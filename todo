@@ -1,0 +1,30 @@
+[] Fix the skillfreq to compare skills
+[] test parsers-using csv pages
+----[] apexfintechsolutions : https://careers.apexfintechsolutions.com/jobs/technology/austin-texas-united-states-of-america/data-engineer/JR103508?utm_source=linkedin&amp&utm_medium=referral&utm_campaign=ongig-job-aggregators&group=1961&source=LinkedIn
+
+----[]smartrecruiters: https://jobs.smartrecruiters.com/Visa/744000099792534-staff-data-engineer?source=LinkedIn
+
+----[]myworkdayjobs: https://gartner.wd5.myworkdayjobs.com/en-US/EXT/job/Software-Engineer-MDM--ETL-_101434
+
+----[]dfwairport: https://careers.dfwairport.com/us/en/job/JR101384/Data-Integration-Engineer?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic
+
+----[x]ashbyhq: https://jobs.ashbyhq.com/teza-technologies/303183aa-cac5-4fde-a19f-160b1658b07e?utm_source=LinkedIn
+---[x] add missing skill to skillfreq and re-run pipeline to see if it is picked up in the job descriptions
+----[]acquiretm: https://amphenol-tcs.acquiretm.com/job_details_clean.aspx?ID=6215
+
+----[]ea: https://jobs.ea.com/en_US/careers/JobDetail/Data-Engineer-Dynamic-Messaging/212167?source=LinkedIn
+
+----[]wexinc: https://careers.wexinc.com/us/en/job/WEXWEXUSR20341EXTERNALENUS/Software-Engineer-2-Data-Acquisition?utm_source=linkedin&utm_medium=phenom-feeds
+
+----[]ultipro:https://recruiting2.ultipro.com/CRA1009CRWL/JobBoard/755fc3a5-077f-4395-ad9a-01ffdc6dea89/OpportunityDetail?opportunityId=4f9e0c99-7597-4080-8b54-c8b3dca37ea2&utm_source=ziprecruiter
+
+----[]brassring: https://sjobs.brassring.com/TGnewUI/Search/home/HomeWithPreLoad?partnerid=25037&siteid=5010&PageType=JobDetails&jobid=836084&utm_source=ziprecruiter#jobDetails=836084_5010
+
+----[]rippling: https://ats.rippling.com/rippling/jobs/efa6057a-5055-4ba0-8fd1-13a14c85b014?jobSite=LinkedIn
+
+----[]icims: https://concentrajobs-selectmedicalcorp.icims.com/jobs/357048/engineer%2c-data-onsite-corporate/job?mode=submit_apply
+
+----[]linkedin: https://www.linkedin.com/jobs/view/4372578138/?trk=flagship3_job_home_appliedjobs&refId=1fcab11b-6e60-446d-b1eb-36733a15ecf0&trackingId=L7c1Q6p9RtKRCak6ExMCjQ%3D%3D
+
+----[]exxonmobil: https://jobs.exxonmobil.com/ExxonMobil/job/Houston-Data-Systems-Engineer-%28Toxicology-&-Environmental%29-TX-77001/1366402700/?feedId=223600&utm_source=LinkedInJobPostings&utm_campaign=EOM_Linkedin
+

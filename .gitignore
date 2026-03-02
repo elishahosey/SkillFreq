@@ -1,0 +1,25 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+.python-version
+
+# Virtual environments
+.venv-skillfreq/
+
+# Environment variables
+.env
+
+# VS Code
+.vscode/
+
+
+# Data files
+*.csv
+*.zip
+*.txt
+*.html
+
+# Archive files
+research_historical/
+*.yml
