@@ -1,21 +1,59 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime
+import logging
 from pathlib import Path
 from typing import Iterable
+
+import pandas as pd
+from .scrape.fetch import process_empty_urls
 
 from skillfreq.parse.parsers import FetchBlocked
 
 from .io.loaders import read_lines
 from .scrape.extract import extract_text_from_url
 from .skills.dictionary import load_skill_dictionary
+from .skills.dictionary import load_weights
 from .skills.match import match_skills
-from .score.similarity import overlap_score
-from .score.similarity import profile_alignment_score
+# from .score.similarity import overlap_score
+# from .score.similarity import profile_alignment_score
+from .score.similarity import weighted_alignment_score
+#from .skills.resume_profile.resume_signal_check import *
+from .skills.resume_profile.extract import extract_resume_signals
 from .score.thresholds import classify
 from .skills.profile import load_profile
+from .skills.extract import extract_requirement_flags
+from skillfreq.skills.resume_profile.extract import extract_resume_signals
 import csv
 
+
+def create_file(filename: str | Path, content: str) -> None:
+    with open(filename, "w", encoding="utf-8") as f:
+        f.write(content)
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S") 
+filename = f"skillfreq_log_{timestamp}.log"
+
+if not Path("./logging").exists():
+    log_dir = BASE_DIR / "logging"
+    log_dir.mkdir(exist_ok=True)
+    
+else:
+    log_dir = Path("./logging")
+
+log_file = log_dir / filename
+log_file.open("w").close()  # create empty log file
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+    handlers=[
+        logging.FileHandler(log_file, encoding="utf-8"),
+        logging.StreamHandler()
+    ]
+)
 
 @dataclass
 class JobResult:
@@ -25,27 +63,48 @@ class JobResult:
     matched: int
     required_total: int
     missing: str
-    matches_json: str  # simple string form for now
+    matches_json: str  
 
 @dataclass
 class FailureRecord:
     source: str
     reason: str
     error: str 
+    
+@dataclass
+class ResumeSuggestion:
+    matched: list[str]
+    missing: list[str]
+    suggestions: list[str]
+    
+    
+def fetch_links(input_path: Path, output_path: Path) -> None:
+    jobspy_data = pd.read_csv(input_path)
+    jd_urls = pd.DataFrame(jobspy_data, columns=['id','job_url','job_url_direct','title'])
+    updated_urls = process_empty_urls(jd_urls)
+    with output_path.open("w", encoding="utf-8") as f:
+        for _, row in updated_urls.iterrows():
+            url = row['job_url_direct'] if pd.notna(row['job_url_direct']) and row['job_url_direct'].strip() != "" else row['job_url']
+            f.write(f"{url}\n")
+
+def extract_links(file_path: str):
+    extract_resume_signals(file_path)
 
 def run_links(
     input_path: Path,
     skills_path: Path,
     out_csv_path: Path,
     profile_path: Path=Path("configs/profile.yml"),
+    weight_path: Path=Path("configs/weights.yml"),
     min_score: float = 0.0,
     no_scrape: bool = False,
-) -> None:
+) -> list[tuple[str, str]]: #have it return the parsed job descriptions as well so we can use that for other things like skill extraction and basic nlp tasks, don't just throw it away after scoring
     skills = load_skill_dictionary(skills_path)
     lines = [ln for ln in read_lines(input_path) if ln]
 
     results: list[JobResult] = []
     failures: list[FailureRecord] = []
+    jdParsedObject=[]
     for line in lines:
         try:
             if no_scrape:
@@ -53,17 +112,29 @@ def run_links(
                 source = "raw_text"
             else:
                 source = line
-            #returned object from job description, containing text and metadata
-                text = extract_text_from_url(line) or ""
-
+                text = extract_text_from_url(line)
+                if text is None:
+                    failures.append(FailureRecord(source=line, reason="Extraction failed", error=""))
+                    continue
+                jdParsedObject.append((line,text))
+            
+            description = text['description'] if isinstance(text, dict) else text
+            
             #grab skill counts for this job description
-            counts = match_skills(text, skills)
+            counts = match_skills(description, skills)
             profile=load_profile(profile_path)
-            score, matched, required_total, missing = profile_alignment_score(counts, profile)
-            label = classify(score)
-
+            weights,penalties=load_weights(weight_path)
+           # score, matched, required_total, missing = profile_alignment_score(counts, profile)
+            flags = extract_requirement_flags(description, skills, profile)
+           
+            score, matched, required_total, missing = weighted_alignment_score(counts, profile, weights,penalties)
+            # label = classify(score)
+            # if flags["has_hard_requirement_blockers"]:
+            #     label = "Skip"
+            # else:
+            label = classify(score,flags)
+            
             if score >= min_score:
-                # keep MVP simple: store counts as a string
                 results.append(
                     JobResult(
                         source=source,
@@ -75,6 +146,8 @@ def run_links(
                         matches_json=str(counts),
                     )
                 )
+     
+        
         except Exception as e:  
             print(f"Error processing {line}: {e}")
             continue
@@ -84,6 +157,9 @@ def run_links(
 
     write_results_csv(out_csv_path, results)
     write_failures_csv(out_csv_path.parent / "failures.csv", failures)
+
+    return jdParsedObject #return the parsed job descriptions as well so we can use that for other things like skill extraction and basic nlp tasks, don't just throw it away after scoring
+
 
 def write_results_csv(path: Path, results: Iterable[JobResult]) -> None:
     with path.open("w", newline="", encoding="utf-8") as f:

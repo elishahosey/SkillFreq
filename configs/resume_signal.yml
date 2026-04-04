@@ -1,0 +1,103 @@
+sql:
+  domains: [data, backend, integration]
+  aliases:
+    - sql
+    - sql server
+    - microsoft sql server
+    - postgresql
+    - mysql
+
+python:
+  domains: [data, automation, backend]
+  aliases:
+    - python
+    - pandas
+    - numpy
+    - sqlalchemy
+    - flask
+    - fastapi
+
+languages:
+  domains: [backend, software]
+  aliases:
+    - java
+    - vb.net
+    - javascript
+    - typescript
+
+frontend:
+  domains: [software]
+  aliases:
+    - html
+    - css
+    - scss
+
+etl:
+  domains: [data, integration]
+  aliases:
+    - etl
+    - elt
+    - data pipeline
+    - data pipelines
+    - data ingestion
+    - data transformation
+
+data_quality:
+  domains: [data, integration]
+  aliases:
+    - data validation
+    - reconciliation
+    - data quality
+
+data_formats:
+  domains: [integration, data]
+  aliases:
+    - xml
+    - json
+
+apis:
+  domains: [integration, backend]
+  aliases:
+    - rest api
+    - rest apis
+    - soap
+
+devops:
+  domains: [platform, devops]
+  aliases:
+    - azure devops
+    - ci/cd
+    - git
+    - github
+
+monitoring:
+  domains: [platform]
+  aliases:
+    - opensearch
+    - logging
+    - log analysis
+
+testing:
+  domains: [software, qa]
+  aliases:
+    - selenium
+    - regression testing
+
+orchestration:
+  domains: [data, platform]
+  aliases:
+    - airflow
+    - workflow orchestration
+
+streaming:
+  domains: [data, platform]
+  aliases:
+    - kafka
+    - spark
+
+concepts:
+  domains: [data, backend]
+  aliases:
+    - data modeling
+    - query optimization
+    - distributed systems

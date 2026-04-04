@@ -1,0 +1,24 @@
+weights:
+  sql: 5
+  etl: 6
+  data_formats: 4
+  python: 3
+  azure: 2
+  data_modeling: 3
+  data_quality: 4
+  java: 2
+  git: 1
+  airflow: 2
+  aws: 1
+  data_platforms: 1
+  systems: 2
+  kafka: 0
+  system_design: 2
+  software_engineering: 2
+  devops: 2
+  testing: 1
+  operations: 1
+  dev_practices: 1
+  
+penalties:
+  seniority: -1

@@ -13,13 +13,37 @@ __pycache__/
 # VS Code
 .vscode/
 
+#Generated files
+extracted_skills_*.txt
+
 
 # Data files
-*.csv
 *.zip
-*.txt
+*.json
 *.html
+*.xlsx
+*.docx
 
 # Archive files
 research_historical/
-*.yml
+
+# Logs
+logging/
+extracted_logs/
+logging.zip
+
+# Generated outputs
+extracted_skills_*.txt
+ExportBlock-*.zip
+
+data/analyze/
+data/outputs/
+data/research_historical/
+
+#Cache files
+cache.py
+__pycache__/
+
+#Personal files
+data/input/resumes/
+CurrentExportFromNotion/

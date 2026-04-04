@@ -1,30 +1,63 @@
-[] Fix the skillfreq to compare skills
-[] test parsers-using csv pages
-----[] apexfintechsolutions : https://careers.apexfintechsolutions.com/jobs/technology/austin-texas-united-states-of-america/data-engineer/JR103508?utm_source=linkedin&amp&utm_medium=referral&utm_campaign=ongig-job-aggregators&group=1961&source=LinkedIn
+## -----------------------Commandlines---------------------------
 
-----[]smartrecruiters: https://jobs.smartrecruiters.com/Visa/744000099792534-staff-data-engineer?source=LinkedIn
+[] Maybe give template:
+    [] Run Task> Run skillfreq
 
-----[]myworkdayjobs: https://gartner.wd5.myworkdayjobs.com/en-US/EXT/job/Software-Engineer-MDM--ETL-_101434
+## -------------TODO List-------------------------------------
 
-----[]dfwairport: https://careers.dfwairport.com/us/en/job/JR101384/Data-Integration-Engineer?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic
+[x] Fix the skillfreq to compare skills
+[x] Log extraction to track which failed and which succeeded
+[x] add parsers for urls that errored
+[x] automate merging csv on personal computer for analysis
+        cat filepath*.csv \
+            filepath2*.csv \
+            > filepath3\merged_analyze_skillfreq.csv
 
-----[x]ashbyhq: https://jobs.ashbyhq.com/teza-technologies/303183aa-cac5-4fde-a19f-160b1658b07e?utm_source=LinkedIn
----[x] add missing skill to skillfreq and re-run pipeline to see if it is picked up in the job descriptions
-----[]acquiretm: https://amphenol-tcs.acquiretm.com/job_details_clean.aspx?ID=6215
+[x] Speed up scrape --did it at Jobspy level
+    [x] preprocess csv before sending to links.txt:
+        - [x] skip senior roles
+        - [x] remove duplicates of url
+        - [x] ignore glassdoor for now (annoying to deal with)
+[x] include frequency map of words in JD - > Basic NLP stuff
+    [x] - use a keyword extraction method:
+    [x]- read this article:https://emerginginvestigators.org/articles/24-068/pdf
+[] analyze mislabeled skip-results.csv
+[] add numbering to urls from result batch -> input for AI
+[**] prep skillfreq for sharing
+[x] create skill comparison - basically replace Jobscan lol
+[] add recruiter search - new column for search term from result.csv
+[] add failed extraction column
 
-----[]ea: https://jobs.ea.com/en_US/careers/JobDetail/Data-Engineer-Dynamic-Messaging/212167?source=LinkedIn
 
-----[]wexinc: https://careers.wexinc.com/us/en/job/WEXWEXUSR20341EXTERNALENUS/Software-Engineer-2-Data-Acquisition?utm_source=linkedin&utm_medium=phenom-feeds
+---------------------------------------------
+[** ] SkillFreq Upgrade: Add role-type detection + mismatch penalties
+    - Define role types (integration, data_engineer_sql, platform, full_stack, backend)
+    - Add keyword-based classification rules per role type
+    - Implement mismatch flags (platform-heavy, fullstack-heavy, senior-like)
+    - Apply score penalties for misaligned roles
+    - Add lane alignment score (ETL + SQL + API + data_quality weighting)
+    - Update suggestion logic to be role-type aware (avoid generic suggestions)
+    - Test against saved “misaligned” JDs and validate improved filtering
 
-----[]ultipro:https://recruiting2.ultipro.com/CRA1009CRWL/JobBoard/755fc3a5-077f-4395-ad9a-01ffdc6dea89/OpportunityDetail?opportunityId=4f9e0c99-7597-4080-8b54-c8b3dca37ea2&utm_source=ziprecruiter
 
-----[]brassring: https://sjobs.brassring.com/TGnewUI/Search/home/HomeWithPreLoad?partnerid=25037&siteid=5010&PageType=JobDetails&jobid=836084&utm_source=ziprecruiter#jobDetails=836084_5010
+[x] extract profile from resume
+    - [x] create suggestion to add in profile;Quick tweak suggestions for stretch roles
+[**] Build JD to closing questions feature
+    - [] add question bank -> pattern-> skillfreq analysis
 
-----[]rippling: https://ats.rippling.com/rippling/jobs/efa6057a-5055-4ba0-8fd1-13a14c85b014?jobSite=LinkedIn
+[**] Add JD capture fallback: validate extracted text and trigger browser-based screenshot capture when parsing fails (store artifacts + mark result as partial)
+    {company}_{role}.txt
 
-----[]icims: https://concentrajobs-selectmedicalcorp.icims.com/jobs/357048/engineer%2c-data-onsite-corporate/job?mode=submit_apply
+[x] LinkedIn - Scrape after redirection failed
+    Test with this:https://www.linkedin.com/jobs/view/4342873583/
 
-----[]linkedin: https://www.linkedin.com/jobs/view/4372578138/?trk=flagship3_job_home_appliedjobs&refId=1fcab11b-6e60-446d-b1eb-36733a15ecf0&trackingId=L7c1Q6p9RtKRCak6ExMCjQ%3D%3D
+## -------------------------Future ML/NLP Stuff---------------------
 
-----[]exxonmobil: https://jobs.exxonmobil.com/ExxonMobil/job/Houston-Data-Systems-Engineer-%28Toxicology-&-Environmental%29-TX-77001/1366402700/?feedId=223600&utm_source=LinkedInJobPostings&utm_campaign=EOM_Linkedin
+[] create a feature vector - Future NLP Stuff
+[] check which cloudtool to use for analysis? AWS--Hadoop,etc
+[] self learning weight tuner for weight.yml
+
+
+##-------------NICE TO HAVES---------------
+[] Quick log error parsing
 

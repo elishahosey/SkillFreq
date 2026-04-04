@@ -4,7 +4,9 @@ import requests
 from pydparser import  JdParser
 import os
 
-os.environ["NLTK_DATA"] = r"C:\\Users\\ehose\\Development\\SkillFreq\\.nltk_data"
+
+os.environ["NLTK_DATA"] = os.environ['NLTK_PATH']
+
 
 def checkNLTKData():
     try:

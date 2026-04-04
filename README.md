@@ -1,116 +1,153 @@
+# SkillFreq
 
-SkillFreq
+**SkillFreq** is a Python-based job description analysis tool that extracts, classifies, and ranks technical skills across large volumes of job postings.
 
-SkillFreq is a Python-based job description analysis tool that extracts, classifies, and ranks technical skills across large volumes of job postings.
+I originally built this for myself after getting frustrated with the job-search process and wanting a more **data-driven way to understand the market**.
 
-It helps engineers make data-driven upskilling decisions by identifying high-frequency technologies and market gaps.
+Instead of guessing what to study next, SkillFreq helps surface the technologies, patterns, and skill gaps that show up most often in real roles.
 
-🚀 Why I Built This
+---
 
-Modern job searches are noisy and subjective. Instead of manually reading dozens of job descriptions and guessing what to study, I built SkillFreq to:
+## Why I Built This
 
-Parse job descriptions at scale
+I got tired of manually searching through jobs and constantly running into roles that *looked* like a fit at first glance, but then hit me with things like:
 
-Extract skill mentions using configurable YAML dictionaries
+- 10+ years required
+- random legacy tech stacks
+- platform tools I barely touch
+- titles that sound right but are actually totally off-lane
 
-Rank skills by frequency and relevance
+Even when job boards try to recommend roles, they often miss the bigger picture.
 
-Identify strategic upskilling targets
+After getting burned out by the process before, I wanted to build my own **job-search system**.
 
-This project turns job market analysis into a repeatable, measurable process.
+Partly out of frustration, partly out of curiosity, and honestly... partly because I was bored and wanted something useful to build.
 
-🧠 What It Does
+So SkillFreq became my way of answering:
 
-Scrapes or ingests job descriptions (Ashby, Lever, etc.)
+- What does the market actually want?
+- What technologies keep showing up?
+- Where are my real gaps?
+- What should I spend time learning?
 
-Tokenizes and normalizes text
+Basically: **stop grinding in the wrong direction**.
 
-Matches skills using YAML-defined keyword buckets
+---
 
-Computes frequency counts and classification labels
+## What It Does
 
-Outputs ranked skill lists to guide learning priorities
+SkillFreq currently works as:
 
-🏗 Architecture Overview
+`JobSpy -> SkillFreq -> market + alignment insights`
 
-SkillFreq is built around a modular parsing architecture:
+It can:
 
-BaseParser
-  ├── AshbyParser
-  ├── LeverParser
-  └── (Extensible for new platforms)
+- ingest job descriptions from scraped URLs
+- parse common job platforms (Ashby, Lever, and extensible parsers)
+- extract technical skills using YAML keyword buckets
+- normalize aliases and grouped concepts
+- output ranked skill frequency lists
+- compare roles against a personal skill profile
+- help identify study priorities
 
-Skill classification is driven by a YAML configuration file, allowing:
+For example, if Kafka, AWS, and Airflow keep appearing across roles, that is probably a stronger signal than randomly doom-scrolling articles.
 
-Easy addition of new technologies (Kafka, Airflow, Spark, etc.)
+Currently pairs well with [JobSpy](https://github.com/speedyapply/JobSpy) for ingestion.
 
-Concept grouping (e.g., Event Streaming → Kafka, Pub/Sub)
+---
 
-Customizable market targeting (data engineering, backend, etc.)
+## Architecture Overview
 
-🛠 Tech Stack
+    BaseParser
+      ├── AshbyParser
+      ├── LeverParser
+      └── Extensible for new platforms
 
-Python
+Skill classification is YAML-driven, which makes it easy to:
 
-CLI interface
+- add new technologies
+- group related concepts
+- tune scoring logic
+- personalize for target markets  
+  (data engineering, backend, platform roles, etc.)
 
-YAML-based configuration
+---
 
-Basic NLP preprocessing (tokenization + normalization)
+## Tech Stack
 
-CSV export for downstream analysis
+- Python
+- CLI interface
+- YAML configuration
+- lightweight NLP preprocessing
+- CSV export
 
-📊 Example Use Case
+---
 
-Collect 50 data engineering job descriptions
+## Configuration
 
-Run SkillFreq
+The `configs/` folder contains the primary configuration files:
 
-Identify top recurring skills (e.g., SQL, Kafka, Airflow)
+- `skills.yml` -> skill keyword buckets
+- `weights.yml` -> scoring weights
+- `profile.yml` -> alignment profile settings
 
-Update learning roadmap based on objective frequency data
+These are intended as starter templates and can be adjusted for your use case.
 
-🎯 Roadmap
+Local environment settings are stored in `.env`.
 
-Add concept-level rollups (e.g., Event Streaming vs specific tools)
+Example:
 
-Add evidence extraction (line-level skill matches)
+`NLTK_PATH=/local/path`
 
-Improve NLP preprocessing and normalization
+Do not commit `.env` if it contains machine-specific paths or sensitive values.
 
-Add visualization support
+---
 
-Optional streaming ingestion for large-scale market scans
+## Use Cases
 
-📌 Status
+- **study planning**  
+  focus learning time on skills with the highest market frequency
 
-Active hobby project focused on data engineering market analysis and skill prioritization.
+- **resume optimization**  
+  validate whether resume bullets match real demand
 
+- **job filtering**  
+  quickly spot roles that do not actually align
 
+- **market sensing**  
+  identify hiring trends across companies and titles
 
-SkillFreq is an analysis tool that extracts technical skills from job descriptions, which can help us align study plans to ACTUAL market demands rather than grinding at the wrong place.
+---
 
-Input:
-- extract technical skills from text
-- Normalize common aliases
-- Filters out soft skills (just be a cool human, and you should be fine lol)
+## Example Workflow
 
-Output:
-- Frequency table of technical skills
-- Per role breakdown
+1. Collect 50 data engineering job descriptions
+2. Run SkillFreq
+3. Identify recurring technologies
+4. update study roadmap based on objective frequency data
 
-Use cases:
-- Resume optimization: Validate your resume emphasizes skills the market actually wants.
-- Job filtering: Quickly spot roles that dont match your core skill set.
-- Study planning: Focus learning time on skills with highest return
-- Market Sensing: Detect patterns across job titles and companies
+Example recurring outputs might include:
 
+- SQL
+- Kafka
+- Airflow
+- AWS
+- ETL tooling
 
-Roadmap:
-- Skill frequency based on job title
-- Resume <-> JD comparison
-- Integration with Notion or other job-tracking tools
+---
 
-Environments:
-- .venv        → parsing (pydparser, python-dateutil==2.8.2)
-- .venv-scrape → scraping (trafilatura, htmldate)
+## Roadmap
+
+- skill frequency by job title
+- resume <-> JD comparison
+- better NLP normalization
+- line-level evidence extraction
+- visualization dashboards
+- Notion integration
+- trend reports over time
+
+---
+
+## Status
+
+Active hobby project focused on turning job search and upskilling into a **systems-driven workflow instead of guesswork**.

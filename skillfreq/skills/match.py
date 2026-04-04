@@ -5,9 +5,9 @@ from typing import Dict, List
 
 
 def _normalize_text(text: str) -> str:
-    #TODO:update to normalize object
-    jd = text['description'].lower()
-    text = re.sub(r"\s+", " ", jd) #trim and collapse whitespace
+    #jd = text['description'].lower()
+    jd = text.lower()
+    text = re.sub(r"\s+", " ", jd).strip() #trim and collapse whitespace
     return text
 
 

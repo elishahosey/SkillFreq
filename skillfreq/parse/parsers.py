@@ -13,6 +13,186 @@ import requests
 
 
 '''
+Helpers for Apply Button detection
+'''
+
+APPLY_TEXT_PATTERNS = [
+    r"\bapply\b",
+    r"\bapply now\b",
+    r"\beasy apply\b",
+    r"\bcontinue\b",
+    r"\bcontinue applying\b",
+    r"\bexternal apply\b",
+    r"\bapply on company site\b",
+    r"\bgo to company site\b",
+    r"\bsubmit application\b",
+]
+
+APPLY_ATTR_PATTERNS = [
+    r"apply",
+    r"application",
+    r"jobapply",
+    r"easy-apply",
+    r"continue",
+    r"companyapply",
+    r"company-site",
+]
+
+
+def _matches_apply_text(text: str) -> bool:
+    if not text:
+        return False
+    text = " ".join(text.split()).strip().lower()
+    return any(re.search(pattern, text) for pattern in APPLY_TEXT_PATTERNS)
+
+
+def _matches_apply_attrs(tag) -> bool:
+    attrs_to_check = []
+
+    for attr_name in ["class", "id", "aria-label", "data-testid", "data-test", "name", "title"]:
+        value = tag.get(attr_name)
+        if isinstance(value, list):
+            attrs_to_check.extend(value)
+        elif value:
+            attrs_to_check.append(str(value))
+
+    combined = " ".join(attrs_to_check).lower()
+    return any(pattern in combined for pattern in APPLY_ATTR_PATTERNS)
+
+
+def _extract_best_apply_href(html: str, base_url: str) -> str | None:
+    soup = BeautifulSoup(html, "html.parser")
+
+    candidates = []
+
+    # 1. Check <a> tags first
+    for a in soup.find_all("a", href=True):
+        href = a.get("href", "").strip()
+        text = a.get_text(" ", strip=True)
+
+        if not href:
+            continue
+
+        if _matches_apply_text(text) or _matches_apply_attrs(a):
+            candidates.append(urljoin(base_url, href))
+
+    # 2. Check button-like elements that may wrap links or carry data-href
+    for tag in soup.find_all(["button", "div", "span"]):
+        text = tag.get_text(" ", strip=True)
+
+        if not (_matches_apply_text(text) or _matches_apply_attrs(tag)):
+            continue
+
+        # direct link-like attributes
+        for attr in ["data-href", "href", "data-url", "data-apply-url"]:
+            value = tag.get(attr)
+            if value:
+                candidates.append(urljoin(base_url, value))
+
+        # nested anchor
+        nested_a = tag.find("a", href=True)
+        if nested_a:
+            candidates.append(urljoin(base_url, nested_a["href"]))
+
+    # 3. De-dupe while preserving order
+    seen = set()
+    deduped = []
+    for url in candidates:
+        if url not in seen:
+            seen.add(url)
+            deduped.append(url)
+
+    return deduped[0] if deduped else None
+
+from bs4 import BeautifulSoup
+from urllib.parse import urljoin
+
+
+def extract_indeed_apply_link(html: str, base_url: str = "https://www.indeed.com") -> str | None:
+    soup = BeautifulSoup(html, "html.parser")
+
+    selectors = [
+        'a[data-testid*="apply"]',
+        'a[aria-label*="Apply"]',
+        'a[href*="apply"]',
+        'button[data-testid*="apply"]',
+    ]
+
+    for selector in selectors:
+        node = soup.select_one(selector)
+        if not node:
+            continue
+
+        href = node.get("href") or node.get("data-href") or node.get("data-url")
+        if href:
+            return urljoin(base_url, href)
+
+    for a in soup.find_all("a", href=True):
+        text = a.get_text(" ", strip=True).lower()
+        if "apply" in text or "company site" in text:
+            return urljoin(base_url, a["href"])
+
+    return None
+
+
+def extract_linkedin_apply_link(html: str, base_url: str = "https://www.linkedin.com") -> str | None:
+    soup = BeautifulSoup(html, "html.parser")
+
+    selectors = [
+        'a[aria-label*="Apply"]',
+        'a[href*="apply"]',
+        'button[aria-label*="Apply"]',
+        '.jobs-apply-button a[href]',
+    ]
+
+    for selector in selectors:
+        node = soup.select_one(selector)
+        if not node:
+            continue
+
+        href = node.get("href") or node.get("data-href") or node.get("data-url")
+        if href:
+            return urljoin(base_url, href)
+
+        nested_a = node.find("a", href=True) if hasattr(node, "find") else None
+        if nested_a:
+            return urljoin(base_url, nested_a["href"])
+
+    for a in soup.find_all("a", href=True):
+        text = a.get_text(" ", strip=True).lower()
+        if "apply" in text or "easy apply" in text:
+            return urljoin(base_url, a["href"])
+
+    return None
+
+
+def extract_glassdoor_apply_link(html: str, base_url: str = "https://www.glassdoor.com") -> str | None:
+    soup = BeautifulSoup(html, "html.parser")
+
+    selectors = [
+        'a[data-test*="apply"]',
+        'a[aria-label*="Apply"]',
+        'a[href*="apply"]',
+        'button[data-test*="apply"]',
+    ]
+
+    for selector in selectors:
+        node = soup.select_one(selector)
+        if not node:
+            continue
+
+        href = node.get("href") or node.get("data-href") or node.get("data-url")
+        if href:
+            return urljoin(base_url, href)
+
+    for a in soup.find_all("a", href=True):
+        text = a.get_text(" ", strip=True).lower()
+        if "apply" in text or "apply now" in text:
+            return urljoin(base_url, a["href"])
+
+    return None
+
+'''
 Generic structured extractors
 '''
 
@@ -996,5 +1176,130 @@ class ICIMSParser(BaseParser):
             "location": "",
             "description": description,
         }
-        
-        
+
+class OracleCloudParser(BaseParser):
+    def parse(self) -> Dict[str, Any]:
+        soup = BeautifulSoup(self.html or "", "html.parser")
+
+        # Shared structured fallback
+        jp = _find_jobposting_jsonld(soup)
+        jsonld_fields = _jsonld_to_fields(jp) if jp else {}
+
+        title = (
+            _first_text(soup.select_one("h1.job-details__title"))
+            or jsonld_fields.get("title", "")
+            or _get_meta(soup, prop="og:title")
+        )
+
+        company = (
+            self._derive_company(_get_meta(soup, prop="og:site_name"))
+            or jsonld_fields.get("company", "")
+            or self._derive_company_from_title(soup)
+        )
+
+        location = (
+            _first_text(soup.select_one(".job-details__subtitle"))
+            or self._job_meta_value(soup, "Locations")
+            or jsonld_fields.get("location", "")
+        )
+
+        description = (
+            self._extract_description(soup)
+            or jsonld_fields.get("description", "")
+            or _get_meta(soup, prop="og:description")
+        )
+
+        return {
+            "title": title or "",
+            "company": company or "",
+            "location": location or "",
+            "description": description or "",
+            "job_id": (
+                self._job_meta_value(soup, "Job Identification")
+                or self._jsonld_identifier(jp)
+                or self._extract_job_id_from_url()
+                or ""
+            ),
+            "category": self._job_meta_value(soup, "Job Category") or "",
+            "posting_date": self._job_meta_value(soup, "Posting Date") or "",
+            "job_schedule": (
+                self._job_meta_value(soup, "Job Schedule")
+                or (jp.get("employmentType", "") if jp else "")
+                or ""
+            ),
+            "salary_range": self._job_meta_value(soup, "Salary Range") or "",
+            "flsa_status": self._job_meta_value(soup, "FLSA Status") or "",
+            "url": self.url,
+            "source": "oraclecloud",
+        }
+
+    def _extract_description(self, soup: BeautifulSoup) -> str:
+        node = soup.select_one(".job-details__description-content")
+        if not node:
+            return ""
+
+        # preserve line breaks a little better
+        for br in node.find_all("br"):
+            br.replace_with("\n")
+
+        text = node.get_text("\n", strip=True)
+        text = re.sub(r"\n{3,}", "\n\n", text)
+        return text.strip()
+
+    def _job_meta_value(self, soup: BeautifulSoup, label: str) -> str:
+        for item in soup.select("li.job-meta__item"):
+            title_node = item.select_one(".job-meta__title")
+            if not title_node:
+                continue
+
+            name = title_node.get_text(" ", strip=True)
+            if name.lower() != label.lower():
+                continue
+
+            if label.lower() == "locations":
+                pins = [
+                    pin.get_text(" ", strip=True)
+                    for pin in item.select(".job-meta__pin-item")
+                ]
+                pins = [p for p in pins if p]
+                if pins:
+                    return " | ".join(pins)
+
+            sub = item.select_one(".job-meta__subitem")
+            if sub:
+                return sub.get_text(" ", strip=True)
+
+        return ""
+
+    def _jsonld_identifier(self, jp: Optional[dict]) -> str:
+        if not jp:
+            return ""
+        ident = jp.get("identifier")
+        if isinstance(ident, dict):
+            return (ident.get("value") or "").strip()
+        return ""
+
+    def _extract_job_id_from_url(self) -> str:
+        match = re.search(r"/job/([^/?#]+)", self.url)
+        return match.group(1).strip() if match else ""
+
+    def _derive_company(self, site_name: str) -> str:
+        if not site_name:
+            return ""
+        return re.sub(
+            r"\s+Candidate Experience Site.*$",
+            "",
+            site_name,
+            flags=re.IGNORECASE,
+        ).strip()
+
+    def _derive_company_from_title(self, soup: BeautifulSoup) -> str:
+        if not soup.title or not soup.title.string:
+            return ""
+        title_text = soup.title.string.strip()
+        match = re.search(
+            r"-\s*(.*?)\s+Candidate Experience Site",
+            title_text,
+            flags=re.IGNORECASE,
+        )
+        return match.group(1).strip() if match else ""

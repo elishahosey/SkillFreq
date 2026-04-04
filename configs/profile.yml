@@ -1,0 +1,23 @@
+skills:
+  sql: 1.0
+  etl: 1.0
+  python: 0.8
+  kafka: 0.0
+  airflow: 0.2
+  azure: 0.8
+  aws: 0.0
+  java: 0.6
+  git: 0.8
+  data_platforms: 0.1
+  devops: 0.4
+  data_formats: 1.0
+  concepts: 0.7 
+  data_modeling: 1
+  systems: 1.25
+  data_quality: 1
+  system_design: 0.5
+  software_engineering: 0.5
+  testing: 0.25
+  operations: 0.25
+
+

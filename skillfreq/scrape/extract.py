@@ -1,14 +1,44 @@
 from __future__ import annotations
+import logging
+from textwrap import wrap
 import re
 import json
 import trafilatura
 import requests
 from skillfreq.parse.parsers import *
+from skillfreq.scrape.apply_buttons.glassdoor_apply import *  
+from skillfreq.scrape.apply_buttons.base import *  
+from skillfreq.scrape.apply_buttons.indeed_apply import *  
+from skillfreq.scrape.apply_buttons.linkedin_apply import *  
+from skillfreq.parse.parsers import _extract_best_apply_href
+
+class MultiLineHandler(logging.StreamHandler):
+    def __init__(self, line_length: int):
+        logging.StreamHandler.__init__(self)
+        self.line_length = line_length
+
+    def emit(self, record):
+        record.msg = "\n".join(wrap(record.msg, self.line_length))
+        super().emit(record)
+
+logger = logging.getLogger(__name__)
+logger.addHandler(MultiLineHandler(line_length=80))
 
 '''
 Extractors depending on platform
 '''
-
+def extract_apply_link(url: str) -> str | None:
+    result = None
+    if "indeed" in url:
+        result = detect_indeed_apply(url)
+    elif "linkedin" in url:
+        result = detect_linkedin_apply(url)
+    elif "glassdoor" in url:
+        result = detect_glassdoor_apply(url)
+    
+    if result and isinstance(result, dict):
+        return result.get('external_url') or url
+    return url
 
 def detect_parser(url: str, html: str) -> BaseParser:
     u = url.lower()
@@ -24,71 +54,19 @@ def detect_parser(url: str, html: str) -> BaseParser:
         return ICIMSParser(url, html)
     if "apexfintechsolutions.com" in u:
         return ApexParser(url, html)
-    # if "taleo.net" in u:
-    #     return TaleoParser(url, html)
-    # if "brassring.com" in u:
-    #     return BrassRingParser(url, html)
-    # if "ultipro.com" in u:
-    #     return UltiproParser(url, html)
-    # if "acquiretm.com" in u:
-    #     return AcquireTMParser(url, html)
-    # if "paycor.com" in u:
-    #     return PaycorParser(url, html)
     if "rippling.com" in u:
         return RipplingParser(url, html)
+    if "oraclecloud.com" in u:
+        return OracleCloudParser(url,html)
 
     # default fallback
     return GenericParser(url, html)
 
 
 
-# def extract_ashby_description(html: str) -> str | None:
-    """
-    Extract job description from Ashby-hosted job pages.
-    Returns plain text description if found.
-    """
-
-    # Detect Ashby
-    if "window.__appData" not in html:
-        return None
-
-    '''
-    Starting at window.__appdata, extract any whitespace,
-    then anything followed immediately by a literal equals sign. 
-    Then extract anything (0/more) up to the parenthesis 
-    ( any character (0/more) up to the first closing parenthesis,followed by a semicolon. 
-    Then extract anyhting (0/more) up to 'fetch(',which should be the next part of the script
-    
-    This should give us the JSON blob containing the job description.
-    '''
-    
-    match = re.search(
-        r"window\.__appData\s*=\s*({.*?});\s*fetch\(",
-        html,
-        flags=re.DOTALL
-    )
-
-    if not match:
-        return None
-
-    try:
-        data = json.loads(match.group(1))
-    except json.JSONDecodeError:
-        return None
-
-    posting = data.get("posting", {})
-
-    # Prefer plain text
-    return posting.get("descriptionPlainText") \
-        or posting.get("descriptionHtml")
-
-def print_to_file(filename: str, content: str):
-    with open(filename, "w", encoding="utf-8") as f:
-        f.write(content)
-
 
 def test_url(url: str):
-    print(f"Testing URL (before GET): {url}")
+    logger.info(f"Testing URL (before GET): {url}")
 
     headers = {
         "User-Agent": "Mozilla/5.0",
@@ -108,38 +86,52 @@ def test_url(url: str):
             allow_redirects=True,
         )
 
-        print(f"Testing URL (after GET): {url} - Status: {resp.status_code} - Len: {len(resp.text)}")
-        print("Final URL:", resp.url)
-        print("Snippet:", resp.text[:300].replace("\n", " "))
+        logging.info(f"Received response for {url} - Status: {resp.status_code} - Len: {len(resp.text)}")
+        logger.info(f"Testing URL (after GET): {url} - Status: {resp.status_code} - Len: {len(resp.text)}")
+        logger.info(f"Final URL: {resp.url}")
+        logger.info(f"Snippet: {resp.text[:300].replace('\n', ' ')}")
 
         return resp
 
     except Exception as e:
-        print(f"GET FAILED for {url}: {repr(e)}")
+        logger.error(f"GET FAILED for {url}: {repr(e)}")
         return None
 
 def extract_text_from_url(url: str) -> str | None:
     try:
-        resp = test_url(url)        # MVP: use trafilatura for now, which is simple and robust
-        final_url = resp.url if resp else url
-
+       #TODO: if there are no direct urls, find it and then test those urls to 
+       # find one that works, then extract from that one
        
-       #TODO: parse the response based on platform (Ashby, Greenhouse, Lever, etc.) to extract the job description.
-        parse_resp= detect_parser(final_url, html=resp.text if resp else None)
+        resp = test_url(url)
+        final_url = resp.url if resp else url
+        #find apply button
+        if "indeed" in url or "linkedin" in url or "glassdoor" in url:
+             final_url = extract_apply_link(url)
+        
+        # If final_url changed (e.g., external apply link), fetch HTML from the new URL
+        original_url = resp.url if resp else url
+        if final_url != original_url:
+            resp = test_url(final_url)
+        
+        #check for new html after redirect
+        if "indeed" in url or "linkedin" in url or "glassdoor" in url:
+            redirected_html=fetch_rendered_html(final_url)
+            parse_resp= detect_parser(final_url, html=redirected_html)
+            logger.info(f"HTML length of REDIRECTED URL: {len(redirected_html) if redirected_html else 0}")
+        else: 
+            parse_resp= detect_parser(final_url, html=resp.text if resp else None)
+        
+        logger.info(f"Using parser {parse_resp.__class__.__name__} for URL: {final_url}")
+        #logger.info(f"Parser Response Object: {parse_resp}")
         if parse_resp:
-            return parse_resp.parse()
+            parsed_text = parse_resp.parse()
+            logger.info(f"Parsed object for {final_url}: {type(parsed_text)} - Length: {len(parsed_text) if parsed_text else 'N/A'}")
+            for k, v in parsed_text.items():
+                logger.info(f"Metadata - {k}: {v}")
+            return parsed_text
+           # return parse_resp.parse()
         
-        #branch depending on platform
-        
-        # print_to_file("extracted_text.txt", resp)
-        # if resp:
-        #     downloaded = trafilatura.fetch_url(url)
-        #     if not downloaded:
-        #         return None
-        #     text = trafilatura.extract(downloaded)
-
-
-        #     return text
     except Exception as e:
-        print(f"Extraction failed for {url} due to {repr(e)}")
+        logger.error(f"Extraction failed for {url} due to {repr(e)}")
+        # return None
         return None

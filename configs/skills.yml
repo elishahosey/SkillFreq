@@ -1,0 +1,206 @@
+seniority:
+  - "7+ years"
+  - "8+ years"
+  - "staff"
+  - "principal"
+  - "lead engineer"
+  - "architect"
+  - "mentor"
+  - "senior"
+  - "technical leadership"
+  - "manager"
+
+data_formats:
+  - "json"
+  - "xml"
+
+sql:
+  - "sql"
+  - "tsql"
+  - "t-sql"
+  - "microsoft sql server"
+  - "sql server"
+  - "postgresql"
+  - "postgres"
+  - "mysql"
+  - "relational database"
+  - "rdbms"
+  - "stored procedures"
+  - "indexing"
+  - "query tuning"
+
+etl:
+  - "etl"
+  - "elt"
+  - "data pipeline"
+  - "data pipelines"
+  - "data ingestion"
+  - "data integration"
+  - "data transformation"
+  - "batch processing"
+  - "stream processing"
+  - "data workflow"
+  - "etl processes"
+
+kafka:
+  - "kafka"
+  - "apache kafka"
+  - "event streaming"
+  - "event-driven"
+  - "event-driven architecture"
+  - "pubsub"
+  - "message broker"
+
+airflow:
+  - "airflow"
+  - "apache airflow"
+  - "dag"
+  - "dags"
+  - "workflow orchestration"
+  - "task scheduling"
+
+azure:
+  - "azure"
+  - "azure devops"
+  - "ado"
+  - "azure data factory"
+  - "adf"
+  - "azure functions"
+  - "azure storage"
+  - "azure sql"
+
+aws:
+  - "aws"
+  - "s3"
+  - "lambda"
+  - "glue"
+  - "redshift"
+  - "athena"
+  - "emr"
+  - "kinesis"
+
+python:
+  - "python"
+  - "pandas"
+  - "numpy"
+  - "pyspark"
+  - "sqlalchemy"
+  - "fastapi"
+  - "flask"
+
+java:
+  - "java"
+  - "spring"
+  - "spring boot"
+  - "maven"
+  - "gradle"
+  - "junit"
+
+git:
+  - "git"
+  - "github"
+  - "gitlab"
+  - "version control"
+  - "git version control"
+  - "branching"
+  - "pull request"
+  - "merge request"
+
+data_platforms:
+  - "dbt"
+  - "snowflake"
+  - "databricks"
+  - "matillion"
+  - "powerbi"
+  - "power bi"
+  - "power query"
+  - "mongodb"
+  - "nosql databases"
+
+devops:
+  - "docker"
+  - "kubernetes"
+  - "jenkins"
+  - "ci/cd"
+  - "continuous integration"
+  - "continuous delivery"
+
+# concepts:
+#   - "data modeling"
+#   - "dimensional modeling"
+#   - "star schema"
+#   - "normalization"
+#   - "denormalization"
+#   - "query optimization"
+#   - "database design"
+#   - "system design"
+#   - "scalability"
+#   - "distributed systems"
+#   - "concurrency"
+#   - "transaction management"
+#   - "data governance"
+
+data_modeling:
+  - "data modeling"
+  - "dimensional modeling"
+  - "star schema"
+  - "normalization"
+  - "denormalization"
+  - "database design"
+
+data_quality:
+  - "data governance"
+  - "data quality"
+  - "validation"
+  - "reconciliation"
+  - "compliance"
+  - "data standards"
+
+systems:
+  - "system reliability"
+  - "data reliability"
+  - "disaster recovery"
+  - "failure recovery"
+  - "workflow orchestration"
+  - "dependency"
+  - "integration"
+  - "upstream"
+  - "downstream"
+  - "latency"
+  - "throughput"
+  - "infrastructure"
+
+software_engineering:
+  - "software development"
+  - "application development"
+  - "software solutions"
+  - "software products"
+
+system_design:
+  - "system design"
+  - "technical design"
+  - "technical requirements"
+  - "system architecture"
+  - "design specifications"
+
+testing:
+  - "testing"
+  - "unit testing"
+  - "unit test cases"
+  - "integration testing"
+
+operations:
+  - "production support"
+  - "monitoring"
+  - "incident"
+  - "troubleshooting"
+  - "root cause analysis"
+  - "risk management"
+dev_practices:
+  - "software development lifecycle"
+  - "agile"
+  - "methodologies"
+  - "code standards"
+  - "documentation"
+  - "system documentation"
+  - "project management"

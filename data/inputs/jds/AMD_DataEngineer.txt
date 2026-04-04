@@ -1,0 +1,35 @@
+THE ROLE:  
+
+We are looking for a dynamic, energetic Systems Design Engineer to join our growing team. As a key contributor to the success of AMD’s products, you will be part of a leading team to drive and improve AMD’s abilities to deliver the highest quality, industry-leading technologies to market. The Systems Design Engineering team fosters and encourages continuous technical innovation to showcase successes as well as facilitate continuous career development.  
+
+  
+
+THE PERSON:  
+
+As a Data Engineer, you will drive scalable and automated data solutions. In this high visibility position, your data engineering expertise will be necessary to design data pipelines, develop ETL solutions, assess data quality issues, and produce resolution strategies.
+
+  
+
+KEY RESPONSIBILITIES:  
+
+Driving technical innovation to improve AMD's capabilities across product development and validation, including pipeline development, ETL optimization, data modeling enhancements, and various internal and cross-functional initiatives
+Troubleshooting data quality and pipeline failures found during development, testing, and production phases
+Working with multiple teams and tracking data ingestion and processing to ensure all datasets are validated and optimized on time
+Working closely with supporting technical and analytics teams
+Engaging in data warehouse and analytics framework design
+Leading collaborative approaches with multiple teams.
+ 
+
+PREFERRED EXPERIENCE:  
+
+Programming/scripting skills (e.g., Python, SQL).
+Data debugging techniques and troubleshooting methodologies
+Experience with data pipeline tools and orchestration platforms (e.g., Databricks, Snowflake)
+Experience with database optimization, query performance tuning, and ETL pipeline monitoring
+Knowledge of data architecture, schema design, and data validation strategies
+ACADEMIC CREDENTIALS:  
+
+Bachelors or Masters degree in electrical or computer engineering 
+ 
+
+This role is not eligible for visa sponsorship.
