@@ -5,26 +5,9 @@
 
 ## -------------TODO List-------------------------------------
 
-[x] Fix the skillfreq to compare skills
-[x] Log extraction to track which failed and which succeeded
-[x] add parsers for urls that errored
-[x] automate merging csv on personal computer for analysis
-        cat filepath*.csv \
-            filepath2*.csv \
-            > filepath3\merged_analyze_skillfreq.csv
-
-[x] Speed up scrape --did it at Jobspy level
-    [x] preprocess csv before sending to links.txt:
-        - [x] skip senior roles
-        - [x] remove duplicates of url
-        - [x] ignore glassdoor for now (annoying to deal with)
-[x] include frequency map of words in JD - > Basic NLP stuff
-    [x] - use a keyword extraction method:
-    [x]- read this article:https://emerginginvestigators.org/articles/24-068/pdf
 [] analyze mislabeled skip-results.csv
 [] add numbering to urls from result batch -> input for AI
 [**] prep skillfreq for sharing
-[x] create skill comparison - basically replace Jobscan lol
 [] add recruiter search - new column for search term from result.csv
 [] add failed extraction column
 
@@ -39,17 +22,11 @@
     - Update suggestion logic to be role-type aware (avoid generic suggestions)
     - Test against saved “misaligned” JDs and validate improved filtering
 
-
-[x] extract profile from resume
-    - [x] create suggestion to add in profile;Quick tweak suggestions for stretch roles
 [**] Build JD to closing questions feature
     - [] add question bank -> pattern-> skillfreq analysis
 
 [**] Add JD capture fallback: validate extracted text and trigger browser-based screenshot capture when parsing fails (store artifacts + mark result as partial)
     {company}_{role}.txt
-
-[x] LinkedIn - Scrape after redirection failed
-    Test with this:https://www.linkedin.com/jobs/view/4342873583/
 
 ## -------------------------Future ML/NLP Stuff---------------------
 
@@ -60,4 +37,28 @@
 
 ##-------------NICE TO HAVES---------------
 [] Quick log error parsing
+
+
+# Market Analysis TODO
+
+- [ ] Load latest cleaned job logs (V1 + V2 CSVs)
+- [ ] Create title frequency report
+  - [ ] Count recurring job titles
+  - [ ] Group similar titles into lane buckets
+    - [ ] data_engineering
+    - [ ] integration
+    - [ ] platform_data
+    - [ ] backend
+    - [ ] analytics
+    - [ ] software-generic
+- [ ] Run skill frequency scan on current logs
+- [ ] Identify top 3 recurring market signals
+- [ ] Compare V1 vs V2 title distribution
+- [ ] Compare V1 vs V2 skill frequency shifts
+- [ ] Document 1–2 learning priorities from market signal
+
+Example output:
+- Strongest lane: Data Engineering
+- Adjacent lane: Platform / Cloud Data
+- Top gap: AWS / monitoring
 
