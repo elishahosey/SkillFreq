@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime
 import logging
+import os
 from pathlib import Path
 from typing import Iterable
 
@@ -97,68 +98,101 @@ def run_links(
     profile_path: Path=Path("configs/profile.yml"),
     weight_path: Path=Path("configs/weights.yml"),
     min_score: float = 0.0,
-    no_scrape: bool = False,
-) -> list[tuple[str, str]]: #have it return the parsed job descriptions as well so we can use that for other things like skill extraction and basic nlp tasks, don't just throw it away after scoring
+    no_scrape: bool = True, #read from csv for descriptions instead of scraping from url. Either due to laziness or because the urls are bad and we already have the descriptions in a csv (e.g. from joblist.py)
+) -> list[tuple[str, str]]: 
     skills = load_skill_dictionary(skills_path)
     lines = [ln for ln in read_lines(input_path) if ln]
 
     results: list[JobResult] = []
     failures: list[FailureRecord] = []
     jdParsedObject=[]
-    for line in lines:
-        try:
-            if no_scrape:
-                text = line
-                source = "raw_text"
-            else:
+    
+    if no_scrape:
+        # If no scraping, we expect the input file to be a CSV with 'job_url' and 'description' columns
+        df = pd.read_csv(os.getenv("JOBSPY_DATA_PATH")+f"/cleaned_jobs-{datetime.now().month}-{datetime.now().day}-{datetime.now().strftime('%y')}.csv")
+        print(f"Loaded {len(df)} job descriptions from CSV for processing.")
+        
+        for _, row in df.iterrows():
+            url = row['job_url']
+            id = row['id']
+            description = row['description']
+            jdParsedObject.append((id,url, description))
+        
+        #for each job, grab the skills and signals from the description, then score against the profile and weights, then classify and save results
+        for id, url, description in jdParsedObject:
+            try:
+                counts = match_skills(description, skills)
+                profile=load_profile(profile_path)
+                weights,penalties=load_weights(weight_path)
+                flags = extract_requirement_flags(description, skills, profile)
+                score, matched, required_total, missing = weighted_alignment_score(counts, profile, weights,penalties)
+                label = classify(score,flags)
+
+                if score >= min_score:
+                    results.append(
+                        JobResult(
+                            source=url,
+                            score=score,
+                            label=label,
+                            matched=matched,
+                            required_total=required_total,
+                            missing=";".join(missing),
+                            matches_json=str(counts),
+                        )
+                    )
+
+            except Exception as e:
+                print(f"Error processing {url}: {e}")
+                continue
+    else:
+        for line in lines:
+            try:
                 source = line
                 text = extract_text_from_url(line)
                 if text is None:
                     failures.append(FailureRecord(source=line, reason="Extraction failed", error=""))
                     continue
                 jdParsedObject.append((line,text))
-            
-            description = text['description'] if isinstance(text, dict) else text
-            
-            #grab skill counts for this job description
-            counts = match_skills(description, skills)
-            profile=load_profile(profile_path)
-            weights,penalties=load_weights(weight_path)
-           # score, matched, required_total, missing = profile_alignment_score(counts, profile)
-            flags = extract_requirement_flags(description, skills, profile)
-           
-            score, matched, required_total, missing = weighted_alignment_score(counts, profile, weights,penalties)
-            # label = classify(score)
-            # if flags["has_hard_requirement_blockers"]:
-            #     label = "Skip"
-            # else:
-            label = classify(score,flags)
-            
-            if score >= min_score:
-                results.append(
-                    JobResult(
-                        source=source,
-                        score=score,
-                        label=label,
-                        matched=matched,
-                        required_total=required_total,
-                        missing=";".join(missing),
-                        matches_json=str(counts),
+                description = text['description'] if isinstance(text, dict) else text
+                
+                #grab skill counts for this job description
+                counts = match_skills(description, skills)
+                profile=load_profile(profile_path)
+                weights,penalties=load_weights(weight_path)
+                flags = extract_requirement_flags(description, skills, profile)
+
+                score, matched, required_total, missing = weighted_alignment_score(counts, profile, weights,penalties)
+                # label = classify(score)
+                # if flags["has_hard_requirement_blockers"]:
+                #     label = "Skip"
+                # else:
+                label = classify(score,flags)
+
+                if score >= min_score:
+                    results.append(
+                        JobResult(
+                            source=source,
+                            score=score,
+                            label=label,
+                            matched=matched,
+                            required_total=required_total,
+                            missing=";".join(missing),
+                            matches_json=str(counts),
+                        )
                     )
-                )
-     
-        
-        except Exception as e:  
-            print(f"Error processing {line}: {e}")
-            continue
-        except FetchBlocked as e:
-            failures.append(FailureRecord(source=line, reason="blocked", error=str(e)))
-            continue
+
+
+            except Exception as e:
+                print(f"Error processing {line}: {e}")
+                continue
+            except FetchBlocked as e:
+                failures.append(FailureRecord(source=line, reason="blocked", error=str(e)))
+                continue
 
     write_results_csv(out_csv_path, results)
     write_failures_csv(out_csv_path.parent / "failures.csv", failures)
 
-    return jdParsedObject #return the parsed job descriptions as well so we can use that for other things like skill extraction and basic nlp tasks, don't just throw it away after scoring
+    return jdParsedObject
 
 
 def write_results_csv(path: Path, results: Iterable[JobResult]) -> None:
