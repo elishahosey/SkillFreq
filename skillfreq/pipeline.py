@@ -109,7 +109,8 @@ def run_links(
     
     if no_scrape:
         # If no scraping, we expect the input file to be a CSV with 'job_url' and 'description' columns
-        df = pd.read_csv(os.getenv("JOBSPY_DATA_PATH")+f"/cleaned_jobs-{datetime.now().month}-{datetime.now().day}-{datetime.now().strftime('%y')}.csv")
+        jobspy_data_path = os.getenv("JOBSPY_DATA_PATH") or "../JobSpy"
+        df = pd.read_csv(jobspy_data_path + f"/cleaned_jobs-{datetime.now().month}-{datetime.now().day}-{datetime.now().strftime('%y')}.csv")
         print(f"Loaded {len(df)} job descriptions from CSV for processing.")
         
         for _, row in df.iterrows():
