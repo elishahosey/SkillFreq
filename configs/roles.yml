@@ -1,0 +1,163 @@
+resume_variants:
+  Engineer_Data:
+    keywords:
+      - data engineer
+      - analytics engineer
+      - etl
+      - elt
+      - pipeline
+      - pipelines
+      - data pipeline
+      - ingestion
+      - transformation
+      - data warehouse
+      - warehousing
+      - warehouse
+      - dbt
+      - airflow
+      - spark
+      - kafka
+      - bigquery
+      - snowflake
+      - databricks
+      - schema
+      - data modeling
+      - data quality
+      - reconciliation
+      - batch processing
+      - stream processing
+      - sql
+      - python
+    weight: 1.0
+
+  Engineer_Analytics:
+    keywords:
+      - analytics
+      - business intelligence
+      - bi
+      - dashboard
+      - dashboards
+      - reporting
+      - reports
+      - metrics
+      - kpi
+      - looker
+      - tableau
+      - power bi
+      - semantic layer
+      - ad hoc
+      - stakeholder reporting
+      - sql
+      - transformation
+      - modeling
+    weight: 1.0
+
+  Engineer_Platform:
+    keywords:
+      - platform engineer
+      - platform
+      - infrastructure
+      - reliability
+      - sre
+      - observability
+      - monitoring
+      - logging
+      - devops
+      - ci/cd
+      - deployment
+      - release
+      - kubernetes
+      - terraform
+      - linux
+      - production support
+      - root cause
+      - distributed systems
+      - workflow orchestration
+      - automation pipelines
+    weight: 1.0
+
+  Engineer_Software:
+    keywords:
+      - backend engineer
+      - software engineer
+      - backend
+      - api
+      - apis
+      - rest
+      - microservices
+      - services
+      - object oriented
+      - client-server
+      - integration engineer
+      - integrations
+      - systems integration
+      - interface engineer
+      - middleware
+      - data exchange
+      - application engineer
+      - system integration
+    weight: 1.0
+
+title_overrides:
+  Engineer_Data:
+    - data engineer
+    - data platform engineer
+    - etl engineer
+    - data warehouse engineer
+    - analytics engineer
+
+  Engineer_Software:
+    - interface engineer
+    - systems integration
+    - system integration
+    - api integration
+    - client integration
+    - client integrations
+    - middleware
+    - integration engineer
+    - data integration engineer
+    - interface developer
+
+  Engineer_Platform:
+    - sre
+    - site reliability engineer
+    - devops engineer
+    - platform engineer
+    - infrastructure engineer
+
+negative_keywords:
+  Engineer_Data:
+    - dashboard
+    - front end
+    - frontend
+  Engineer_Analytics:
+    - kubernetes
+    - terraform
+  Engineer_Platform:
+    - tableau
+    - power bi
+  Engineer_Software:
+    - tableau
+    - power bi
+
+seniority_penalties:
+  hard_titles:
+    - senior
+    - sr
+    - lead
+    - principal
+    - staff
+    - architect
+    - manager
+    - director
+  medium_requirements:
+    - 5+ years
+    - 6+ years
+    - 7+ years
+    - 8+ years
+    - 10+ years
+    - five years
+    - six years
+    - seven years
+    - eight years
+    - ten years

@@ -65,6 +65,7 @@ class JobResult:
     required_total: int
     missing: str
     matches_json: str  
+    description: str
 
 @dataclass
 class FailureRecord:
@@ -139,6 +140,7 @@ def run_links(
                             required_total=required_total,
                             missing=";".join(missing),
                             matches_json=str(counts),
+                            description=description
                         )
                     )
 
@@ -179,6 +181,7 @@ def run_links(
                             required_total=required_total,
                             missing=";".join(missing),
                             matches_json=str(counts),
+                            description=description
                         )
                     )
 
@@ -199,9 +202,9 @@ def run_links(
 def write_results_csv(path: Path, results: Iterable[JobResult]) -> None:
     with path.open("w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
-        w.writerow(["source", "score", "label", "matched", "required_total", "missing", "matches"])
+        w.writerow(["source", "score", "label", "matched", "required_total", "missing", "matches", "description"])
         for r in results:
-            w.writerow([r.source, f"{r.score:.3f}", r.label, r.matched, r.required_total, r.missing, r.matches_json])
+            w.writerow([r.source, f"{r.score:.3f}", r.label, r.matched, r.required_total, r.missing, r.matches_json, r.description])
 
 def write_failures_csv(path: Path, failures: Iterable[FailureRecord]) -> None:
     with path.open("w", newline="", encoding="utf-8") as f:
