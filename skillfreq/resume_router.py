@@ -41,21 +41,12 @@ def _count_terms(text: str, keywords: list[str]) -> int:
 
 
 def _description_first_bucket_score(title: str, description: str, keywords: list[str]) -> int:
-    """
-    JD-first scoring:
-    - description/body is primary
-    - title is only a soft bonus
-    """
     title_hits = _count_terms(title, keywords)
     desc_hits = _count_terms(description, keywords)
     return (desc_hits * 3) + title_hits
 
 
 def _apply_title_bonus(scores: dict[str, int], title: str, config: dict[str, Any], bonus: int = 2) -> dict[str, int]:
-    """
-    Soft title routing:
-    add a small bonus instead of hard-locking the result.
-    """
     updated = scores.copy()
     overrides = config.get("title_overrides", {})
 
@@ -65,12 +56,21 @@ def _apply_title_bonus(scores: dict[str, int], title: str, config: dict[str, Any
 
     return updated
 
+def _ai_stack_penalty(description: str, config: dict[str, Any]) -> int:
+    penalty_cfg = config.get("ai_stack_penalty", {})
+    keywords = penalty_cfg.get("keywords", [])
+    base_penalty = penalty_cfg.get("penalty_score", 0)
+
+    ai_hits = _count_terms(description, keywords)
+
+    if ai_hits < 2:
+        return 0
+
+    return min(3, base_penalty + (ai_hits // 4))
+
+
 
 def _seniority_penalty(title: str, description: str, config: dict[str, Any]) -> int:
-    '''
-    Apply a penalty based on seniority level. 
-    I literally have less than 5 years of experience and want to avoid routing to lanes that are too senior, even if the JD language is a close match.
-    '''
     
     penalties = config.get("seniority_penalties", {})
     penalty = 0
@@ -89,9 +89,6 @@ def _seniority_penalty(title: str, description: str, config: dict[str, Any]) -> 
 
 
 def _resolve_tie_with_content(full_text: str) -> str:
-    """
-    Final fallback when scores are tied or nearly tied.
-    """
     if any(term in full_text for term in ["sql", "etl", "elt", "pipeline", "pipelines", "dbt", "airflow", "data warehouse"]):
         return "Engineer_Data"
     if any(term in full_text for term in ["dashboard", "reporting", "metrics", "bi", "business intelligence", "analytics"]):
@@ -127,13 +124,18 @@ def suggest_resume_variant(
         neg_score = _count_terms(full_text, negative_keywords.get(resume_name, []))
         scores[resume_name] = base_score - neg_score
 
-    # Apply seniority penalty equally across lanes
+
     seniority_penalty = _seniority_penalty(norm_title, norm_desc, roles_config)
     if seniority_penalty:
         for resume_name in scores:
             scores[resume_name] -= seniority_penalty
+            
+    ai_penalty = _ai_stack_penalty(norm_desc, roles_config)
+    if ai_penalty:
+        for resume_name in scores:
+            scores[resume_name] -= ai_penalty
 
-    # Apply only a soft title bonus after JD scoring
+
     scores = _apply_title_bonus(scores, norm_title, roles_config, bonus=2)
 
     sorted_scores = sorted(scores.items(), key=lambda item: item[1], reverse=True)

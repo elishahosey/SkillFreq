@@ -161,3 +161,34 @@ seniority_penalties:
     - seven years
     - eight years
     - ten years
+
+ai_stack_penalty:
+  keywords:
+    - rag
+    - retrieval augmented generation
+    - langchain
+    - langgraph
+    - llamaindex
+    - crewai
+    - autogen
+    - agentops
+    - llmops
+    - mlops
+    - model monitoring
+    - experiment tracking
+    - model versioning
+    - fine tuning
+    - fine-tune
+    - lora
+    - peft
+    - transformers
+    - tensorflow
+    - pytorch
+    - scikit-learn
+    - sklearn
+    - hallucination
+    - grounding
+    - prompt management
+    - offline evaluation
+    - online evaluation
+  penalty_score: 2
