@@ -48,6 +48,8 @@ SECTION_PATTERNS = {
 
 
 CORE_BLOCKER_SKILLS = {"sql", "etl", "python"}
+MODERN_STACK_SKILLS = {"spark", "airflow", "kafka", "aws", "data_platforms"}
+
 
 nlp = spacy.load('en_core_web_sm')
 
@@ -127,6 +129,7 @@ def extract_requirement_flags(
     skills: Dict[str, List[str]],
     profile: Dict[str, float],
 ) -> Dict[str, object]:
+    
     sections = extract_sections(description)
     required_text = sections.get("required", "")
     preferred_text = sections.get("preferred", "")
@@ -135,14 +138,23 @@ def extract_requirement_flags(
     flags = {
         "mandatory_missing_skills": [],
         "preferred_missing_skills": [],
+        "modern_required_missing_skills": [],
+        "modern_preferred_missing_skills": [],
         "years_required": None,
         "is_lead_like": False,
         "has_hard_requirement_blockers": False,
+        "has_modern_stack_blockers": False,
+        "reason_codes": [],
     }
 
+    # years parsing
     years_match = re.search(r"(\d+)\s*-\s*(\d+)\s+years", full_text)
     if years_match:
         flags["years_required"] = (int(years_match.group(1)), int(years_match.group(2)))
+    else:
+        single_years = re.findall(r"(\d+)\+?\s+years", full_text)
+        if single_years:
+            flags["years_required"] = max(int(y) for y in single_years)
 
     lead_terms = [
         "technical lead",
@@ -151,6 +163,9 @@ def extract_requirement_flags(
         "principal",
         "architect",
         "lead engineer",
+        "set technical direction",
+        "mentor junior engineers",
+        "drive architecture",
     ]
     flags["is_lead_like"] = any(term in full_text for term in lead_terms)
 
@@ -159,13 +174,14 @@ def extract_requirement_flags(
         for skill, terms in skills.items():
             if profile.get(skill, 0.0) > 0:
                 continue
-            if skill not in CORE_BLOCKER_SKILLS:
-                continue
 
             for term in terms:
                 pattern = r"(?<!\w)" + re.escape(term.lower()) + r"(?!\w)"
                 if re.search(pattern, required_text):
-                    flags["mandatory_missing_skills"].append(skill)
+                    if skill in CORE_BLOCKER_SKILLS:
+                        flags["mandatory_missing_skills"].append(skill)
+                    elif skill in MODERN_STACK_SKILLS:
+                        flags["modern_required_missing_skills"].append(skill)
                     break
 
     # softer signals from preferred section
@@ -177,13 +193,32 @@ def extract_requirement_flags(
             for term in terms:
                 pattern = r"(?<!\w)" + re.escape(term.lower()) + r"(?!\w)"
                 if re.search(pattern, preferred_text):
-                    flags["preferred_missing_skills"].append(skill)
+                    if skill in MODERN_STACK_SKILLS:
+                        flags["modern_preferred_missing_skills"].append(skill)
+                    else:
+                        flags["preferred_missing_skills"].append(skill)
                     break
 
     flags["mandatory_missing_skills"] = sorted(set(flags["mandatory_missing_skills"]))
     flags["preferred_missing_skills"] = sorted(set(flags["preferred_missing_skills"]))
-    flags["has_hard_requirement_blockers"] = (
-     len(flags["mandatory_missing_skills"]) > 0
-    )
+    flags["modern_required_missing_skills"] = sorted(set(flags["modern_required_missing_skills"]))
+    flags["modern_preferred_missing_skills"] = sorted(set(flags["modern_preferred_missing_skills"]))
+
+    flags["has_hard_requirement_blockers"] = len(flags["mandatory_missing_skills"]) > 0
+
+    # Modern stack is a blocker only if multiple required missing modern skills show up
+    flags["has_modern_stack_blockers"] = len(flags["modern_required_missing_skills"]) >= 2
+
+    # Reason codes
+    if flags["mandatory_missing_skills"]:
+        flags["reason_codes"].append("core_required_missing")
+    if flags["modern_required_missing_skills"]:
+        flags["reason_codes"].append("modern_required_missing")
+    if flags["modern_preferred_missing_skills"]:
+        flags["reason_codes"].append("modern_preferred_missing")
+    if flags["is_lead_like"]:
+        flags["reason_codes"].append("lead_like")
+    if flags["years_required"]:
+        flags["reason_codes"].append("years_present")
 
     return flags

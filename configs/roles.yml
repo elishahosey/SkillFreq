@@ -28,6 +28,12 @@ resume_variants:
       - stream processing
       - sql
       - python
+      - hugging face
+      - feature engineering
+      - model evaluation
+      - batch inference
+      - ml pipeline
+      - model artifacts
     weight: 1.0
 
   Engineer_Analytics:
@@ -50,6 +56,18 @@ resume_variants:
       - sql
       - transformation
       - modeling
+      - machine learning
+      - ml
+      - nlp
+      - bert
+      - predictive modeling
+      - classification
+      - model evaluation
+      - precision
+      - recall
+      - f1
+      - experimentation
+      - hypothesis testing
     weight: 1.0
 
   Engineer_Platform:
@@ -191,4 +209,4 @@ ai_stack_penalty:
     - prompt management
     - offline evaluation
     - online evaluation
-  penalty_score: 2
+  penalty_score: 1

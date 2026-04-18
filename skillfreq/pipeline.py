@@ -26,6 +26,8 @@ from .score.thresholds import classify
 from .skills.profile import load_profile
 from .skills.extract import extract_requirement_flags
 from skillfreq.skills.resume_profile.extract import extract_resume_signals
+from skillfreq.score.decision_layer import decide_apply_bucket, derive_fit_quality
+from .score.lane_classifier import classify_role_lane
 import csv
 
 
@@ -64,8 +66,12 @@ class JobResult:
     matched: int
     required_total: int
     missing: str
-    matches_json: str  
+    matches_json: str
     description: str
+    reason_codes: str
+    apply_decision: str
+    fit_quality: str
+    role_lane: str
 
 @dataclass
 class FailureRecord:
@@ -112,6 +118,8 @@ def run_links(
         # If no scraping, we expect the input file to be a CSV with 'job_url' and 'description' columns
         jobspy_data_path = os.getenv("JOBSPY_DATA_PATH") or "../JobSpy"
         df = pd.read_csv(jobspy_data_path + f"/cleaned_jobs-{datetime.now().month}-{datetime.now().day}-{datetime.now().strftime('%y')}.csv")
+       #specific date missed
+        #df = pd.read_csv(jobspy_data_path + f"/cleaned_jobs-4-12-26.csv")
         print(f"Loaded {len(df)} job descriptions from CSV for processing.")
         
         for _, row in df.iterrows():
@@ -127,9 +135,32 @@ def run_links(
                 profile=load_profile(profile_path)
                 weights,penalties=load_weights(weight_path)
                 flags = extract_requirement_flags(description, skills, profile)
-                score, matched, required_total, missing = weighted_alignment_score(counts, profile, weights,penalties)
+                score, matched, required_total, missing = weighted_alignment_score(counts, profile, weights,penalties,description=description,flags=flags)
                 label = classify(score,flags)
-
+                reason_codes = ";".join(flags.get("reason_codes", []))
+                apply_decision = decide_apply_bucket({
+                        "title": row.get("title", ""),
+                        "description": description,
+                        "reason_codes": reason_codes,
+                        "label": label,
+                        "score": score,
+                        "matched": matched,
+                        "required_total": required_total,
+                    })
+                fit_quality = derive_fit_quality({
+                "title": row.get("title", ""),
+                "description": description,
+                "reason_codes": reason_codes,
+                "label": label,
+                "score": score,
+                "matched": matched,
+                "required_total": required_total,
+                "missing": ";".join(missing),
+            })
+                role_lane = classify_role_lane({
+                    "title": row.get("title", ""),
+                    "description": description,
+                })
                 if score >= min_score:
                     results.append(
                         JobResult(
@@ -140,10 +171,14 @@ def run_links(
                             required_total=required_total,
                             missing=";".join(missing),
                             matches_json=str(counts),
-                            description=description
+                            description=description,
+                            reason_codes=reason_codes,
+                            apply_decision=apply_decision,
+                            fit_quality=fit_quality,
+                            role_lane=role_lane
                         )
                     )
-
+                print(f"{url} | score={score:.2f} | label={label} | reasons={flags.get('reason_codes', [])}")
             except Exception as e:
                 print(f"Error processing {url}: {e}")
                 continue
@@ -164,13 +199,36 @@ def run_links(
                 weights,penalties=load_weights(weight_path)
                 flags = extract_requirement_flags(description, skills, profile)
 
-                score, matched, required_total, missing = weighted_alignment_score(counts, profile, weights,penalties)
+                score, matched, required_total, missing = weighted_alignment_score(counts, profile, weights,penalties,description=description,flags=flags)
                 # label = classify(score)
                 # if flags["has_hard_requirement_blockers"]:
                 #     label = "Skip"
                 # else:
                 label = classify(score,flags)
-
+                reason_codes = ";".join(flags.get("reason_codes", []))
+                apply_decision = decide_apply_bucket({
+                        "title": row.get("title", ""),
+                        "description": description,
+                        "reason_codes": reason_codes,
+                        "label": label,
+                        "score": score,
+                        "matched": matched,
+                        "required_total": required_total,
+                    })
+                fit_quality = derive_fit_quality({
+                "title": row.get("title", ""),
+                "description": description,
+                "reason_codes": reason_codes,
+                "label": label,
+                "score": score,
+                "matched": matched,
+                "required_total": required_total,
+                "missing": ";".join(missing),
+            })
+                role_lane = classify_role_lane({
+                    "title": row.get("title", ""),
+                    "description": description,
+                })
                 if score >= min_score:
                     results.append(
                         JobResult(
@@ -181,10 +239,14 @@ def run_links(
                             required_total=required_total,
                             missing=";".join(missing),
                             matches_json=str(counts),
-                            description=description
+                            description=description,
+                            reason_codes=reason_codes,
+                            apply_decision=apply_decision,
+                            fit_quality=fit_quality,
+                            role_lane=role_lane
                         )
                     )
-
+            
 
             except Exception as e:
                 print(f"Error processing {line}: {e}")
@@ -202,9 +264,10 @@ def run_links(
 def write_results_csv(path: Path, results: Iterable[JobResult]) -> None:
     with path.open("w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
-        w.writerow(["source", "score", "label", "matched", "required_total", "missing", "matches", "description"])
+        w.writerow(["source", "score", "raw_match", "matched", "required_total",
+                    "missing", "matches", "description", "reason_codes", "fit_quality", "role_lane", "apply_decision"])
         for r in results:
-            w.writerow([r.source, f"{r.score:.3f}", r.label, r.matched, r.required_total, r.missing, r.matches_json, r.description])
+            w.writerow([r.source, f"{r.score:.3f}", r.label, r.matched, r.required_total, r.missing, r.matches_json, r.description, r.reason_codes, r.fit_quality, r.role_lane, r.apply_decision])
 
 def write_failures_csv(path: Path, failures: Iterable[FailureRecord]) -> None:
     with path.open("w", newline="", encoding="utf-8") as f:

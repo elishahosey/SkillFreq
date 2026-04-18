@@ -8,17 +8,18 @@ weights:
   data_quality: 4
   java: 2
   git: 1
-  airflow: 2
-  aws: 1
-  data_platforms: 1
+  airflow: 1
+  aws: 0.5
+  data_platforms: 0.5
   systems: 2
   kafka: 0
   system_design: 2
   software_engineering: 2
-  devops: 2
+  devops: 1.5
   testing: 1
-  operations: 1
+  operations: 1.5
   dev_practices: 1
-  
+  ai_ml: 0.5
+
 penalties:
   seniority: -1
