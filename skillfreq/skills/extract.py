@@ -1,7 +1,7 @@
 from datetime import datetime
 from string import punctuation
 import re
-from typing import Dict, List
+from typing import Any, Dict, List
 
 import spacy
 
@@ -87,10 +87,30 @@ def get_nounChunks(text):
     return results
         
     
+def _extract_description_text(jd: Any) -> str:
+    if isinstance(jd, dict):
+        return str(jd.get("description", "") or "")
+
+    if isinstance(jd, tuple):
+        if len(jd) < 2:
+            return ""
+
+        payload = jd[1]
+        if isinstance(payload, dict):
+            return str(payload.get("description", "") or "")
+        return str(payload or "")
+
+    return str(jd or "")
+
+
 def extract_jd_skills(jdParsedObject):
     extracted_skills = []
     for jd in jdParsedObject:
-        text = jd[1]['description'] if 'description' in jd[1] else jd[1]
+        text = _extract_description_text(jd)
+        if not text:
+            extracted_skills.append([])
+            continue
+
         output = list(set(get_nounChunks(text)))
 
         extracted_skills.append(output)
@@ -158,14 +178,18 @@ def extract_requirement_flags(
 
     lead_terms = [
         "technical lead",
-        "subject matter expert",
         "staff",
         "principal",
-        "architect",
         "lead engineer",
         "set technical direction",
         "mentor junior engineers",
-        "drive architecture",
+        "mentor junior data engineers",
+        "evaluate and make decisions",
+        "evaluate dataset implementations",
+        "evaluate the use of new or existing software products and tools",
+        "drive best practices in source teams",
+        "architecture ownership",
+        "system design leadership",
     ]
     flags["is_lead_like"] = any(term in full_text for term in lead_terms)
 

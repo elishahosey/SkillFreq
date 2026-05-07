@@ -29,42 +29,32 @@ def classify_role_lane(row: Dict[str, Any]) -> str:
     desc = _safe_text(row.get("description", ""))
     text = f"{title} {desc}"
 
-    # -----------------------------
-    # Hard wrong-lane titles
-    # -----------------------------
     hard_wrong_title_terms = [
         "qa engineer",
         "quality assurance",
         "automation tester",
         "test engineer",
-        "application qa",
         "frontend engineer",
         "frontend developer",
         "ui engineer",
         "ui developer",
         "full stack engineer",
         "full stack developer",
-        "aem engineer",
-        "data analyst",
-        "business analyst",
-        "reporting analyst",
         "data scientist",
         "applied scientist",
         "ml engineer",
         "machine learning engineer",
         "ai engineer",
         "ai automation analyst",
-        "consultant",
         "associate consultant",
+        "implementation consultant",
+        "consultant",
         "cloud infrastructure engineer",
     ]
 
     if _contains_any(title, hard_wrong_title_terms):
         return "wrong_lane"
 
-    # -----------------------------
-    # Title buckets
-    # -----------------------------
     strong_target_title_terms = [
         "data engineer",
         "etl engineer",
@@ -72,7 +62,6 @@ def classify_role_lane(row: Dict[str, Any]) -> str:
         "data integration engineer",
         "integration engineer",
         "data warehouse engineer",
-        "analytics engineer",
         "data systems engineer",
         "sql developer",
         "data developer",
@@ -87,22 +76,13 @@ def classify_role_lane(row: Dict[str, Any]) -> str:
         "data platform engineer",
         "platform engineer",
         "application engineer",
+        "analytics engineer",
         "bi engineer",
         "business intelligence engineer",
         "cloud data engineer",
         "pl/sql developer",
     ]
 
-    senior_platform_title_terms = [
-        "data platform engineer",
-        "cloud data engineer",
-        "platform engineer",
-        "pl/sql developer",
-    ]
-
-    # -----------------------------
-    # Description signals
-    # -----------------------------
     core_data_signals = [
         "etl",
         "elt",
@@ -118,9 +98,13 @@ def classify_role_lane(row: Dict[str, Any]) -> str:
         "data modeling",
         "source to target",
         "stored procedures",
-        "record processing",
         "xml",
         "json",
+        "api",
+        "rest",
+        "oracle pl/sql",
+        "production support",
+        "root cause",
     ]
 
     backend_data_signals = [
@@ -128,7 +112,6 @@ def classify_role_lane(row: Dict[str, Any]) -> str:
         "flask",
         "postgresql",
         "sqlalchemy",
-        "rest api",
         "microservices",
         "batch data processing",
         "real-time and batch data processing",
@@ -136,8 +119,6 @@ def classify_role_lane(row: Dict[str, Any]) -> str:
         "xml processing",
         "message brokers",
         "distributed task processing",
-        "redis",
-        "alembic",
         "pytest",
         "docker",
     ]
@@ -147,9 +128,29 @@ def classify_role_lane(row: Dict[str, Any]) -> str:
         "python",
         "git",
         "query optimization",
-        "snowflake",
-        "oracle pl/sql",
         "pl/sql",
+    ]
+
+    analytics_terms = [
+        "dashboard",
+        "dashboards",
+        "tableau",
+        "power bi",
+        "quicksight",
+        "looker",
+        "business intelligence",
+        "obiee",
+        "olap",
+        "semantic layer",
+        "ad hoc reporting",
+        "reporting and analysis",
+        "executive reporting",
+        "dbt",
+        "snowflake",
+        "facts",
+        "dimensions",
+        "scd",
+        "snapshots",
     ]
 
     wrong_desc_terms = [
@@ -158,9 +159,6 @@ def classify_role_lane(row: Dict[str, Any]) -> str:
         "bdd frameworks",
         "functional testing",
         "regression testing",
-        "adobe experience platform",
-        "touch ui",
-        "classic ui",
         "prompt engineering",
         "langchain",
         "openai api",
@@ -172,12 +170,6 @@ def classify_role_lane(row: Dict[str, Any]) -> str:
         "machine learning",
         "deep learning",
         "nlp",
-        "power bi",
-        "tableau",
-        "looker",
-        "dashboard development",
-        "executive reporting",
-        "self-service analytics",
         "scada",
         "wastewater",
         "sewer",
@@ -201,16 +193,12 @@ def classify_role_lane(row: Dict[str, Any]) -> str:
         "ansible",
         "helm",
         "serverless",
-        "iac",
         "observability",
         "monitoring and alerting",
         "high availability",
         "capacity planning",
-        "backup and recovery",
         "database administration",
         "dba",
-        "sql server environments",
-        "data lake",
         "redshift",
         "glue",
         "emr",
@@ -228,6 +216,8 @@ def classify_role_lane(row: Dict[str, Any]) -> str:
         "eager to learn",
         "entry level",
         "recent graduates",
+        "technical recruiter",
+        "someone in your network",
     ]
 
     strong_target_title = _contains_any(title, strong_target_title_terms)
@@ -236,69 +226,45 @@ def classify_role_lane(row: Dict[str, Any]) -> str:
     core_data_count = _count_hits(text, core_data_signals)
     backend_data_count = _count_hits(text, backend_data_signals)
     support_count = _count_hits(text, support_signals)
+    analytics_count = _count_hits(text, analytics_terms)
     wrong_desc_count = _count_hits(desc, wrong_desc_terms)
     platform_heavy_count = _count_hits(text, platform_heavy_terms)
+    low_signal_count = _count_hits(text, low_signal_terms)
 
-    # -----------------------------
-    # Hard wrong-lane descriptions
-    # -----------------------------
     if wrong_desc_count >= 2 and core_data_count == 0 and backend_data_count == 0:
         return "wrong_lane"
 
-    # -----------------------------
-    # Platform / DBA / cloud drift guard
-    # -----------------------------
-    if _contains_any(title, senior_platform_title_terms):
-        if platform_heavy_count >= 2 or wrong_desc_count >= 1:
-            return "adjacent_lane"
+    if low_signal_count >= 2 and not strong_target_title:
+        return "wrong_lane"
 
-    # -----------------------------
-    # Strong target detection
-    # -----------------------------
-    is_strong_target = False
-
-    # Real DE/integration/data titles should have an easier path
-    if strong_target_title and (core_data_count >= 2 or backend_data_count >= 2):
-        is_strong_target = True
-
-    elif strong_target_title and core_data_count >= 1:
-        is_strong_target = True
-
-    elif strong_target_title and support_count >= 2:
-        is_strong_target = True
-
-    # Backend/software-ish titles can still become target if clearly data/backend shaped
-    elif adjacent_title and (
-        (core_data_count >= 2 and support_count >= 2)
-        or (backend_data_count >= 3 and support_count >= 1)
-    ):
-        if wrong_desc_count == 0 and platform_heavy_count <= 2:
-            is_strong_target = True
-
-    # Description-only target catch
-    elif core_data_count >= 3 and support_count >= 2 and wrong_desc_count == 0 and platform_heavy_count <= 2:
-        is_strong_target = True
-
-    elif backend_data_count >= 3 and support_count >= 2 and wrong_desc_count == 0:
-        is_strong_target = True
-
-    # -----------------------------
-    # Low-signal downrank
-    # -----------------------------
-    if is_strong_target and _contains_any(desc, low_signal_terms):
+    if _contains_any(title, ["business intelligence engineer", "bi engineer", "analytics engineer"]):
         return "adjacent_lane"
 
-    # -----------------------------
-    # Final target decision
-    # -----------------------------
-    if is_strong_target:
-        return "target_lane"
+    if strong_target_title:
+        if core_data_count >= 2:
+            return "target_lane"
+        if core_data_count >= 1 and support_count >= 2:
+            return "target_lane"
 
-    # -----------------------------
-    # Adjacent lane
-    # -----------------------------
     if adjacent_title:
+        if (
+            analytics_count == 0
+            and platform_heavy_count <= 2
+            and (
+                (core_data_count >= 3 and support_count >= 2)
+                or (backend_data_count >= 3 and support_count >= 1)
+            )
+        ):
+            return "target_lane"
         return "adjacent_lane"
+
+    if (
+        core_data_count >= 3
+        and support_count >= 2
+        and analytics_count == 0
+        and platform_heavy_count <= 2
+    ):
+        return "target_lane"
 
     if core_data_count >= 1 or backend_data_count >= 1 or support_count >= 2:
         return "adjacent_lane"

@@ -1,0 +1,86 @@
+I will provide a text file of manually scraped job descriptions.
+
+Each job is separated by:
+________________________________________________________
+
+Each job uses this format:
+
+Order:
+Link:
+Role:
+JD:
+
+Your task has TWO STEPS:
+
+STEP 1 — Evaluate each role from the raw JD
+Use my actual experience and strict recruiter-screen realism.
+
+My background:
+- Backend / data-focused engineer
+- Strong in SQL, ETL-style work, data validation, reconciliation, APIs, integrations, debugging data workflows, production support
+- Experience with Python, Java, REST APIs, JSON/XML, SQL Server, data workflows
+- Target roles:
+  - Data Engineer, SQL/ETL focused
+  - Backend Engineer, data-heavy
+  - Integration / ETL / pipeline roles
+- Target level: junior to mid-level, 0–4 years
+
+Avoid overrating roles centered on:
+- cloud platform ownership
+- distributed big-data frameworks
+- streaming/event-driven systems
+- infrastructure/platform engineering
+- senior architecture ownership
+- consulting-heavy delivery
+- AI/ML-heavy work
+- dashboard/reporting-only work
+
+Hard filters:
+- 5+ years or senior/lead/architect ownership = weak_fit / wrong_lane / skip
+- modern data platform roles centered on cloud + Spark/Databricks/Kafka/big-data/platform architecture = weak_fit / wrong_lane / skip
+- infra/platform/DevOps/SRE-heavy roles = weak_fit / wrong_lane / skip
+- AI/ML-heavy roles = weak_fit or aggressive downgrade
+- consulting/vendor/client-delivery-heavy roles = downrank or skip
+- ecosystem-gated roles like Snowflake, Databricks, Informatica, Palantir, SAP, heavy AWS = downgrade unless unusually strong match
+
+For each role, assign:
+- Fit Quality: good_fit / possible_fit / weak_fit
+- Role Lane: target_lane / adjacent_lane / wrong_lane
+- Apply Decision: apply_now / manual_review / skip
+- Reason: 2–4 sentences explaining recruiter realism and the rule that drove the result
+
+STEP 2 — Decide what I should ACTUALLY apply to right now
+From the evaluated roles, choose only the strongest 3–6 max.
+
+For possible_fit roles included in APPLY NOW or OPTIONAL / STRETCH, classify:
+- possible_2a = strong possible fit; core work still matches SQL/ETL/data validation/integrations/backend data processing
+- possible_2b = weaker possible fit; overlap exists but role is more diluted, platform/tool/domain/reporting-heavy, or less recruiter-safe
+
+For APPLY NOW or OPTIONAL / STRETCH roles, classify pivot status:
+- pivotable = reinforces SQL, ETL, APIs, integrations, validation, backend/data systems
+- conditional = useful but has tradeoff like domain, reporting tilt, tool-specific gating, or partial mismatch
+- risky = high pigeonhole risk or weak future transfer
+
+Decision constraints:
+- I can only apply to 3–6 roles max
+- Optimize for recruiter pass likelihood, not learning
+- Prefer realistic resume match, minimal stack gap, and low pigeonhole risk
+- Prefer pivotable over conditional
+- Prefer possible_2a over possible_2b
+- Do not force weak options
+
+Output exactly:
+
+APPLY NOW (Top 3-5)
+
+- Order X — Fit Quality — Role Lane — possible_2a/possible_2b if applicable — pivotable/conditional/risky
+  Reason: 1-2 sentences focused on recruiter realism and pivot impact.
+
+OPTIONAL / STRETCH
+
+- Order X — Fit Quality — Role Lane — possible_2a/possible_2b if applicable — pivotable/conditional/risky
+  Reason: 1-2 sentences explaining the risk and pivot tradeoff.
+
+DO NOT APPLY
+
+- Brief 1-2 sentence summary of why the rest are not worth it.

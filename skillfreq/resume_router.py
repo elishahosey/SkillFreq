@@ -179,8 +179,8 @@ def route_resumes_for_csv(
     input_csv: Path,
     out_csv: Path,
     roles_path: Path,
-    title_col: str = "Role",
-    jd_col: str = "JDText",
+    title_col: str = "",
+    jd_col: str = "description",
 ) -> pd.DataFrame:
     base_path = os.getenv("NOTION_TRACKER_PATH", "").strip('"')
     if not base_path:
@@ -192,7 +192,9 @@ def route_resumes_for_csv(
 
     roles_config = load_roles_config(roles_path)
 
-    missing_cols = [col for col in [title_col, jd_col] if col not in df.columns]
+    # Only check for columns that are specified (non-empty)
+    cols_to_check = [col for col in [title_col, jd_col] if col]
+    missing_cols = [col for col in cols_to_check if col not in df.columns]
     if missing_cols:
         raise ValueError(
             f"Missing required columns for resume routing: {missing_cols}. "

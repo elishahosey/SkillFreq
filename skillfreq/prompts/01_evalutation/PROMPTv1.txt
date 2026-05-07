@@ -1,0 +1,447 @@
+I will provide:
+
+1. My base resume(s)
+2. A CSV of job descriptions (column: description + additional columns)
+
+Your task is to evaluate each job based on how well it matches MY ACTUAL experience.
+
+---
+
+## CONTEXT ABOUT ME
+
+- Backend / data-focused engineer
+- Strong in: SQL, data validation, ETL-style work, debugging data pipelines, APIs, integrations
+- Experience with: Python, Java, REST APIs, JSON/XML, data workflows, production debugging
+- Target roles:
+  - Data Engineer (SQL / ETL focused)
+  - Backend Engineer (data-heavy)
+  - Integration / ETL / pipeline roles
+
+I am targeting junior to mid-level roles (0–4 years).
+
+My actual background is strongest in:
+- SQL-heavy data work
+- ETL / ingestion / transformation flows
+- data validation / reconciliation
+- API / integration work
+- production debugging and reliability
+- backend data processing
+
+I am NOT a strong match for roles centered on:
+- cloud platform ownership
+- distributed big-data frameworks
+- streaming/event-driven data systems
+- infrastructure/platform engineering
+- senior architecture ownership
+
+---
+
+## DATA PROVIDED (IMPORTANT)
+
+Each row may already include signals such as:
+- fit_quality
+- role_lane
+- apply_decision
+- missing
+- reason_co
+
+You MUST:
+- Use these only as supporting signals
+- Override them if they conflict with the rules below
+- Never trust them blindly
+- Evaluate from the raw job description first
+
+---
+
+## PRIMARY EVALUATION QUESTION
+
+For every job, answer this:
+
+"Would I realistically pass recruiter screening for this role based on my actual experience?"
+
+Do NOT answer:
+- "Could I learn this?"
+- "Does the title sound close?"
+- "Do a few keywords overlap?"
+
+The standard is recruiter realism, not theoretical learnability.
+
+---
+
+# HARD FILTERS (RUN FIRST)
+
+If ANY hard filter triggers:
+
+- Fit Quality = weak_fit
+- Role Lane = wrong_lane
+- Apply Decision = skip
+
+IMPORTANT:
+- Even if a hard filter triggers, you MUST still provide a detailed reason
+- Do NOT stop silently
+- Do NOT let positive keywords override a hard filter
+
+---
+
+## 1. SENIORITY / EXPERIENCE DISQUALIFIERS
+
+Trigger hard filter if the job explicitly asks for:
+- 5+ years
+- 6+ years
+- 7+ years
+- 8+ years
+- 10+ years
+- or ranges like 5–7, 6–8, 7–10, 8–12
+
+Also trigger hard filter for implicit seniority such as:
+- lead
+- leading systems end-to-end
+- architect
+- own / ownership of major systems
+- drive technical direction
+- mentor engineers
+- define strategy
+- scalability ownership
+- performance ownership across major systems
+
+IMPORTANT:
+Do not ignore seniority just because the title sounds close.
+
+---
+
+## 2. TITLE / LEVEL SANITY CHECK (NEW)
+
+Be careful with titles such as:
+- Data Engineer II / III
+- Senior Data Engineer
+- Lead Data Engineer
+- Staff / Principal / Architect
+- Senior Backend Engineer
+- Senior Platform Engineer
+
+If the title or level suggests a stronger role than my background supports, treat that as a negative signal.
+
+IMPORTANT:
+A role can still fail even if the years requirement says only 3+ years, if the actual responsibilities clearly reflect mid-senior or platform-level expectations.
+
+Example:
+A "Data Engineer III" role with cloud architecture, distributed processing, and large-scale performance ownership is NOT a realistic fit just because it says 3+ years.
+
+---
+
+## 3. MODERN DATA PLATFORM DETECTION (CRITICAL)
+
+If the role emphasizes ANY TWO OR MORE of the following as CORE responsibilities, treat it as a hard filter:
+
+- cloud platform design / deployment / management (AWS, GCP, Azure)
+- distributed data processing (Spark, Databricks, Flink, Hadoop)
+- streaming or event-driven systems (Kafka, Kinesis, event-driven architectures)
+- large-scale / big-data processing as a central responsibility
+- scalable data platform / data architecture ownership
+- storage/query optimization for very large-scale datasets as a primary focus
+- cloud-native data architecture
+- real-time or near-real-time platform engineering
+
+Then set:
+- Fit Quality = weak_fit
+- Role Lane = wrong_lane
+- Apply Decision = skip
+
+Reason MUST explicitly state:
+"This is a modern data platform role, not a SQL/ETL-focused role."
+
+IMPORTANT:
+Do NOT rescue the score just because SQL or Python appears in the description.
+Many modern platform roles mention SQL, Python, APIs, and testing, but that does NOT make them a match.
+
+---
+
+## 4. PLATFORM / INFRASTRUCTURE HEAVY
+
+Trigger hard filter if PRIMARY work includes:
+- Kubernetes
+- Docker
+- containerization
+- orchestration technologies
+- infrastructure provisioning
+- Terraform or similar
+- CI/CD ownership (not just usage)
+- DevOps responsibilities
+- SRE responsibilities
+- runtime/platform infrastructure support
+
+If the role is mainly about platform operations, deployment systems, infrastructure reliability, or cloud environment ownership, it is NOT a target role.
+
+---
+
+## 5. BACKEND PLATFORM ENGINEERING (NON-DATA)
+
+Trigger hard filter if the role is mainly:
+- microservices
+- distributed backend systems
+- platform APIs
+- backend service scalability
+- performance engineering
+- service architecture
+
+AND there is little or no emphasis on:
+- SQL
+- ETL
+- data validation
+- integrations
+- backend data processing
+
+These are not my target lane unless data pipeline / ETL / integration work is clearly central.
+
+---
+
+## 6. CONSULTING / VENDOR ROLES
+
+Trigger hard filter if the job shows signs of:
+- consulting-heavy delivery
+- client implementation / multiple client delivery
+- digital transformation wording
+- vendor / staffing firm style language
+- recruiter-broadcast tone
+- external client ownership as the main job
+
+IMPORTANT:
+Even if tools match, consulting-heavy roles should be downranked or skipped because they are not my preferred lane.
+
+---
+
+## 7. MANAGEMENT / ORG-LEVEL DATA ROLES
+
+Trigger hard filter if the role includes:
+- data strategy ownership
+- governance leadership
+- KPI / roadmap definition
+- stakeholder leadership as a primary responsibility
+- team management
+- reporting to leadership on program direction
+- org-level data ownership
+
+This is beyond my target level.
+
+---
+
+## 8. AI / ML / ADVANCED ANALYTICS HEAVY
+
+Trigger hard filter or aggressive downgrade if the role centers on:
+- machine learning pipelines
+- ML model deployment
+- AI-driven analytics
+- ML platforms / frameworks
+- data science experimentation
+- heavy predictive modeling responsibilities
+
+If AI/ML is only a small preferred bonus, do not hard filter on that alone.
+But if it is central, this is not my lane.
+
+---
+
+## 9. ECOSYSTEM LOCK-IN (SOFT DOWNGRADE)
+
+If the role heavily depends on one or more of the following as central technologies:
+- Databricks
+- Snowflake architecture ownership
+- Palantir Foundry
+- SAP / SAP BTP
+
+Then downgrade at least one level.
+
+Example:
+- good_fit -> possible_fit
+- possible_fit -> weak_fit
+
+If that ecosystem dependency is clearly central to the role, do NOT overrate the fit.
+
+---
+
+# CORE RESPONSIBILITY CHECK (AFTER HARD FILTERS)
+
+After applying hard filters, check whether the job is PRIMARILY focused on the things I actually do well:
+
+- SQL
+- ETL / ELT / ingestion / transformation
+- data validation / reconciliation / data quality
+- backend data processing
+- APIs / integrations
+- production debugging for data workflows
+- pipeline reliability
+
+If these are NOT clearly central, then:
+- MAX Fit Quality = possible_fit
+
+A role should only be good_fit if the core day-to-day work strongly matches my proven background.
+
+---
+
+# SCORE OVERRIDE RULE
+
+A high keyword match does NOT equal a high fit.
+
+If:
+- core tools are not in my actual experience
+AND
+- those tools are central to the role
+
+Then downgrade regardless of overlap in SQL, Python, APIs, or generic data terms.
+
+IMPORTANT:
+Do not let broad overlap hide a true mismatch in role type.
+
+---
+
+# APPLY DECISION LOGIC
+
+Use these definitions:
+
+- apply_now = strong fit and realistic recruiter-screen chance with low or moderate ramp
+- manual_review = viable but requires noticeable ramp, or title/responsibilities create some risk
+- skip = poor fit, failed hard filters, or unlikely recruiter pass
+
+IMPORTANT:
+If:
+- fit looks good on surface
+BUT
+- the role requires multiple missing core tools
+OR
+- the role is level-inflated / platform-heavy / senior-coded
+
+Then downgrade appropriately.
+
+Examples:
+- good_fit -> manual_review
+- possible_fit -> skip
+
+---
+
+# ADJACENT LANE RULE
+
+If Role Lane = adjacent_lane, default to:
+- Apply Decision = manual_review
+
+If it is adjacent_lane AND also has:
+- key missing tools
+- title inflation
+- seniority mismatch
+- platform-heavy signals
+- unclear recruiter realism
+
+Then:
+- Apply Decision = skip
+
+---
+
+# GOOD_FIT STANDARD (STRICT)
+
+Only assign good_fit if MOST of the following are true:
+
+- the role is primarily SQL / ETL / data validation / integration focused
+- modern platform tooling is not central
+- cloud/distributed/streaming is not the heart of the role
+- the title and level are realistic for junior-to-mid experience
+- the responsibilities look close to my actual proven work
+- I could plausibly pass recruiter screening without stretching the story too much
+
+If those conditions are not met, do NOT assign good_fit.
+
+---
+
+# POSSIBLE_FIT STANDARD
+
+Assign possible_fit if:
+- there is meaningful overlap with my background
+- the role is still somewhat in my target or adjacent lane
+- some ramp would be needed
+- the missing tools are not overwhelmingly central
+- recruiter pass is possible but not especially strong
+
+---
+
+# WEAK_FIT STANDARD
+
+Assign weak_fit if:
+- the role fails a hard filter
+- the role is mainly a modern data platform role
+- the role is too senior
+- the role is too infra/platform heavy
+- the role is too AI/ML heavy
+- the role is too consulting-heavy
+- the job would likely fail recruiter screening despite keyword overlap
+
+---
+
+# OUTPUT FORMAT
+
+For EACH job, output exactly:
+
+| Order | Fit Quality | Role Lane | Apply Decision | Reason |
+
+---
+
+# REASON REQUIREMENTS (IMPORTANT)
+
+Each Reason must be detailed and useful.
+
+Requirements:
+1. 2–5 sentences
+2. Explain WHY the role fits or fails
+3. Mention the most important rule(s) that drove the outcome
+4. Refer to specific signals from the description
+5. Use plain, direct language
+6. Avoid generic filler like:
+   - "not a good fit"
+   - "missing skills"
+   - "seems aligned"
+   - "could be learned"
+
+Each reason should include some combination of:
+- core responsibility match
+- seniority realism
+- modern data platform detection
+- recruiter-screen realism
+- target-lane vs adjacent-lane explanation
+- stack centrality vs optionality
+
+---
+
+# REASON STYLE GUIDE
+
+Good reasons should sound like this:
+
+- "This role is centered on SQL, ETL, data validation, and API-driven integrations, which closely match my actual experience. The responsibilities look operational and pipeline-focused rather than platform-architecture-heavy, so it appears realistic for recruiter screening."
+
+- "This role mentions SQL and Python, but the core emphasis is cloud-native architecture, distributed processing, and large-scale platform optimization. This is a modern data platform role, not a SQL/ETL-focused role, so it should be skipped despite surface keyword overlap."
+
+- "This role is somewhat adjacent because it includes backend and data handling, but ETL, validation, and integration work are not clearly central. It may be viable only with ramp, so it belongs in manual_review rather than apply_now."
+
+- "The title and responsibilities signal a mid-senior expectation, including ownership, architecture direction, and scalability concerns. That creates a seniority mismatch even if some of the tools overlap."
+
+---
+
+# FINAL PRIORITY ORDER
+
+Favor roles that are clearly:
+- SQL-heavy
+- ETL / pipeline focused
+- validation / reconciliation heavy
+- API / integration driven
+- backend data processing oriented
+- realistic for junior to mid-level screening
+
+Downrank or skip roles that are:
+- cloud/platform-heavy
+- distributed/big-data heavy
+- streaming/event-driven heavy
+- infra-heavy
+- consulting-heavy
+- AI/ML-heavy
+- vague or low-signal
+- title-inflated relative to my background
+
+Be strict.
+Do not overrate based on title.
+Do not overrate based on keywords.
+Do not overrate based on theoretical learnability.

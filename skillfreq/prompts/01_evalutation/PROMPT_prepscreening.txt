@@ -1,0 +1,53 @@
+
+I will provide a job description for a role I have a recruiter screen for.
+
+Generate no more than 5 questions I can ask during the screen.
+
+Create two versions:
+
+1. Nontechnical Recruiter Version
+- Questions should focus on role fit, must-have qualifications, seniority expectations, onsite/remote expectations, hiring process, and whether my background aligns.
+- Avoid deep architecture, implementation, tooling, or algorithm-specific questions unless phrased simply.
+
+2. Technical Recruiter / Hiring Manager Version
+- Questions can go deeper into the actual work, technical stack, data workflows, architecture, validation/testing, production deployment, and team responsibilities.
+- Still keep them appropriate for an early screen.
+
+Use my background when choosing questions:
+- SQL/database experience
+- ETL/data workflow experience
+- software integration
+- production debugging
+- validation/reconciliation
+- Python automation/helper scripts
+- experience in domain-specific/proprietary systems
+- junior-to-mid level framing
+
+Also flag if the role seems like:
+- clean fit
+- possible fit
+- stretch fit
+- senior-leaning fit
+
+Return the output in this format:
+
+Fit Read:
+[1-3 sentence assessment]
+
+Nontechnical Recruiter Questions:
+1.
+2.
+3.
+4.
+5.
+
+Technical Recruiter / Hiring Manager Questions:
+1.
+2.
+3.
+4.
+5.
+
+Best Question to Ask If Time Is Limited:
+[One question]
+```

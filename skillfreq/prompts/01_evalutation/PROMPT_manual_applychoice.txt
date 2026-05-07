@@ -1,0 +1,449 @@
+I will provide:
+
+1. My base resume(s)
+2. A manual_scrape .txt file containing raw job postings copied from job boards
+
+Each posting may include:
+- job title
+- company
+- location
+- remote / hybrid / on-site status
+- job description
+- requirements
+- preferred qualifications
+- pay / contract info
+- messy formatting or duplicate text
+
+Your task is to evaluate the raw postings against my actual resume background and decide:
+
+"What should I ACTUALLY apply to right now given limited time and realistic recruiter outcomes?"
+
+---
+
+MANUAL SCRAPE USAGE CONTEXT
+
+This prompt is used only when my normal SkillFreq batch did not produce enough strong apply_now roles.
+
+Manual scrape roles are backup candidates, not the primary pipeline.
+
+Therefore:
+- Be stricter, not looser
+- Do not force applications just because I provided roles
+- Only recommend roles that are realistically worth applying to
+- If the manual scrape contains no strong roles, say so clearly
+- It is acceptable to return zero APPLY NOW roles
+- Manual roles should supplement SkillFreq, not lower the quality bar
+
+The goal is to find worthwhile backup applications, not to justify weak roles.
+
+---
+
+CRITICAL RESUME GROUNDING RULE
+
+Use my base resume(s) as the source of truth for my actual experience.
+
+Do NOT infer skills, tools, domain experience, seniority, or ownership beyond what appears in the resumes.
+
+If a job requires tools or responsibilities not supported by the resumes:
+- mark the gap clearly
+- do NOT pretend alignment
+- do NOT compensate by over-weighting general experience
+
+Resume evidence matters more than generic career context.
+
+---
+
+CONTEXT
+
+- I am a backend/data-focused engineer
+- Strong in: SQL, ETL, data validation, APIs, integrations, debugging
+- Experience with: Python, Java, REST APIs, JSON/XML, data workflows, production debugging
+- Target roles:
+  - Data Engineer
+  - SQL-heavy ETL / integration roles
+  - backend data processing roles
+  - data validation / reconciliation roles
+- Experience level: junior to mid-level, 0–4 years
+- I want to avoid being pigeonholed if I need to pivot because of a weak market
+
+---
+
+STEP 1 — READ THE BASE RESUME(S)
+
+Before evaluating jobs:
+
+- Identify the strongest resume-aligned signals
+- Identify supported tools and technologies
+- Identify unsupported or only-foundational tools
+- Identify experience boundaries that should not be exaggerated
+
+Use this only to improve evaluation accuracy.
+
+Do NOT rewrite the resumes.
+Do NOT suggest resume tailoring in this prompt.
+Do NOT invent missing tools.
+
+---
+
+STEP 2 — PARSE THE MANUAL SCRAPE
+
+Treat each distinct job posting as one role.
+
+Assign temporary order numbers based on appearance:
+
+- Manual 1
+- Manual 2
+- Manual 3
+- etc.
+
+For each posting, extract when available:
+
+- Job title
+- Company
+- Location
+- Remote / hybrid / on-site status
+- Contract / full-time / part-time status
+- Core responsibilities
+- Required tools / stack
+- Years of experience required
+- Any local-candidate, travel, clearance, or domain-specific constraints
+
+If a posting is incomplete, evaluate only what is visible.
+
+---
+
+STEP 3 — EVALUATE EACH ROLE
+
+For each role, determine:
+
+Fit Quality:
+- good_fit
+- possible_fit
+- weak_fit
+
+Role Lane:
+- target_lane
+- adjacent_lane
+- wrong_lane
+
+Apply Decision:
+- apply_now
+- manual_review
+- skip
+
+Reason:
+- 1–2 sentences explaining the decision using both:
+  - the job posting
+  - my actual resume evidence
+
+---
+
+FIT QUALITY RULES
+
+good_fit:
+- Strong overlap with my actual resume
+- SQL, ETL, data validation, integrations, APIs, or backend data workflows are central
+- Experience level is realistic for 0–4 years
+- Stack gaps are small or tool-level rather than platform-level
+
+possible_fit:
+- Some real overlap with my resume
+- Role may include SQL, ETL, APIs, integrations, debugging, or data workflows
+- But there are meaningful gaps, such as:
+  - specific tools I do not own
+  - stronger analytics/reporting tilt
+  - platform/cloud ownership
+  - domain-specific expectations
+  - vague responsibilities
+  - higher seniority risk
+
+weak_fit:
+- Poor recruiter match based on my resume
+- Mostly outside my lane
+- Heavy senior/lead ownership
+- Heavy cloud/platform/infra ownership
+- AI/ML-centered
+- dashboard/reporting-only
+- consulting-heavy
+- implementation/support-only with weak engineering transfer
+- too domain-specific with little SQL/ETL/backend overlap
+
+---
+
+ROLE LANE RULES
+
+target_lane:
+- Data Engineer
+- ETL / integration engineer
+- SQL-heavy data pipeline role
+- backend data processing role
+- data validation / reconciliation role
+
+adjacent_lane:
+- Analytics engineer
+- BI/data analyst with strong SQL/ETL overlap
+- integration analyst with real technical implementation
+- software engineer role where data/backend work is central
+- operations/data systems role with transferable SQL/debugging work
+
+wrong_lane:
+- Pure frontend
+- Pure QA
+- Pure IT support/helpdesk
+- Pure reporting/dashboarding
+- AI/ML research or model-heavy role
+- Cloud/platform/DevOps ownership role
+- Senior/lead/architect role
+- Heavy consulting role
+- Generic business analyst role with minimal technical depth
+
+---
+
+APPLY DECISION RULES
+
+apply_now:
+- Realistic recruiter pass chance based on resume evidence
+- Day-to-day maps clearly to my background
+- Minimal stack gap
+- No major seniority/platform/domain red flags
+- Worth applying now
+
+manual_review:
+- Possible but requires caution
+- Some overlap, but risk exists
+- Apply only if the day’s batch is weak or if the application is quick
+
+skip:
+- Weak fit
+- Wrong lane
+- Too senior
+- Too platform/tool-gated
+- Too domain-specific
+- Too vague
+- Not worth time right now
+
+---
+
+POSSIBLE_FIT SUBTYPE RULE
+
+For every possible_fit role in APPLY NOW or OPTIONAL / STRETCH, classify it as:
+
+possible_2a:
+- Strong possible fit
+- Core work still matches my resume background
+- SQL, ETL, data validation, integrations, APIs, or backend data processing are central
+- Gaps exist, but they are not the main identity of the job
+
+possible_2b:
+- Weaker possible fit
+- Some overlap with my resume, but the role is more diluted
+- Data/backend overlap may be secondary
+- Higher chance the role depends on tools, platforms, domain knowledge, analytics, reporting, cloud, or responsibilities I do not strongly own
+
+Do not use possible_2a or possible_2b for good_fit roles unless helpful for explanation.
+
+---
+
+PIVOT STATUS RULE
+
+For every role in APPLY NOW or OPTIONAL / STRETCH, classify it as:
+
+pivotable:
+- Helps preserve or improve my ability to move between:
+  - Data Engineer
+  - SQL-heavy ETL / integration roles
+  - backend data processing roles
+  - data validation / reconciliation roles
+- Work is transferable
+- Role reinforces SQL, ETL, APIs, integrations, debugging, or backend/data systems
+
+conditional:
+- Some transferable value, but there is a real tradeoff
+- Could be acceptable in a weak market
+- May involve some pigeonhole risk due to:
+  - domain-specific work
+  - reporting/analytics tilt
+  - tool-specific requirements
+  - partial mismatch with backend/data engineering work
+
+risky:
+- High chance of pigeonholing or weak future transfer
+- Role is likely too tied to:
+  - a specific platform
+  - a narrow business domain
+  - implementation/support-only work
+  - reporting/dashboard-only work
+  - cloud/platform ownership I do not strongly match
+  - senior/architecture expectations
+- Should not be prioritized unless there are no better options
+
+---
+
+HARD PLATFORM GATING RULE
+
+If a role appears to require direct hands-on experience with a specific platform/tool such as:
+- Snowflake
+- Informatica / IDMC / PowerCenter
+- Databricks
+- Palantir
+- SAP
+- Salesforce
+- ServiceNow
+- heavy AWS / Azure / GCP cloud platform ownership
+
+AND the job description implies candidates will be filtered based on that experience,
+
+THEN:
+- do not place this role in APPLY NOW unless the rest of the role is an unusually strong match
+- usually place it in OPTIONAL / STRETCH or SKIP
+- mark it conditional or risky depending on severity
+
+General SQL/ETL overlap does not automatically override platform gating.
+
+---
+
+FOUNDATIONAL TOOL RULE
+
+If a base resume lists a tool only as “Foundational” or “Concepts”:
+- Do NOT treat it as hands-on experience
+- Do NOT use it to justify apply_now by itself
+- It may only slightly reduce risk if the role does not require direct production ownership
+
+Examples:
+- Airflow, Kafka, Spark listed as foundational do not equal production experience
+- AWS/Azure/GCP foundational does not equal cloud platform ownership
+
+---
+
+TOOL VS SYSTEM RULE
+
+Distinguish between:
+
+TOOL DIFFERENCE, usually acceptable:
+- Example: Oracle vs SQL Server
+- Same type of work: SQL, ETL, data movement, validation
+- These roles can be APPLY NOW
+- Usually pivotable
+
+SYSTEM / PLATFORM DIFFERENCE, higher risk:
+- Example: AWS modernization, DataOps platform, multi-system architecture ownership
+- Involves environment ownership, platform transitions, or cross-system design
+- These roles should usually be downgraded to OPTIONAL / STRETCH or SKIP
+- Usually conditional or risky
+
+Prefer roles where the work is familiar even if the tool is different.
+Avoid roles where the system/platform context is the main job.
+
+---
+
+DECISION CONSTRAINTS
+
+You MUST follow these:
+
+1. I can only apply to a SMALL number of backup roles: 0–3 preferred, 5 max only if unusually strong
+2. I want the HIGHEST probability of passing recruiter screening
+3. I am NOT optimizing for learning or stretch
+4. I am NOT optimizing for interesting roles
+5. I am optimizing for:
+   - realistic resume match
+   - recruiter pass likelihood
+   - minimal stack gap
+   - avoiding unnecessary pigeonholing
+
+---
+
+RANKING CRITERIA
+
+Rank based on:
+
+1. Day-to-day overlap with:
+   - SQL
+   - ETL / pipelines
+   - data validation / reconciliation
+   - integrations / APIs
+   - backend data processing
+
+2. Low risk from:
+   - ecosystem lock-in
+   - platform ownership expectations
+   - vague or inflated responsibilities
+   - senior/lead expectations
+   - narrow domain pigeonholing
+
+3. Recruiter realism:
+   - Would a recruiter quickly understand why my resume matches?
+
+4. Pivot preservation:
+   - Does the role preserve my ability to stay in data/backend/integration lanes?
+
+Prefer:
+- good_fit over possible_fit
+- target_lane over adjacent_lane
+- pivotable over conditional
+- conditional over risky
+- possible_2a over possible_2b
+
+---
+
+OUTPUT FORMAT
+
+Give me EXACTLY this format:
+
+RESUME GROUNDING SNAPSHOT
+
+- Strongest supported signals:
+  - [signal]
+  - [signal]
+  - [signal]
+
+- Supported tools:
+  - [tools]
+
+- Foundational / do-not-overclaim tools:
+  - [tools]
+
+- Major unsupported areas to watch:
+  - [area]
+  - [area]
+
+PARSED ROLES
+
+| Manual Order | Title | Company | Location | Work Mode | Employment Type | Initial Read |
+|---|---|---|---|---|---|---|
+
+APPLY NOW (Top 0–3 preferred, 5 max only if unusually strong)
+
+- Manual X — Title — Company — Fit Quality — Role Lane — possible_2a/possible_2b if applicable — pivotable/conditional/risky
+  Reason: 1–2 sentences focused on recruiter realism and pivot impact.
+
+OPTIONAL / STRETCH
+
+- Manual X — Title — Company — Fit Quality — Role Lane — possible_2a/possible_2b if applicable — pivotable/conditional/risky
+  Reason: 1–2 sentences explaining the risk and pivot tradeoff.
+
+DO NOT APPLY
+
+- Brief 1–2 sentence summary of why the rest are not worth it.
+
+FINAL APPLICATION PLAN
+
+- Apply to:
+  1. Manual X — Title — Company
+  2. Manual Y — Title — Company
+  3. Manual Z — Title — Company
+
+- Skip/hold:
+  - Manual A — reason
+  - Manual B — reason
+
+FINAL RULES
+
+- Be decisive
+- Do not hedge
+- Do not include weak roles just to fill space
+- Prefer fewer, higher-quality applications over more
+- If zero roles meet strong criteria, return zero APPLY NOW roles
+- Do not force weak options
+- Do not optimize for curiosity, learning, or prestige
+- Optimize for realistic recruiter pass chance and preserving backend/data pivot options
+- Every decision must be grounded in the base resumes and the manual scrape text

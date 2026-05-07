@@ -2,6 +2,7 @@
 
 [] Maybe give template:
     [] Run Task> Run skillfreq
+Market analysis=> .venv-skillfreq\Scripts\python.exe -m skillfreq.cli titles C:\Users\ehose\Development\JobSpy\market_analysis_5-5-26.csv
 
 ## -------------TODO List-------------------------------------
 
