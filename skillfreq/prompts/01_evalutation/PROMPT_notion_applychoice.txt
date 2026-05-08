@@ -1,0 +1,347 @@
+I will provide a CSV of pre-evaluated job roles.
+
+The CSV may include either:
+
+Evaluation columns:
+- Order
+- Fit Quality (good_fit / possible_fit / weak_fit)
+- Role Lane (target_lane / adjacent_lane / wrong_lane)
+- Apply Decision (apply_now / manual_review / skip)
+- Reason
+
+Or tracker-style columns such as:
+- Company
+- Role
+- JDText
+- Link
+- Status
+- Notes
+- Application
+- Location
+- Contract?
+- Pivotable?
+- Resume Variant
+- Manual FIT (1-5)
+- Fit Reason
+
+Your task is NOT to fully re-evaluate every job from scratch.
+
+Your task is to decide:
+
+"What should I ACTUALLY apply to right now given limited time and realistic recruiter outcomes?"
+
+Use the existing evaluation fields as the main signal.
+Use JDText, Fit Reason, Notes, Pivotable?, Contract?, Resume Variant, and Status only as supporting signals when deciding priority.
+
+Also include:
+- whether each considered possible_fit role is possible_2a or possible_2b
+- what pivot status each considered role has: pivotable, conditional, or risky
+
+---
+
+CONTEXT
+
+- I am a backend/data-focused engineer.
+- Strong in: SQL, ETL, data validation, reconciliation, APIs, integrations, backend data processing, and production debugging.
+- Strongest database background: SQL Server.
+- Experience includes Python automation, REST APIs, XML/JSON, SFTP, SQL-based validation, ETL-style workflows, and troubleshooting data pipeline failures with SQL/logs/OpenSearch.
+- Target roles:
+  - Data Engineer, especially SQL-heavy / ETL-focused
+  - Data Integration Engineer
+  - ETL / ELT Developer
+  - Backend data processing roles
+  - Data quality / validation / reconciliation roles
+- I am targeting junior–mid level roles, roughly 0–4 years.
+- I want to avoid unnecessary pigeonholing if I need to pivot because of a weak market.
+
+I am NOT trying to optimize for:
+- interesting roles
+- theoretical learning
+- prestige
+- stretch cloud/platform roles
+- generic software roles
+- pure BI/dashboard roles
+- senior/lead/architecture roles
+
+I am optimizing for:
+- realistic recruiter-screen pass probability
+- strongest resume match
+- minimal stack gap
+- familiar day-to-day work
+- preserving future pivot options
+
+---
+
+IMPORTANT INPUT RULES
+
+1. If a row already has Fit Quality, Role Lane, Apply Decision, and Reason, treat those as the primary evaluation.
+2. Do NOT redo the full evaluation unless the existing label clearly conflicts with the Reason or JDText.
+3. If the row has only tracker-style columns, use Manual FIT, Fit Reason, Pivotable?, Notes, JDText, Contract?, and Resume Variant to infer whether it belongs in APPLY NOW, OPTIONAL / STRETCH, or DO NOT APPLY.
+4. If Status is not “Pending Application” or otherwise clearly still actionable, do not prioritize it unless I explicitly say to include all statuses.
+5. If Company or Role is blank, still use Order or row number and evaluate from JDText / Fit Reason.
+6. If Contract? = Yes, do not automatically reject it. Treat contract roles as acceptable only when the core lane match is strong and recruiter realism is high.
+7. Existing Pivotable? values are supporting signals only. Override them if the role clearly preserves or harms future pivot options.
+
+---
+
+POSSIBLE_FIT SUBTYPE RULE
+
+For every possible_fit role that appears in APPLY NOW or OPTIONAL / STRETCH, classify it as one of:
+
+possible_2a:
+- Strong possible fit
+- Core work still matches my background
+- SQL, ETL, data validation, reconciliation, integrations, APIs, or backend data processing are central
+- Gaps exist, but they are not the main identity of the job
+- Recruiter pass is realistic if the resume is framed correctly
+
+possible_2b:
+- Weaker possible fit
+- Some overlap with my background, but the role is more diluted
+- Data/backend overlap may be secondary
+- Higher chance the role depends on tools, platforms, domain knowledge, analytics, reporting, cloud, or responsibilities I do not strongly own
+- Recruiter pass is possible but weaker
+
+Do not use possible_2a or possible_2b for good_fit roles unless it helps explain the decision.
+
+---
+
+PIVOT STATUS RULE
+
+For every role in APPLY NOW or OPTIONAL / STRETCH, classify it as one of:
+
+pivotable:
+- Helps preserve or improve my ability to move between:
+  - Data Engineer
+  - SQL-heavy ETL roles
+  - data integration roles
+  - backend data processing roles
+  - data validation / reconciliation roles
+- Reinforces SQL, ETL, APIs, integrations, debugging, data quality, or backend/data systems
+- Future employers would understand the experience as relevant to my lane
+
+conditional:
+- Some transferable value, but there is a real tradeoff
+- Could be acceptable in a weak market
+- May involve some pigeonhole risk due to:
+  - domain-specific work
+  - reporting/analytics tilt
+  - tool-specific requirements
+  - business analyst responsibilities
+  - support-heavy work
+  - partial mismatch with backend/data engineering
+
+risky:
+- High chance of pigeonholing or weak future transfer
+- Role is likely too tied to:
+  - a specific platform
+  - a narrow business domain
+  - reporting/dashboard-only work
+  - support-only work
+  - cloud/platform ownership
+  - senior/architecture expectations
+  - generic application work outside the data lane
+- Should not be prioritized unless there are no better options
+
+---
+
+DECISION CONSTRAINTS
+
+You MUST follow these:
+
+1. I can only apply to a SMALL number of roles: 3–6 max.
+2. If fewer than 3 roles meet strong criteria, return fewer than 3.
+3. Do not force weak options just to fill space.
+4. I want the highest realistic chance of passing recruiter screening.
+5. I am not optimizing for learning, stretch, or “maybe I could do it.”
+6. I am optimizing for:
+   - realistic resume match
+   - recruiter pass likelihood
+   - minimal stack gap
+   - avoiding unnecessary pigeonholing
+   - preserving pivot optionality
+
+---
+
+FILTERING RULES
+
+Ignore rows where any of the following are true:
+
+- Fit Quality = weak_fit
+- Apply Decision = skip
+- Role Lane = wrong_lane
+- Status suggests already applied, rejected, closed, or not actionable
+- The role is clearly senior/lead/architect/manager level
+- The role is primarily finance, business analysis, BI dashboards, QA/testing, civil engineering, support desk, DevOps/platform, infrastructure, AI/ML, or generic app development
+
+Focus only on:
+
+- good_fit + target_lane
+- good_fit + adjacent_lane, only if recruiter realism is strong
+- possible_fit + target_lane
+- possible_fit + adjacent_lane, only if strong SQL/ETL/data integration overlap exists
+
+---
+
+RANKING CRITERIA
+
+From the remaining roles, rank based on:
+
+1. How closely the day-to-day work matches:
+   - SQL
+   - ETL / ELT
+   - pipelines
+   - data validation / reconciliation
+   - integrations / APIs
+   - backend data processing
+   - production debugging
+
+2. How low the risk is from:
+   - ecosystem lock-in
+   - platform ownership expectations
+   - vague or inflated responsibilities
+   - senior/lead expectations
+   - reporting/dashboard pigeonholing
+   - narrow business-domain pigeonholing
+   - cloud/distributed systems expectations
+
+3. How likely a recruiter would say:
+   “Yes, this background matches what we need.”
+
+4. Whether the role helps preserve pivot options if the market stays weak.
+
+Prefer:
+- good_fit over possible_fit
+- target_lane over adjacent_lane
+- pivotable over conditional
+- conditional over risky
+- possible_2a over possible_2b
+- familiar work with a different tool over unfamiliar platform ownership
+
+---
+
+HARD PLATFORM GATING RULE
+
+If a role appears to require direct hands-on experience with a specific platform/tool such as:
+
+- Snowflake
+- Informatica / IDMC / PowerCenter
+- Databricks
+- Palantir
+- SAP / SAP BTP / SAP Datasphere
+- Collibra
+- Splunk
+- OneStream
+- heavy AWS / cloud platform ownership
+- heavy Azure platform ownership beyond ADF/basic SQL migration
+- Kubernetes / Terraform / infrastructure tooling
+
+AND the job description implies candidates will be filtered based on that experience,
+
+THEN:
+
+- do not place this role in APPLY NOW unless the rest of the role is an unusually strong match
+- usually place it in OPTIONAL / STRETCH or DO NOT APPLY
+- mark it conditional or risky depending on severity
+
+General SQL/ETL overlap does not automatically override platform gating.
+
+---
+
+TOOL VS SYSTEM RULE
+
+Distinguish between:
+
+TOOL DIFFERENCE, usually acceptable:
+- Oracle vs SQL Server
+- PostgreSQL vs SQL Server
+- ADF vs similar ETL/scheduled workflow concepts
+- SSIS vs other ETL pipeline tools
+- Same type of work: SQL, ETL, data movement, validation, reconciliation, debugging
+
+These roles can be APPLY NOW if the work itself is familiar.
+These are usually pivotable.
+
+SYSTEM / PLATFORM DIFFERENCE, higher risk:
+- AWS modernization
+- Databricks platform
+- Snowflake architecture ownership
+- DataOps platform
+- observability platform ownership
+- cloud-native architecture
+- distributed systems ownership
+- real-time/event-driven platform engineering
+- multi-system architecture design
+
+These roles should usually be downgraded to OPTIONAL / STRETCH or DO NOT APPLY.
+These are usually conditional or risky.
+
+Prefer roles where the work is familiar even if the tool is different.
+Avoid roles where the system/platform context is the main job.
+
+---
+
+CONTRACT ROLE RULE
+
+If Contract? = Yes:
+
+- Do not reject only because it is contract.
+- Prioritize it if it is SQL/ETL/data integration-heavy and recruiter-realistic.
+- Downgrade it if it is contract plus platform-gated, senior-coded, vague, or outside my lane.
+- Mention contract risk only if it affects prioritization.
+
+---
+
+RESUME VARIANT RULE
+
+If Resume Variant is provided:
+
+- Use it only as a supporting signal.
+- Data resume usually supports SQL/ETL/data engineering roles.
+- Software resume may support backend/API/integration-heavy roles.
+- Platform resume may support reliability/workflow/platform-adjacent roles, but do not use it to justify infra-heavy roles.
+- Analytics resume may support analytics-adjacent roles, but do not let it pull me into dashboard-only or BI-only work unless the market is dry.
+- Do not recommend a role solely because a resume variant exists.
+
+---
+
+OUTPUT FORMAT
+
+Give me EXACTLY this format:
+
+APPLY NOW (Top 3-5)
+
+- Order X — Company / Role if available — Fit Quality — Role Lane — possible_2a/possible_2b if applicable — pivotable/conditional/risky
+  Reason: 1-2 sentences focused on recruiter realism and pivot impact.
+
+OPTIONAL / STRETCH
+
+- Order X — Company / Role if available — Fit Quality — Role Lane — possible_2a/possible_2b if applicable — pivotable/conditional/risky
+  Reason: 1-2 sentences explaining the risk and pivot tradeoff.
+
+DO NOT APPLY
+
+- Brief 1-2 sentence summary of why the rest are not worth it.
+
+FINAL DECISION
+
+- Apply to: Order X, Order Y, Order Z
+- Backup only if time remains: Order A, Order B
+- Drop everything else.
+
+---
+
+FINAL RULES
+
+- Be decisive.
+- Do not hedge.
+- Do not repeat the original evaluation.
+- Do not include weak roles just to fill space.
+- Prefer fewer, higher-quality applications over more.
+- If fewer than 3 roles meet strong criteria, return fewer than 3.
+- Do not force weak options.
+- Do not prioritize roles based on title alone.
+- Do not prioritize roles based on theoretical learnability.
+- Do not rescue platform-heavy roles because they mention SQL or Python.
+- Do not recommend dashboard/reporting-heavy roles unless the batch is extremely weak and the role still has strong SQL/data-quality overlap.
+- Do not recommend senior/lead/architect/manager roles.
