@@ -40,6 +40,9 @@ data/analyze/
 data/outputs/
 data/research_historical/
 
+#Prompts
+skillfreq/prompts/
+
 #Cache files
 cache.py
 __pycache__/

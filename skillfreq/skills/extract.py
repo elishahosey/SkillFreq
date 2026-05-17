@@ -103,10 +103,12 @@ def _extract_description_text(jd: Any) -> str:
     return str(jd or "")
 
 
+
 def extract_jd_skills(jdParsedObject):
     extracted_skills = []
     for jd in jdParsedObject:
         text = _extract_description_text(jd)
+        
         if not text:
             extracted_skills.append([])
             continue

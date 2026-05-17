@@ -1,13 +1,16 @@
 # recruiter_finder_lite.py
 # Adds recruiter/contact search fields to your Job Tracker CSV.
-
 import pandas as pd
-from urllib.parse import quote_plus
+from urllib.parse import quote
 from pathlib import Path
+import os
+import re
+from dotenv import load_dotenv
+load_dotenv()
 
 #currently hardcoded to my Job Tracker from Notion export - update as needed
-INPUT_FILE = "Job Tracker 2026- v3 8dcc866429df82fe86770149001ecd0f_all.csv"
-OUTPUT_FILE = "job_tracker_with_recruiter_finder.csv"
+INPUT_FILE = os.getenv("NOTION_TRACKER_PATH") + "\\"+"outreach-5-8-26.csv"
+OUTPUT_FILE = "job_tracker_with_recruiter_finder-5-8-26.csv"
 
 
 def get_col(row, possible_names):
@@ -17,41 +20,42 @@ def get_col(row, possible_names):
     return ""
 
 
-def google_search_url(query):
-    return f"https://www.google.com/search?q={quote_plus(query)}"
+def linkedin_recruiter_search_url(company, company_id=""):
+    keywords = quote("technical recruiters ", safe="")
+
+    if company_id:
+        current_company = quote(f'["{company_id}"]', safe="")
+        return (
+            "https://www.linkedin.com/search/results/people/"
+            f"?keywords={keywords}&origin=FACETED_SEARCH&currentCompany={current_company}"
+        )
+
+    search_terms = quote(f"technical recruiters {company}", safe="")
+    return (
+        "https://www.linkedin.com/search/results/people/"
+        f"?keywords={search_terms}&origin=FACETED_SEARCH"
+    )
 
 
-def linkedin_people_search_url(query):
-    return f"https://www.linkedin.com/search/results/people/?keywords={quote_plus(query)}"
+def extract_linkedin_company_id(*values):
+    for value in values:
+        match = re.search(r"currentCompany=%5B%22(\d+)%22%5D", value)
+        if match:
+            return match.group(1)
+
+        match = re.search(r"linkedin\.com/company/(\d+)", value)
+        if match:
+            return match.group(1)
+
+        if value.isdigit():
+            return value
+
+    return ""
 
 
-def build_queries(company, role):
-    recruiter_query = f'site:linkedin.com/in "{company}" recruiter'
-    talent_query = f'site:linkedin.com/in "{company}" "talent acquisition"'
-    role_recruiter_query = f'site:linkedin.com/in "{company}" "{role}" recruiter'
-    data_manager_query = f'site:linkedin.com/in "{company}" "data engineering manager"'
-    backend_manager_query = f'site:linkedin.com/in "{company}" "software engineering manager" data'
-    engineering_manager_query = f'site:linkedin.com/in "{company}" "engineering manager" "{role}"'
-
+def build_queries(company, role, company_id=""):
     return {
-        "Recruiter Search Query": recruiter_query,
-        "Talent Acquisition Search Query": talent_query,
-        "Role Recruiter Search Query": role_recruiter_query,
-        "Data Manager Search Query": data_manager_query,
-        "Backend Manager Search Query": backend_manager_query,
-        "Engineering Manager Search Query": engineering_manager_query,
-
-        "Recruiter Google URL": google_search_url(recruiter_query),
-        "Talent Acquisition Google URL": google_search_url(talent_query),
-        "Role Recruiter Google URL": google_search_url(role_recruiter_query),
-        "Data Manager Google URL": google_search_url(data_manager_query),
-        "Backend Manager Google URL": google_search_url(backend_manager_query),
-        "Engineering Manager Google URL": google_search_url(engineering_manager_query),
-
-        "LinkedIn Recruiter People URL": linkedin_people_search_url(f"{company} recruiter"),
-        "LinkedIn Talent People URL": linkedin_people_search_url(f"{company} talent acquisition"),
-        "LinkedIn Data Manager People URL": linkedin_people_search_url(f"{company} data engineering manager"),
-        "LinkedIn Engineering Manager People URL": linkedin_people_search_url(f"{company} engineering manager"),
+        "LinkedIn Technical Recruiter Search URL": linkedin_recruiter_search_url(company, company_id),
     }
 
 
@@ -101,12 +105,19 @@ def main():
         company = get_col(row, ["Company", "company", "company_name", "employer"])
         role = get_col(row, ["Role", "title", "role_title", "job_title", "Job Title"])
         job_url = get_col(row, ["Link", "job_url", "Job URL"])
+        company_id = get_col(row, [
+            "LinkedIn Company ID",
+            "Company LinkedIn ID",
+            "linkedin_company_id",
+            "currentCompany",
+        ])
+        company_id = extract_linkedin_company_id(company_id, company, job_url)
 
         if not company:
             queries = {}
             contact_priority = "missing_company"
         else:
-            queries = build_queries(company, role)
+            queries = build_queries(company, role, company_id)
             contact_priority = should_check_contact(row)
 
         results.append({

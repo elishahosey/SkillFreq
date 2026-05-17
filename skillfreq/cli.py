@@ -106,7 +106,6 @@ def main() -> None:
         extracted_skills = extract_jd_skills(jdParsedObject)
         #flatten before creating file
         flatten_skills = [item for sublist in extracted_skills for item in sublist]
-        
         counts_skills = Counter(flatten_skills)
         output = "\n".join(f"{skill},{count}" for skill, count in counts_skills.most_common())
         create_file(skills_filename, output)

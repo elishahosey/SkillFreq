@@ -5,7 +5,7 @@ from datetime import datetime
 import logging
 import os
 from pathlib import Path
-from typing import Iterable
+from typing import Any, Iterable
 
 import pandas as pd
 from .scrape.fetch import process_empty_urls
@@ -31,8 +31,10 @@ from .score.lane_classifier import classify_role_lane
 import csv
 
 
-def create_file(filename: str | Path, content: str) -> None:
+def create_file(filename: str | Path, content: str, title: str | None = None) -> None:
     with open(filename, "w", encoding="utf-8") as f:
+        if title:
+            f.write(f"{title}\n\n")
         f.write(content)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -60,8 +62,10 @@ logging.basicConfig(
 
 @dataclass
 class JobResult:
+    id:str
     source: str
     score: float
+    title: str
     label: str
     matched: int
     required_total: int
@@ -106,7 +110,7 @@ def run_links(
     weight_path: Path = Path("configs/weights.yml"),
     min_score: float = 0.0,
     no_scrape: bool = True,
-) -> list[tuple[str, str]]:
+) -> list[dict[str, Any]]:
     skills = load_skill_dictionary(skills_path)
     lines = [ln for ln in read_lines(input_path) if ln]
 
@@ -119,7 +123,8 @@ def run_links(
     if no_scrape:
         jobspy_data_path = os.getenv("JOBSPY_DATA_PATH") or "../JobSpy"
         df = pd.read_csv(
-            #WIDEN Search? uncomment for uncleaned_jobs
+            #plan c
+           # jobspy_data_path + f"/lastresort-jobs-{datetime.now().month}-{datetime.now().day}-{datetime.now().strftime('%y')}.csv",
             jobspy_data_path + f"/jobs-{datetime.now().month}-{datetime.now().day}-{datetime.now().strftime('%y')}.csv",
             #jobspy_data_path + f"/cleaned_jobs-{datetime.now().month}-{datetime.now().day}-{datetime.now().strftime('%y')}.csv",
             encoding='latin1'
@@ -140,6 +145,7 @@ def run_links(
         for job in job_rows:
             try:
                 url = job["url"]
+                id = job["id"]
                 title = job["title"]
                 description = job["description"]
 
@@ -175,7 +181,9 @@ def run_links(
                     results.append(
                         JobResult(
                             source=url,
+                            id=id,
                             score=score,
+                            title=title,
                             label=label,
                             matched=matched,
                             required_total=required_total,
@@ -189,7 +197,7 @@ def run_links(
                         )
                     )
 
-                print(f"{url} | score={score:.2f} | label={label} | reasons={flags.get('reason_codes', [])}")
+                print(f"{url} | id={id} |title={title}| score={score:.2f} | label={label} | reasons={flags.get('reason_codes', [])}")
 
             except Exception as e:
                 print(f"Error processing {job.get('url', '')}: {e}")
@@ -206,6 +214,7 @@ def run_links(
                     continue
 
                 description = text["description"] if isinstance(text, dict) else text
+                id = text.get("id", "") if isinstance(text, dict) else ""
                 title = text.get("title", "") if isinstance(text, dict) else ""
 
                 counts = match_skills(description, skills)
@@ -239,7 +248,9 @@ def run_links(
                 if score >= min_score:
                     results.append(
                         JobResult(
+                            id=id,
                             source=source,
+                            title=title,
                             score=score,
                             label=label,
                             matched=matched,
@@ -264,16 +275,24 @@ def run_links(
     write_results_csv(out_csv_path, results)
     write_failures_csv(out_csv_path.parent / "failures.csv", failures)
 
-    #if no scrape, return the URLs and their labels for review; otherwise, return descriptions for skill extraction and analysis
-    return [(r.source, r.label) for r in results] if not no_scrape else [(r.source, r.description) for r in results]
+    return [
+        {
+            "id": r.id,
+            "source": r.source,
+            "title": r.title,
+            "label": r.label,
+            "description": r.description,
+        }
+        for r in results
+    ]
 
 def write_results_csv(path: Path, results: Iterable[JobResult]) -> None:
     with path.open("w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
-        w.writerow(["source", "score", "raw_match", "matched", "required_total",
+        w.writerow(["id","source","title", "score", "raw_match", "matched", "required_total",
                     "missing", "matches", "description", "reason_codes", "fit_quality", "role_lane", "apply_decision"])
         for r in results:
-            w.writerow([r.source, f"{r.score:.3f}", r.label, r.matched, r.required_total, r.missing, r.matches_json, r.description, r.reason_codes, r.fit_quality, r.role_lane, r.apply_decision])
+            w.writerow([r.id,r.source, r.title, f"{r.score:.3f}", r.label, r.matched, r.required_total, r.missing, r.matches_json, r.description, r.reason_codes, r.fit_quality, r.role_lane, r.apply_decision])
 
 def write_failures_csv(path: Path, failures: Iterable[FailureRecord]) -> None:
     with path.open("w", newline="", encoding="utf-8") as f:
