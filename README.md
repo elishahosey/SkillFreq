@@ -1,153 +1,161 @@
 # SkillFreq
 
-**SkillFreq** is a Python-based job description analysis tool that extracts, classifies, and ranks technical skills across large volumes of job postings.
+SkillFreq is a Python CLI for turning job descriptions into market signals: recurring skills, profile alignment, missing requirements, and CSV outputs you can use to make a job search less guessy.
 
-I originally built this for myself after getting frustrated with the job-search process and wanting a more **data-driven way to understand the market**.
-
-Instead of guessing what to study next, SkillFreq helps surface the technologies, patterns, and skill gaps that show up most often in real roles.
-
----
-
-## Why I Built This
-
-I got tired of manually searching through jobs and constantly running into roles that *looked* like a fit at first glance, but then hit me with things like:
-
-- 10+ years required
-- random legacy tech stacks
-- platform tools I barely touch
-- titles that sound right but are actually totally off-lane
-
-Even when job boards try to recommend roles, they often miss the bigger picture.
-
-After getting burned out by the process before, I wanted to build my own **job-search system**.
-
-Partly out of frustration, partly out of curiosity, and honestly... partly because I was bored and wanted something useful to build.
-
-So SkillFreq became my way of answering:
-
-- What does the market actually want?
-- What technologies keep showing up?
-- Where are my real gaps?
-- What should I spend time learning?
-
-Basically: **stop grinding in the wrong direction**.
-
----
+I originally built this for myself after getting frustrated with job boards, vague recommendations, and roles that looked relevant until the requirements told a different story. The goal is simple: collect job descriptions, extract the signals, and use the evidence to decide what to study, skip, tailor, or apply to.
 
 ## What It Does
 
-SkillFreq currently works as:
+SkillFreq currently works as a command-line workflow:
 
-`JobSpy -> SkillFreq -> market + alignment insights`
+```text
+Job postings or JobSpy CSVs -> SkillFreq -> scored CSVs + skill frequency outputs
+```
 
 It can:
 
-- ingest job descriptions from scraped URLs
-- parse common job platforms (Ashby, Lever, and extensible parsers)
-- extract technical skills using YAML keyword buckets
-- normalize aliases and grouped concepts
-- output ranked skill frequency lists
-- compare roles against a personal skill profile
-- help identify study priorities
+- read job links or JobSpy-style CSV exports
+- fetch and normalize job URLs
+- parse job descriptions from supported platforms
+- extract skills using YAML keyword buckets
+- score job descriptions against a local profile and weights
+- classify roles based on score and requirement flags
+- count repeated job titles in a CSV
+- route jobs toward resume variants when role configuration is available
+- export results, failures, logs, and extracted skill summaries
 
-For example, if Kafka, AWS, and Airflow keep appearing across roles, that is probably a stronger signal than randomly doom-scrolling articles.
+## Repository Layout
 
-Currently pairs well with [JobSpy](https://github.com/speedyapply/JobSpy) for ingestion.
-
----
-
-## Architecture Overview
-
-    BaseParser
-      ├── AshbyParser
-      ├── LeverParser
-      └── Extensible for new platforms
-
-Skill classification is YAML-driven, which makes it easy to:
-
-- add new technologies
-- group related concepts
-- tune scoring logic
-- personalize for target markets  
-  (data engineering, backend, platform roles, etc.)
-
----
-
-## Tech Stack
-
-- Python
-- CLI interface
-- YAML configuration
-- lightweight NLP preprocessing
-- CSV export
-
----
+```text
+configs/       YAML configuration for skills, weights, profile, resume signals, and roles
+data/          local inputs and outputs
+Jobspy/        helper scripts and expected JobSpy cleaned CSV location
+logging/       timestamped run logs
+skillfreq/     SkillFreq package and CLI
+Dockerfile     container image definition
+```
 
 ## Configuration
 
-The `configs/` folder contains the primary configuration files:
+The main configuration files live in `configs/`:
 
-- `skills.yml` -> skill keyword buckets
-- `weights.yml` -> scoring weights
-- `profile.yml` -> alignment profile settings
+- `skills.yml`: skill names, aliases, and keyword buckets
+- `weights.yml`: scoring weights and penalties
+- `profile.yml`: local skill/profile alignment settings
+- `resume_signal.yml`: resume signal extraction settings
+- `roles.yml`: role routing configuration
 
-These are intended as starter templates and can be adjusted for your use case.
+Local environment settings can live in `.env`. Do not commit machine-specific paths or secrets.
 
-Local environment settings are stored in `.env`.
+Useful environment variables:
 
-Example:
+```text
+JOBSPY_DATA_PATH=/app/Jobspy
+PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+```
 
-`NLTK_PATH=/local/path`
+## Local Setup
 
-Do not commit `.env` if it contains machine-specific paths or sensitive values.
+Create and activate a virtual environment, then install dependencies:
 
----
+```powershell
+python -m venv .venv-skillfreq
+.\.venv-skillfreq\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m playwright install chromium
+```
+
+Show the CLI help:
+
+```powershell
+python -m skillfreq.cli --help
+```
+
+## CLI Commands
+
+Fetch usable links from a JobSpy-style CSV:
+
+```powershell
+python -m skillfreq.cli fetch --input Jobspy/jobs.csv --output data/inputs/links.txt
+```
+
+Run SkillFreq against links or JobSpy data:
+
+```powershell
+python -m skillfreq.cli run --input data/inputs/links.txt --out data/outputs/results.csv
+```
+
+By default, `run` treats each line in the input file as a URL and tries to scrape the job description. To skip URL scraping and read descriptions from the cleaned JobSpy CSV path instead, pass:
+
+```powershell
+python -m skillfreq.cli run --input data/inputs/links.txt --out data/outputs/results.csv --no-scrape
+```
+
+The `--no-scrape` path reads a cleaned JobSpy CSV from `JOBSPY_DATA_PATH` or `../JobSpy`.
+
+Count job titles in a CSV:
+
+```powershell
+python -m skillfreq.cli titles data/outputs/results.csv --title-col title
+```
+
+Extract resume signals:
+
+```powershell
+python -m skillfreq.cli extract --file data/inputs/resume.pdf
+```
+
+Compare a folder of job descriptions against profile signals:
+
+```powershell
+python -m skillfreq.cli suggest --jds data/inputs/jds
+```
+
+Route jobs toward resume variants:
+
+```powershell
+python -m skillfreq.cli route --input data/inputs/jobs.csv --out data/outputs/routed_jobs.csv
+```
+
+## Docker
+
+Docker support exists in the repo, but it is still being shaped and is not the recommended path yet. For now, use the local Python setup above.
+
+## Outputs
+
+Typical outputs include:
+
+- `data/outputs/results.csv`: scored jobs
+- `data/outputs/failures.csv`: failed or blocked fetches
+- `logging/skillfreq_log_*.log`: run logs
+- `extracted_skills_*.txt`: extracted skill frequency summaries
+
+The main results CSV includes:
+
+```text
+source, score, label, matched, required_total, missing, matches
+```
 
 ## Use Cases
 
-- **study planning**  
-  focus learning time on skills with the highest market frequency
+- study planning based on repeated market signals
+- resume tailoring based on actual job requirements
+- filtering roles that are technically or strategically off-lane
+- spotting repeated tools, platforms, and requirement patterns
+- comparing job descriptions against a local profile
 
-- **resume optimization**  
-  validate whether resume bullets match real demand
+## Coming Soon
 
-- **job filtering**  
-  quickly spot roles that do not actually align
+These areas are in progress or belong to active branch work:
 
-- **market sensing**  
-  identify hiring trends across companies and titles
-
----
-
-## Example Workflow
-
-1. Collect 50 data engineering job descriptions
-2. Run SkillFreq
-3. Identify recurring technologies
-4. update study roadmap based on objective frequency data
-
-Example recurring outputs might include:
-
-- SQL
-- Kafka
-- Airflow
-- AWS
-- ETL tooling
-
----
-
-## Roadmap
-
-- skill frequency by job title
-- resume <-> JD comparison
-- better NLP normalization
-- line-level evidence extraction
-- visualization dashboards
-- Notion integration
-- trend reports over time
-
----
+- stronger resume variant routing
+- cleaner prompt and evaluation workflows
+- Notion-oriented application tracking
+- outreach and recruiter-finder workflows
+- richer dashboards and trend reports
+- polished Docker usage with documented bind mounts for inputs, outputs, configs, and logs
 
 ## Status
 
-Active hobby project focused on turning job search and upskilling into a **systems-driven workflow instead of guesswork**.
+Active hobby project. The main branch is usable as a local CLI workflow, while newer job-search, routing, and evaluation ideas are still being shaped.
