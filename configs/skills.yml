@@ -1,4 +1,6 @@
 seniority:
+  - "5+ years"
+  - "6+ years"
   - "7+ years"
   - "8+ years"
   - "staff"
@@ -13,6 +15,8 @@ seniority:
 data_formats:
   - "json"
   - "xml"
+  - "csv"
+  - "txt"
 
 sql:
   - "sql"
@@ -26,6 +30,7 @@ sql:
   - "relational database"
   - "rdbms"
   - "stored procedures"
+  - "stored procedure"
   - "indexing"
   - "query tuning"
 
@@ -40,7 +45,58 @@ etl:
   - "batch processing"
   - "stream processing"
   - "data workflow"
+  - "data workflows"
   - "etl processes"
+  - "etl workflows"
+
+apis:
+  - "api"
+  - "apis"
+  - "rest"
+  - "rest apis"
+  - "restful apis"
+  - "api integration"
+  - "api integrations"
+  - "api design"
+  - "api development"
+  - "soap"
+  - "soap services"
+  - "soap ui"
+  - "xml"
+  - "json"
+
+integration_workflows:
+  - "integration"
+  - "integrations"
+  - "data integration"
+  - "systems integration"
+  - "system integration"
+  - "system integrations"
+  - "integration patterns"
+  - "integration testing"
+  - "interfaces"
+  - "interface"
+  - "external systems"
+  - "external vendors"
+  - "data exchange"
+  - "data transfer"
+  - "batch jobs"
+  - "job scheduling"
+  - "workflow automation"
+  - "workflows"
+  - "data workflows"
+  - "operational workflows"
+  - "deployment workflows"
+  - "etl workflows"
+  - "data mapping"
+  - "source-to-target mappings"
+  - "mapping documents"
+  - "data migration"
+  - "data migrations"
+  - "database migrations"
+  - "data extraction"
+  - "enterprise data extraction"
+  - "flat file extracts"
 
 kafka:
   - "kafka"
@@ -78,6 +134,7 @@ aws:
   - "athena"
   - "emr"
   - "kinesis"
+  - "ec2"
 
 python:
   - "python"
@@ -125,21 +182,6 @@ devops:
   - "continuous integration"
   - "continuous delivery"
 
-# concepts:
-#   - "data modeling"
-#   - "dimensional modeling"
-#   - "star schema"
-#   - "normalization"
-#   - "denormalization"
-#   - "query optimization"
-#   - "database design"
-#   - "system design"
-#   - "scalability"
-#   - "distributed systems"
-#   - "concurrency"
-#   - "transaction management"
-#   - "data governance"
-
 data_modeling:
   - "data modeling"
   - "dimensional modeling"
@@ -151,10 +193,27 @@ data_modeling:
 data_quality:
   - "data governance"
   - "data quality"
+  - "data quality issues"
+  - "data quality rules"
+  - "data quality checks"
+  - "data quality management"
+  - "data quality monitoring"
+  - "data integrity"
+  - "data integrity checks"
   - "validation"
+  - "data validation"
+  - "validation rules"
+  - "validation tools"
   - "reconciliation"
-  - "compliance"
+  - "data reconciliation"
+  - "reconciliations"
+  - "data accuracy"
   - "data standards"
+  - "completeness"
+  - "consistency"
+  - "data discrepancies"
+  - "discrepancies"
+  - "compliance"
 
 systems:
   - "system reliability"
@@ -164,11 +223,19 @@ systems:
   - "workflow orchestration"
   - "dependency"
   - "integration"
+  - "integrations"
   - "upstream"
   - "downstream"
   - "latency"
   - "throughput"
   - "infrastructure"
+  - "production systems"
+  - "production environments"
+  - "application logs"
+  - "system logs"
+  - "logs"
+  - "logging"
+  - "log analysis"
 
 software_engineering:
   - "software development"
@@ -189,13 +256,48 @@ testing:
   - "unit test cases"
   - "integration testing"
 
+
 operations:
+  - "support"
+  - "technical support"
   - "production support"
+  - "operational support"
+  - "application support"
   - "monitoring"
   - "incident"
+  - "incidents"
+  - "incident management"
+  - "production issue"
+  - "production issues"
+  - "production incident"
+  - "production incidents"
   - "troubleshooting"
+  - "troubleshoot"
+  - "troubleshooting support"
+  - "technical troubleshooting"
   - "root cause analysis"
+  - "root cause"
+  - "root causes"
   - "risk management"
+  - "production environments"
+  - "production systems"
+  - "logs"
+  - "application logs"
+  - "system logs"
+  - "log analysis"
+  - "logging"
+  - "technical issues"
+  - "complex technical issues"
+  - "failures"
+  - "failure"
+  - "recovery"
+  - "support tickets"
+  - "jira tickets"
+  - "technical documentation"
+  - "support documentation"
+  - "system documentation"
+  - "process documentation"
+
 dev_practices:
   - "software development lifecycle"
   - "agile"
@@ -206,20 +308,20 @@ dev_practices:
   - "project management"
 
 ai_ml:
-  - machine learning
-  - ml
-  - nlp
-  - bert
-  - transformer
-  - hugging face
-  - llm
-  - generative ai
-  - genai
-  - predictive modeling
-  - classification
-  - model evaluation
-  - f1
-  - precision
-  - recall
-  - feature engineering
-  - experimentation
+  - "machine learning"
+  - "ml"
+  - "nlp"
+  - "bert"
+  - "transformer"
+  - "hugging face"
+  - "llm"
+  - "generative ai"
+  - "genai"
+  - "predictive modeling"
+  - "classification"
+  - "model evaluation"
+  - "f1"
+  - "precision"
+  - "recall"
+  - "feature engineering"
+  - "experimentation"

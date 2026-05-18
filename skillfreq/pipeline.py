@@ -120,8 +120,10 @@ def run_links(
         jobspy_data_path = os.getenv("JOBSPY_DATA_PATH") or "../JobSpy"
         df = pd.read_csv(
             #WIDEN Search? uncomment for uncleaned_jobs
+            jobspy_data_path + f"/jobs-5-11-26.csv",
+
             #jobspy_data_path + f"/jobs-{datetime.now().month}-{datetime.now().day}-{datetime.now().strftime('%y')}.csv",
-            jobspy_data_path + f"/cleaned_jobs-{datetime.now().month}-{datetime.now().day}-{datetime.now().strftime('%y')}.csv",
+           # jobspy_data_path + f"/cleaned_jobs-{datetime.now().month}-{datetime.now().day}-{datetime.now().strftime('%y')}.csv",
             encoding='latin1'
         ) #if encountering encoding issues, try 'latin1' or 'utf-8-sig'
         print(f"Loaded {len(df)} job descriptions from CSV for processing.")

@@ -10,16 +10,22 @@ weights:
   git: 1
   airflow: 1
   aws: 0.5
-  data_platforms: 0.5
-  systems: 2
+  data_platforms: 0
+  systems: 1.5
   kafka: 0
   system_design: 2
-  software_engineering: 2
-  devops: 1.5
+  software_engineering: 1
+  devops: 0.5
   testing: 1
-  operations: 1.5
+  operations: 1
   dev_practices: 1
   ai_ml: 0.5
+  apis: 3
+  integration_workflows: 4
+  
 
 penalties:
   seniority: -1
+  data_platforms: -1
+  devops: -1
+  ai_ml: -2

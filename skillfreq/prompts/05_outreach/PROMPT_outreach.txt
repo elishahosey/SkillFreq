@@ -1,0 +1,97 @@
+
+I will provide:
+
+1. My base resume(s)
+2. A list of applied jobs
+
+Each job may include:
+- Company
+- Role Title
+- Job Description (JDText)
+- Fit Quality
+- Role Lane
+- Apply Decision
+- Reason
+- possible_2a / possible_2b if available
+- pivot status if available
+- Any notes about tool/platform gaps
+
+Your task is NOT to re-evaluate the full job fit.
+
+Your task is to choose the best 3–5 roles for recruiter outreach based on:
+1. realistic recruiter-screen likelihood
+2. strongest match to my actual resume
+3. JD-specific messageability
+4. lowest risk of awkward tool/platform gaps
+5. strongest preservation of my target lane
+
+MY BACKGROUND / TARGET:
+- Backend/data-focused engineer
+- Strong in SQL, ETL-style workflows, data validation/reconciliation, APIs, integrations, production debugging, and operational data workflows
+- Experience with Python, Java, SQL Server, REST APIs, XML/JSON, SFTP, logs/OpenSearch, CI/CD, and production support
+- Targeting junior-to-mid roles in:
+  - Data Engineering
+  - SQL-heavy ETL / integration
+  - backend data processing
+  - data quality / data operations
+  - systems/application roles involving SQL, APIs, integrations, troubleshooting, or operational data workflows
+
+PRIORITIZE ROLES WHERE OUTREACH CAN NATURALLY MENTION:
+- SQL
+- ETL/data workflows
+- validation/reconciliation
+- APIs/integrations
+- production troubleshooting
+- logs/debugging
+- operational data workflows
+- concrete resume bullets from my experience
+
+DOWNRANK ROLES WHERE OUTREACH WOULD BE AWKWARD BECAUSE THE JD IS MAINLY:
+- Snowflake, Databricks, Informatica, Alteryx, SAP, Palantir, or other platform-gated tools
+- senior/lead/architect expectations
+- cloud platform ownership
+- dashboard-only BI/reporting
+- generic support
+- vague business analyst work
+- frontend/full-stack work
+- implementation/configuration-heavy consulting
+
+CLASSIFICATION RULES:
+- good_fit beats possible_fit unless the good_fit has major platform/seniority gating.
+- possible_2a beats possible_2b.
+- pivotable beats conditional.
+- conditional beats risky.
+- target_lane beats adjacent_lane, unless the adjacent role has much stronger recruiter-screen realism.
+- Prefer roles where my actual resume language gives an easy, honest outreach angle.
+- Do not force 5 roles. If only 3 are worth messaging, return 3.
+- Do not recommend outreach for weak or awkward roles just to fill space.
+
+OUTPUT FORMAT:
+
+RECRUITER OUTREACH PRIORITY
+
+1. [Company] — [Role Title] — [Order if available]
+Priority: high / medium
+Why message this one:
+- [1–2 bullets]
+Best message angle:
+- [1 sentence: what I should emphasize]
+
+2. ...
+
+DO NOT MESSAGE / LOW ROI
+
+- [Company] — [Role Title] — [Order if available]
+Reason: [short reason]
+
+FINAL RECOMMENDATION
+
+Message these roles today:
+- [Company] — [Role Title]
+- [Company] — [Role Title]
+- [Company] — [Role Title]
+
+Skip or defer:
+- [Company] — [Role Title]
+```
+
