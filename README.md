@@ -6,6 +6,8 @@ I originally built this for myself after getting frustrated with the job-search 
 
 Instead of guessing what to study next, SkillFreq helps surface the technologies, patterns, and skill gaps that show up most often in real roles.
 
+> Note: SkillFreq is currently heavily personalized around my own job search, target roles, resume variants, and local workflow. Parts of it may be useful to others, but it is not a polished general-purpose product yet.
+
 ---
 
 ## Why I Built This
@@ -136,6 +138,50 @@ Example recurring outputs might include:
 
 ---
 
+## Docker Usage
+
+Docker support is still being shaped, but the current container can be tested as a short-lived CLI run.
+
+Build the image:
+
+```powershell
+docker build -t skillfreq .
+```
+
+Current `--no-scrape` workflow:
+
+Set `JOBSPY_REPO` to the local path of your JobSpy repo before running the container:
+
+```powershell
+$env:JOBSPY_REPO="C:\path\to\JobSpy"
+```
+
+```powershell
+docker run --rm `
+  -v ${PWD}\data:/app/data `
+  -v ${PWD}\configs:/app/configs `
+  -v ${PWD}\logging:/app/logging `
+  -v ${env:JOBSPY_REPO}:/jobspy `
+  -e JOBSPY_DATA_PATH=/jobspy `
+  skillfreq run --input data/inputs/links.txt --out data/outputs/results.csv --no-scrape
+```
+
+This keeps the work inside Docker while persisting user-editable inputs, outputs, configs, logs, and JobSpy CSV data on the host machine. The `--no-scrape` path reads cleaned JobSpy CSV data from `/jobspy` and writes results to `/app/data`.
+
+URL scraping workflow with `links.txt`:
+
+```powershell
+docker run --rm `
+  -v ${PWD}\data:/app/data `
+  -v ${PWD}\configs:/app/configs `
+  -v ${PWD}\logging:/app/logging `
+  skillfreq run --input data/inputs/links.txt --out data/outputs/results.csv
+```
+
+When the container exits, anything written only inside the container disappears. Bind mounts like `-v ${PWD}\data:/app/data` are what keep the files available after the run.
+
+---
+
 ## Roadmap
 
 - skill frequency by job title
@@ -145,6 +191,7 @@ Example recurring outputs might include:
 - visualization dashboards
 - Notion integration
 - trend reports over time
+- easier personalization so other users can bring their own skill buckets, profile weights, role lanes, and resume signals through YAML setup
 
 ---
 
