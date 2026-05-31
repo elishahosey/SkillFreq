@@ -5,7 +5,7 @@ from datetime import datetime
 import logging
 import os
 from pathlib import Path
-from typing import Iterable
+from typing import Any, Iterable
 
 import pandas as pd
 from .scrape.fetch import process_empty_urls
@@ -26,11 +26,15 @@ from .score.thresholds import classify
 from .skills.profile import load_profile
 from .skills.extract import extract_requirement_flags
 from skillfreq.skills.resume_profile.extract import extract_resume_signals
+from skillfreq.score.decision_layer import decide_apply_bucket, derive_fit_quality
+from .score.lane_classifier import classify_role_lane
 import csv
 
 
-def create_file(filename: str | Path, content: str) -> None:
+def create_file(filename: str | Path, content: str, title: str | None = None) -> None:
     with open(filename, "w", encoding="utf-8") as f:
+        if title:
+            f.write(f"{title}\n\n")
         f.write(content)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -58,13 +62,23 @@ logging.basicConfig(
 
 @dataclass
 class JobResult:
+    id:str
     source: str
+    search_lane: str
+    search_term_used: str
+    review_priority: str
     score: float
+    title: str
     label: str
     matched: int
     required_total: int
     missing: str
-    matches_json: str  
+    matches_json: str
+    description: str
+    reason_codes: str
+    apply_decision: str
+    fit_quality: str
+    role_lane: str
 
 @dataclass
 class FailureRecord:
@@ -95,113 +109,209 @@ def run_links(
     input_path: Path,
     skills_path: Path,
     out_csv_path: Path,
-    profile_path: Path=Path("configs/profile.yml"),
-    weight_path: Path=Path("configs/weights.yml"),
+    profile_path: Path = Path("configs/profile.yml"),
+    weight_path: Path = Path("configs/weights.yml"),
     min_score: float = 0.0,
-    no_scrape: bool = True, #read from csv for descriptions instead of scraping from url. Either due to laziness or because the urls are bad and we already have the descriptions in a csv (e.g. from joblist.py)
-) -> list[tuple[str, str]]: 
+    no_scrape: bool = True,
+) -> list[dict[str, Any]]:
     skills = load_skill_dictionary(skills_path)
     lines = [ln for ln in read_lines(input_path) if ln]
 
     results: list[JobResult] = []
     failures: list[FailureRecord] = []
-    jdParsedObject=[]
-    
-    if no_scrape:
-        # If no scraping, we expect the input file to be a CSV with 'job_url' and 'description' columns
-        jobspy_data_path = os.getenv("JOBSPY_DATA_PATH") or "../JobSpy"
-        df = pd.read_csv(jobspy_data_path + f"/cleaned_jobs-{datetime.now().month}-{datetime.now().day}-{datetime.now().strftime('%y')}.csv")
-        print(f"Loaded {len(df)} job descriptions from CSV for processing.")
-        
-        for _, row in df.iterrows():
-            url = row['job_url']
-            id = row['id']
-            description = row['description']
-            jdParsedObject.append((id,url, description))
-        
-        #for each job, grab the skills and signals from the description, then score against the profile and weights, then classify and save results
-        for id, url, description in jdParsedObject:
-            try:
-                counts = match_skills(description, skills)
-                profile=load_profile(profile_path)
-                weights,penalties=load_weights(weight_path)
-                flags = extract_requirement_flags(description, skills, profile)
-                score, matched, required_total, missing = weighted_alignment_score(counts, profile, weights,penalties)
-                label = classify(score,flags)
 
-                if score >= min_score:
+    profile = load_profile(profile_path)
+    weights, penalties = load_weights(weight_path)
+
+    if no_scrape:
+        jobspy_data_path = os.getenv("JOBSPY_DATA_PATH") or "../JobSpy"
+        df = pd.read_csv(
+            #WIDEN Search? uncomment for uncleaned_jobs
+            #jobspy_data_path + f"/jobs-5-24-26.csv",
+
+            jobspy_data_path + f"/jobs-{datetime.now().month}-{datetime.now().day}-{datetime.now().strftime('%y')}.csv",
+           # jobspy_data_path + f"/cleaned_jobs-{datetime.now().month}-{datetime.now().day}-{datetime.now().strftime('%y')}.csv",
+            encoding='latin1'
+        ) #if encountering encoding issues, try 'latin1' or 'utf-8-sig'
+        print(f"Loaded {len(df)} job descriptions from CSV for processing.")
+
+        job_rows = []
+        for _, row in df.iterrows():
+            job_rows.append(
+                {
+                    "id": row.get("id", ""),
+                    "url": row.get("job_url", ""),
+                    "title": row.get("title", ""),
+                    "description": row.get("description", ""),
+                    "search_lane": row.get("search_lane", ""),
+                    "search_term_used": row.get("search_term_used", ""),
+                    "review_priority": row.get("review_priority", ""),
+                }
+            )
+
+        for job in job_rows:
+            try:
+                url = job["url"]
+                id = job["id"]
+                title = job["title"]
+                description = job["description"]
+                search_lane = job["search_lane"]
+                search_term_used = job["search_term_used"]
+                review_priority = job["review_priority"]
+
+                counts = match_skills(description, skills)
+                flags = extract_requirement_flags(description, skills, profile)
+                score, matched, required_total, missing = weighted_alignment_score(
+                    counts,
+                    profile,
+                    weights,
+                    penalties,
+                    description=description,
+                    flags=flags,
+                )
+                label = classify(score, flags)
+                reason_codes = ";".join(flags.get("reason_codes", []))
+
+                row_payload = {
+                    "title": title,
+                    "description": description,
+                    "reason_codes": reason_codes,
+                    "label": label,
+                    "score": score,
+                    "matched": matched,
+                    "required_total": required_total,
+                    "missing": ";".join(missing),
+                    "search_lane": search_lane,
+                }
+
+                apply_decision = decide_apply_bucket(row_payload)
+                fit_quality = derive_fit_quality(row_payload)
+                role_lane = classify_role_lane(row_payload)
+
+                include_fallback_lane = search_lane in {"survival", "contract_survival"}
+
+                if score >= min_score or include_fallback_lane:
                     results.append(
                         JobResult(
+                            id=id,
                             source=url,
+                            search_lane=search_lane,
+                            search_term_used=search_term_used,
+                            review_priority=review_priority,
                             score=score,
+                            title=title,
                             label=label,
                             matched=matched,
                             required_total=required_total,
                             missing=";".join(missing),
                             matches_json=str(counts),
+                            description=description,
+                            reason_codes=reason_codes,
+                            apply_decision=apply_decision,
+                            fit_quality=fit_quality,
+                            role_lane=role_lane,
                         )
                     )
 
+                print(f"{url} | id={id} |title={title}| score={score:.2f} | label={label} | reasons={flags.get('reason_codes', [])}")
+
             except Exception as e:
-                print(f"Error processing {url}: {e}")
+                print(f"Error processing {job.get('url', '')}: {e}")
                 continue
+
     else:
         for line in lines:
             try:
                 source = line
                 text = extract_text_from_url(line)
+
                 if text is None:
                     failures.append(FailureRecord(source=line, reason="Extraction failed", error=""))
                     continue
-                jdParsedObject.append((line,text))
-                description = text['description'] if isinstance(text, dict) else text
-                
-                #grab skill counts for this job description
+
+                description = text["description"] if isinstance(text, dict) else text
+                id = text.get("id", "") if isinstance(text, dict) else ""
+                title = text.get("title", "") if isinstance(text, dict) else ""
+
                 counts = match_skills(description, skills)
-                profile=load_profile(profile_path)
-                weights,penalties=load_weights(weight_path)
                 flags = extract_requirement_flags(description, skills, profile)
+                score, matched, required_total, missing = weighted_alignment_score(
+                    counts,
+                    profile,
+                    weights,
+                    penalties,
+                    description=description,
+                    flags=flags,
+                )
+                label = classify(score, flags)
+                reason_codes = ";".join(flags.get("reason_codes", []))
 
-                score, matched, required_total, missing = weighted_alignment_score(counts, profile, weights,penalties)
-                # label = classify(score)
-                # if flags["has_hard_requirement_blockers"]:
-                #     label = "Skip"
-                # else:
-                label = classify(score,flags)
+                row_payload = {
+                    "title": title,
+                    "description": description,
+                    "reason_codes": reason_codes,
+                    "label": label,
+                    "score": score,
+                    "matched": matched,
+                    "required_total": required_total,
+                    "missing": ";".join(missing),
+                }
 
-                if score >= min_score:
-                    results.append(
-                        JobResult(
-                            source=source,
-                            score=score,
-                            label=label,
-                            matched=matched,
-                            required_total=required_total,
-                            missing=";".join(missing),
-                            matches_json=str(counts),
-                        )
+                apply_decision = decide_apply_bucket(row_payload)
+                fit_quality = derive_fit_quality(row_payload)
+                role_lane = classify_role_lane(row_payload)
+
+                #if score >= min_score: #I'm including survival lane
+                results.append(
+                    JobResult(
+                            id=id,
+                        source=source,
+                            title=title,
+                        search_lane="",
+                        search_term_used="",
+                        review_priority="",
+                        score=score,
+                        label=label,
+                        matched=matched,
+                        required_total=required_total,
+                        missing=";".join(missing),
+                        matches_json=str(counts),
+                        description=description,
+                        reason_codes=reason_codes,
+                        apply_decision=apply_decision,
+                        fit_quality=fit_quality,
+                        role_lane=role_lane,
                     )
+                )
 
-
-            except Exception as e:
-                print(f"Error processing {line}: {e}")
-                continue
             except FetchBlocked as e:
                 failures.append(FailureRecord(source=line, reason="blocked", error=str(e)))
+                continue
+            except Exception as e:
+                print(f"Error processing {line}: {e}")
                 continue
 
     write_results_csv(out_csv_path, results)
     write_failures_csv(out_csv_path.parent / "failures.csv", failures)
 
-    return jdParsedObject
-
+    return [
+        {
+            "id": r.id,
+            "source": r.source,
+            "title": r.title,
+            "label": r.label,
+            "description": r.description,
+        }
+        for r in results
+    ]
 
 def write_results_csv(path: Path, results: Iterable[JobResult]) -> None:
     with path.open("w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
-        w.writerow(["source", "score", "label", "matched", "required_total", "missing", "matches"])
+        w.writerow(["id","source","title", "search_lane", "search_term_used", "review_priority", "score", "raw_match", "matched", "required_total",
+                    "missing", "matches", "description", "reason_codes", "fit_quality", "role_lane", "apply_decision"])
         for r in results:
-            w.writerow([r.source, f"{r.score:.3f}", r.label, r.matched, r.required_total, r.missing, r.matches_json])
+            w.writerow([r.id,r.source, r.title, r.search_lane, r.search_term_used, r.review_priority, f"{r.score:.3f}", r.label, r.matched, r.required_total, r.missing, r.matches_json, r.description, r.reason_codes, r.fit_quality, r.role_lane, r.apply_decision])
 
 def write_failures_csv(path: Path, failures: Iterable[FailureRecord]) -> None:
     with path.open("w", newline="", encoding="utf-8") as f:

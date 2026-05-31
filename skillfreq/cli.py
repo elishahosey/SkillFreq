@@ -1,19 +1,43 @@
 import argparse
+import csv
 from datetime import datetime
 from pathlib import Path
 from .pipeline import run_links,fetch_links,create_file,extract_links
 from .skills.jds.extract import process_all_jobs
 from .skills.extract import extract_jd_skills
-import truststore
 from collections import Counter
-
-truststore.inject_into_ssl()  # fixes SSL issues on some platforms (e.g. Mac M1) without requiring users to manually install certs
-
+from .resume_router import route_resumes_for_csv
+try:
+    import truststore
+    truststore.inject_into_ssl()  # optional SSL fix for some platforms
+except ImportError:
+    truststore = None
 
 import sys
 print("DEBUG python:", sys.executable)
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 skills_filename = f"extracted_skills_{timestamp}.txt"
+
+def count_titles(csv_path: Path, title_col: str = "title") -> None:
+    counts: Counter[str] = Counter()
+
+    with csv_path.open("r", encoding="utf-8-sig", newline="") as f:
+        reader = csv.DictReader(f)
+        if reader.fieldnames is None:
+            raise ValueError(f"{csv_path} does not appear to have a header row")
+        if title_col not in reader.fieldnames:
+            available = ", ".join(reader.fieldnames)
+            raise ValueError(f"Column '{title_col}' not found. Available columns: {available}")
+
+        for row in reader:
+            title = " ".join((row.get(title_col) or "").split())
+            if title:
+                counts[title] += 1
+
+    writer = csv.writer(sys.stdout, lineterminator="\n")
+    writer.writerow(["title", "count"])
+    for title, count in counts.most_common():
+        writer.writerow([title, count])
 
 def main() -> None:
     parser = argparse.ArgumentParser(prog="skillfreq")
@@ -22,6 +46,17 @@ def main() -> None:
     resume_suggest = sub.add_parser("suggest", help="Used to compare skills from JD vs resume/profile yaml")
     resume_suggest.add_argument("--jds", required=True,help="Enter the folder of JDs")
     resume_suggest.add_argument("--out", default="data/outputs/suggestions.csv", help="CSV output path for suggestions")
+
+    route = sub.add_parser("route", help="Recommend the best resume variant for each JD row in a CSV")
+    route.add_argument("--input", required=True, help="Path to input CSV with title/JD columns")
+    route.add_argument("--out", default="data/outputs/routed_jobs.csv", help="CSV output path with resume routing columns")
+    route.add_argument("--roles", default="configs/roles.yml", help="Path to roles.yml")
+    route.add_argument("--title-col", default="", help="Title column name in the CSV (optional)")
+    route.add_argument("--jd-col", default="description", help="JD text column name in the CSV")
+
+    titles = sub.add_parser("titles", aliases=["count-titles"], help="Count job titles in a CSV")
+    titles.add_argument("filename", help="Path to the CSV file")
+    titles.add_argument("--title-col", default="title", help="Title column name in the CSV")
 
     extract_skills = sub.add_parser("extract", help="Used to extract skills from resume and update your profile yaml")
     extract_skills.add_argument("--file", required=True,help="Enter the filename of the resume, including the file extension")
@@ -44,6 +79,8 @@ def main() -> None:
     fetch.set_defaults(command="fetch")
     run.set_defaults(command="run")
     resume_suggest.set_defaults(command="suggest")
+    route.set_defaults(command="route")
+    titles.set_defaults(command="titles")
     
     if args.cmd == "fetch":
         fetch_links(
@@ -69,7 +106,6 @@ def main() -> None:
         extracted_skills = extract_jd_skills(jdParsedObject)
         #flatten before creating file
         flatten_skills = [item for sublist in extracted_skills for item in sublist]
-        
         counts_skills = Counter(flatten_skills)
         output = "\n".join(f"{skill},{count}" for skill, count in counts_skills.most_common())
         create_file(skills_filename, output)
@@ -83,6 +119,20 @@ def main() -> None:
             jd_folder= Path(args.jds), 
             skills_path= Path("configs/skills.yml")
          )
+    elif args.cmd == "route":
+        routed_df = route_resumes_for_csv(
+            input_csv=Path(args.input),
+            out_csv=Path(args.out),
+            roles_path=Path(args.roles),
+            title_col=args.title_col,
+            jd_col=args.jd_col,
+        )
+        print(f"Wrote {len(routed_df)} routed rows to {args.out}")
+    elif args.cmd in {"titles", "count-titles"}:
+        count_titles(
+            csv_path=Path(args.filename),
+            title_col=args.title_col,
+        )
         
         
 if __name__ == "__main__":

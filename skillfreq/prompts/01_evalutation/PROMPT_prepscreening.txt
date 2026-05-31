@@ -1,0 +1,140 @@
+I will provide a job description for a role I have a recruiter screen for.
+
+Generate no more than 5 questions I can ask during the screen.
+
+Create two versions:
+
+1. Nontechnical Recruiter Version
+- Questions should focus on role fit, must-have qualifications, seniority expectations, onsite/remote expectations, hiring process, and whether my background aligns.
+- Questions should help clarify whether the role is a good bridge toward my backend/data goals or whether it risks pigeonholing me into admin/support/vendor-tool work.
+- Avoid deep architecture, implementation, tooling, or algorithm-specific questions unless phrased simply.
+
+2. Technical Recruiter / Hiring Manager Version
+- Questions can go deeper into the actual work, technical stack, data workflows, architecture, validation/testing, production deployment, troubleshooting, ownership boundaries, and team responsibilities.
+- Questions should help reveal the role’s true center of gravity:
+  - SQL/data workflow work
+  - ETL/integration work
+  - production troubleshooting
+  - backend/data processing
+  - application/data support
+  - DBA/platform administration
+  - vendor-tool administration
+  - reporting/dashboard work
+  - generic support
+- Still keep them appropriate for an early screen.
+
+Use my background when choosing questions:
+- SQL/database experience
+- ETL/data workflow experience
+- software integration
+- APIs
+- XML/JSON/SFTP
+- production debugging
+- validation/reconciliation
+- Python automation/helper scripts
+- logs/OpenSearch-style troubleshooting
+- experience in domain-specific/proprietary systems
+- junior-to-mid level framing
+- customer-facing web component experience when relevant
+- test/debug workflows when relevant
+
+My target direction:
+- Data Engineer, SQL-heavy
+- ETL / integration roles
+- backend data processing roles
+- data quality / validation / reconciliation roles
+- systems/application analyst roles with strong SQL, integrations, APIs, logs, or operational data workflows
+- technical data/application support roles only when SQL, APIs, logs, integrations, or data correctness are central
+
+I am open to bridge roles, but I want to avoid roles that would trap me in:
+- routine admin-only work
+- DBA-only work
+- Managed File Transfer platform-only work
+- vendor-tool administration
+- dashboard-only reporting
+- generic customer support
+- nontechnical operations
+- configuration-heavy implementation work
+- senior/platform ownership that is beyond my resume
+
+Important bridge-role concern:
+If the role appears adjacent but may actually be admin/platform-heavy, include questions that clarify whether the day-to-day creates transferable SQL/data/integration/debugging stories or mostly routine platform/vendor/admin tickets.
+
+Examples of risky role-identity mismatches:
+- SQL troubleshooting role that is actually DBA/platform administration
+- SFTP/file workflow role that is actually Managed File Transfer platform administration
+- API/integration role that is actually vendor-tool configuration
+- reporting systems role that is actually dashboard-only BI
+- software role that is actually deep full-stack/backend ownership beyond my experience
+- cloud-adjacent role that is actually cloud platform ownership
+
+For DBA-like roles, clarify whether the work is mostly:
+- SQL troubleshooting
+- failed jobs
+- application data issues
+- query performance
+- validation/reconciliation
+- data workflow reliability
+
+or mostly:
+- backups/restores
+- HA/DR
+- patching
+- permissions/access requests
+- database platform maintenance
+- routine DBA tickets
+
+For Managed File Transfer / MFT-like roles, clarify whether the work is mostly:
+- SFTP/file-based workflows
+- integrations
+- data movement
+- transfer failure troubleshooting
+- validation/reconciliation
+- operational data exchange
+
+or mostly:
+- Axway / IBM Sterling / Connect:Direct / NDM / GoAnywhere / MOVEit administration
+- certificate/key management
+- platform monitoring
+- MFT account administration
+- enterprise file transfer platform ownership
+
+Also flag if the role seems like:
+- clean fit
+- possible fit
+- stretch fit
+- senior-leaning fit
+- niche bridge fit
+- risky bridge fit
+
+Fit Read should include:
+- whether the role supports my target direction
+- whether it is a bridge role or target-lane role
+- main recruiter-screen risk
+- main pivot/pigeonhole risk
+- what I need to clarify during the screen
+
+Return the output in this format:
+
+Fit Read:
+[1-3 sentence assessment. Include whether this looks like clean fit, possible fit, stretch fit, senior-leaning fit, niche bridge fit, or risky bridge fit.]
+
+Nontechnical Recruiter Questions:
+1.
+2.
+3.
+4.
+5.
+
+Technical Recruiter / Hiring Manager Questions:
+1.
+2.
+3.
+4.
+5.
+
+Best Question to Ask If Time Is Limited:
+[One question that best reveals whether the role is target-lane, useful bridge, or pigeonhole risk.]
+
+Bridge Risk Check:
+[1-3 sentences explaining what would make this role useful versus risky for my long-term backend/data goals.]

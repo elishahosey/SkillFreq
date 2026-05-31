@@ -1,0 +1,376 @@
+resume_variants:
+  Engineer_Data:
+    keywords:
+      - data engineer
+      - etl
+      - elt
+      - pipeline
+      - pipelines
+      - data pipeline
+      - data pipelines
+      - ingestion
+      - transformation
+      - data warehouse
+      - warehousing
+      - warehouse
+      - schema
+      - data modeling
+      - data quality
+      - validation
+      - reconciliation
+      - batch processing
+      - sql
+      - python
+      - api
+      - rest
+      - xml
+      - json
+      - sftp
+      - production support
+      - root cause
+    weight: 1.0
+
+  Engineer_Secondary:
+    keywords:
+      - backend engineer
+      - software engineer data
+      - backend data engineer
+      - data platform engineer
+      - data systems engineer
+      - data infrastructure engineer
+      - data reliability engineer
+      - application engineer
+      - integration engineer
+      - integration developer
+      - api engineer
+      - api developer
+      - backend
+      - api
+      - apis
+      - rest
+      - microservices
+      - services
+      - object oriented
+      - client-server
+      - integrations
+      - systems integration
+      - interface engineer
+      - middleware
+      - data exchange
+      - application development
+      - batch data processing
+      - postgresql
+      - sql server
+      - python
+      - git
+    weight: 0.85
+
+  Engineer_Bridge:
+    keywords:
+      - systems analyst
+      - system analyst
+      - application analyst
+      - business systems analyst
+      - technical systems analyst
+      - application support analyst
+      - application support engineer
+      - production support analyst
+      - production support engineer
+      - software support analyst
+      - software support engineer
+      - technical support analyst
+      - technical support engineer
+      - sql analyst
+      - data analyst
+      - data quality analyst
+      - data operations analyst
+      - data integrity analyst
+      - reporting analyst
+      - integration analyst
+      - interface analyst
+      - api support engineer
+      - etl support analyst
+      - database analyst
+      - sql
+      - queries
+      - stored procedures
+      - data validation
+      - data quality
+      - reconciliation
+      - reporting
+      - reports
+      - power bi
+      - tableau
+      - api
+      - apis
+      - rest
+      - xml
+      - json
+      - sftp
+      - integration
+      - integrations
+      - interface
+      - interfaces
+      - production support
+      - application support
+      - troubleshooting
+      - root cause
+      - incident
+      - logs
+      - log analysis
+      - operational workflows
+    weight: 0.65
+
+  Engineer_Analytics:
+    keywords:
+      - analytics
+      - business intelligence
+      - bi
+      - dashboard
+      - dashboards
+      - reporting
+      - reports
+      - metrics
+      - kpi
+      - looker
+      - tableau
+      - power bi
+      - semantic layer
+      - ad hoc
+      - stakeholder reporting
+      - sql
+      - transformation
+      - modeling
+    weight: 0.65
+
+  Engineer_Platform:
+    keywords:
+      - platform engineer
+      - platform
+      - infrastructure
+      - reliability
+      - sre
+      - observability
+      - monitoring
+      - logging
+      - devops
+      - ci/cd
+      - deployment
+      - release
+      - kubernetes
+      - terraform
+      - linux
+      - production support
+      - root cause
+      - distributed systems
+      - workflow orchestration
+      - automation pipelines
+    weight: 0.45
+
+  Engineer_Software:
+    keywords:
+      - backend engineer
+      - software engineer
+      - backend
+      - api
+      - apis
+      - rest
+      - microservices
+      - services
+      - object oriented
+      - client-server
+      - integration engineer
+      - integrations
+      - systems integration
+      - interface engineer
+      - middleware
+      - data exchange
+      - application engineer
+      - system integration
+    weight: 0.75
+
+title_overrides:
+  Engineer_Data:
+    - data engineer
+    - etl engineer
+    - elt engineer
+    - data warehouse engineer
+    - data integration engineer
+    - data pipeline engineer
+    - data ingestion engineer
+    - data quality engineer
+    - sql developer
+    - database developer
+
+  Engineer_Secondary:
+    - data platform engineer
+    - data systems engineer
+    - data infrastructure engineer
+    - software engineer data
+    - backend engineer data
+    - backend data engineer
+    - api engineer
+    - api developer
+    - application engineer integration
+    - integration developer
+    - pl/sql developer
+    - database engineer
+
+  Engineer_Bridge:
+    - systems analyst
+    - system analyst
+    - application analyst
+    - business systems analyst
+    - technical systems analyst
+    - application support analyst
+    - application support engineer
+    - production support analyst
+    - production support engineer
+    - software support analyst
+    - software support engineer
+    - technical support engineer
+    - technical support analyst
+    - sql analyst
+    - data analyst
+    - data quality analyst
+    - data operations analyst
+    - data integrity analyst
+    - reporting analyst
+    - integration analyst
+    - interface analyst
+    - api support engineer
+    - etl support analyst
+    - database analyst
+
+  Engineer_Software:
+    - interface engineer
+    - systems integration
+    - system integration
+    - api integration
+    - client integration
+    - client integrations
+    - middleware
+    - integration engineer
+    - interface developer
+
+  Engineer_Platform:
+    - sre
+    - site reliability engineer
+    - devops engineer
+    - platform engineer
+    - infrastructure engineer
+
+negative_keywords:
+  Engineer_Data:
+    - dashboard-only
+    - dashboard only
+    - front end
+    - frontend
+    - implementation consultant
+    - configuration consultant
+
+  Engineer_Secondary:
+    - kubernetes ownership
+    - terraform ownership
+    - cloud infrastructure ownership
+    - implementation consultant
+    - configuration consultant
+    - machine learning
+    - ai agents
+
+  Engineer_Bridge:
+    - call center
+    - help desk only
+    - password reset
+    - desktop support
+    - hardware support
+    - field technician
+    - implementation consultant
+    - configuration consultant
+    - salesforce admin
+    - servicenow admin
+    - erp consultant
+    - workday consultant
+    - sap consultant
+    - peoplesoft consultant
+    - clinical technician
+    - scada
+    - gis
+    - arcgis
+
+  Engineer_Analytics:
+    - dashboard-only
+    - dashboard only
+    - no sql
+    - kubernetes
+    - terraform
+    - machine learning
+    - predictive modeling
+
+  Engineer_Platform:
+    - tableau
+    - power bi
+    - dashboard-only
+    - database administration
+    - dba
+
+  Engineer_Software:
+    - tableau
+    - power bi
+    - frontend
+    - front end
+    - react-only
+    - react only
+
+seniority_penalties:
+  hard_titles:
+    - senior
+    - sr
+    - lead
+    - principal
+    - staff
+    - architect
+    - manager
+    - director
+  medium_requirements:
+    - 5+ years
+    - 6+ years
+    - 7+ years
+    - 8+ years
+    - 10+ years
+    - five years
+    - six years
+    - seven years
+    - eight years
+    - ten years
+
+ai_stack_penalty:
+  keywords:
+    - rag
+    - retrieval augmented generation
+    - langchain
+    - langgraph
+    - llamaindex
+    - crewai
+    - autogen
+    - agentops
+    - llmops
+    - mlops
+    - model monitoring
+    - experiment tracking
+    - model versioning
+    - fine tuning
+    - fine-tune
+    - lora
+    - peft
+    - transformers
+    - tensorflow
+    - pytorch
+    - scikit-learn
+    - sklearn
+    - hallucination
+    - grounding
+    - prompt management
+    - offline evaluation
+    - online evaluation
+  penalty_score: 1

@@ -1,7 +1,7 @@
 from datetime import datetime
 from string import punctuation
 import re
-from typing import Dict, List
+from typing import Any, Dict, List
 
 import spacy
 
@@ -10,7 +10,7 @@ BAD_PHRASES = {
     "actionable insights",
     "business stakeholders",
     "non-exempt position summary",
-    "chief information officer flsa status"
+    "chief information officer flsa status",
 }
 
 BAD_SINGLE_WORDS = {
@@ -20,7 +20,7 @@ BAD_SINGLE_WORDS = {
     "processing",
     "reporting",
     "ingesting",
-    "sc"
+    "sc",
 }
 
 SECTION_PATTERNS = {
@@ -45,61 +45,89 @@ SECTION_PATTERNS = {
     ],
 }
 
-
-
 CORE_BLOCKER_SKILLS = {"sql", "etl", "python"}
+MODERN_STACK_SKILLS = {"spark", "airflow", "kafka", "aws", "data_platforms"}
 
-nlp = spacy.load('en_core_web_sm')
+nlp = spacy.load("en_core_web_sm")
+
 
 def get_hotwords(text):
     result = []
-    pos_tag = ['PROPN', 'ADJ', 'NOUN'] 
-    doc = nlp(text.lower()) 
+    pos_tag = ["PROPN", "ADJ", "NOUN"]
+    doc = nlp(text.lower())
+
     for token in doc:
-        if(token.text in nlp.Defaults.stop_words or token.text in punctuation):
+        if token.text in nlp.Defaults.stop_words or token.text in punctuation:
             continue
-        if(token.pos_ in pos_tag):
+
+        if token.pos_ in pos_tag:
             result.append(token.text)
+
     return result
 
+
 def get_nounChunks(text):
-    
     results = []
-    doc = nlp(text.lower()) 
+    doc = nlp(text.lower())
+
     for chunk in doc.noun_chunks:
-        pos_tag = ['PROPN', 'ADJ', 'NOUN'] 
-        
-        if(chunk.text in nlp.Defaults.stop_words or chunk.text in punctuation):
-         continue
-        
+        pos_tag = ["PROPN", "ADJ", "NOUN"]
+
+        if chunk.text in nlp.Defaults.stop_words or chunk.text in punctuation:
+            continue
+
         if chunk.text in BAD_PHRASES:
-         continue
+            continue
 
         if chunk.text in BAD_SINGLE_WORDS:
-         continue
-        
-        #check chunk in allowed list
+            continue
+
+        # check chunk in allowed list
         if all(token.pos_ in pos_tag for token in chunk):
             results.append(chunk.text)
-    
+
     return results
-        
-    
+
+
+def _extract_description_text(jd: Any) -> str:
+    if isinstance(jd, dict):
+        return str(jd.get("description", "") or "")
+
+    if isinstance(jd, tuple):
+        if len(jd) < 2:
+            return ""
+
+        payload = jd[1]
+        if isinstance(payload, dict):
+            return str(payload.get("description", "") or "")
+
+        return str(payload or "")
+
+    return str(jd or "")
+
+
+
 def extract_jd_skills(jdParsedObject):
     extracted_skills = []
-    for jd in jdParsedObject:
-        text = jd[1]['description'] if 'description' in jd[1] else jd[1]
-        output = list(set(get_nounChunks(text)))
 
+    for jd in jdParsedObject:
+        text = _extract_description_text(jd)
+
+        if not text:
+            extracted_skills.append([])
+            continue
+
+        output = list(set(get_nounChunks(text)))
         extracted_skills.append(output)
-        
-    
+
     return extracted_skills
+
 
 def extract_sections(description: str) -> Dict[str, str]:
     text = description.lower()
 
     matches = []
+
     for section_name, patterns in SECTION_PATTERNS.items():
         for pattern in patterns:
             for m in re.finditer(pattern, text):
@@ -111,6 +139,7 @@ def extract_sections(description: str) -> Dict[str, str]:
     matches.sort(key=lambda x: x[0])
 
     sections: Dict[str, str] = {}
+
     for i, (start, end, section_name) in enumerate(matches):
         next_start = matches[i + 1][0] if i + 1 < len(matches) else len(text)
         section_text = text[end:next_start].strip()
@@ -120,7 +149,9 @@ def extract_sections(description: str) -> Dict[str, str]:
             sections[section_name] = section_text
 
     sections["full_text"] = text
+
     return sections
+
 
 def extract_requirement_flags(
     description: str,
@@ -135,23 +166,54 @@ def extract_requirement_flags(
     flags = {
         "mandatory_missing_skills": [],
         "preferred_missing_skills": [],
+        "modern_required_missing_skills": [],
+        "modern_preferred_missing_skills": [],
         "years_required": None,
         "is_lead_like": False,
         "has_hard_requirement_blockers": False,
+        "has_modern_stack_blockers": False,
+        "reason_codes": [],
     }
 
-    years_match = re.search(r"(\d+)\s*-\s*(\d+)\s+years", full_text)
-    if years_match:
-        flags["years_required"] = (int(years_match.group(1)), int(years_match.group(2)))
+    # years parsing
+    # Normalize escaped plus signs from scraped/CSV text, e.g. "4\\+ years" -> "4+ years"
+    normalized_full_text = full_text.replace("\\+", "+")
+
+    years_range_match = re.search(
+        r"(\d+)\s*(?:-|to)\s*(\d+)\s*\+?\s+years",
+        normalized_full_text,
+    )
+
+    if years_range_match:
+        flags["years_required"] = (
+            int(years_range_match.group(1)),
+            int(years_range_match.group(2)),
+        )
+    else:
+        single_years = re.findall(
+            r"(\d+)\s*\+?\s+years",
+            normalized_full_text,
+        )
+
+        if single_years:
+            flags["years_required"] = max(int(y) for y in single_years)
 
     lead_terms = [
         "technical lead",
-        "subject matter expert",
         "staff",
         "principal",
-        "architect",
         "lead engineer",
+        "set technical direction",
+        "mentor junior engineers",
+        "mentor junior data engineers",
+        "evaluate and make decisions",
+        "evaluate dataset implementations",
+        "evaluate the use of new or existing software products and tools",
+        "drive best practices in source teams",
+        "architecture ownership",
+        "system design leadership",
     ]
+
     flags["is_lead_like"] = any(term in full_text for term in lead_terms)
 
     # hard blockers only from required section
@@ -159,13 +221,16 @@ def extract_requirement_flags(
         for skill, terms in skills.items():
             if profile.get(skill, 0.0) > 0:
                 continue
-            if skill not in CORE_BLOCKER_SKILLS:
-                continue
 
             for term in terms:
                 pattern = r"(?<!\w)" + re.escape(term.lower()) + r"(?!\w)"
+
                 if re.search(pattern, required_text):
-                    flags["mandatory_missing_skills"].append(skill)
+                    if skill in CORE_BLOCKER_SKILLS:
+                        flags["mandatory_missing_skills"].append(skill)
+                    elif skill in MODERN_STACK_SKILLS:
+                        flags["modern_required_missing_skills"].append(skill)
+
                     break
 
     # softer signals from preferred section
@@ -176,14 +241,39 @@ def extract_requirement_flags(
 
             for term in terms:
                 pattern = r"(?<!\w)" + re.escape(term.lower()) + r"(?!\w)"
+
                 if re.search(pattern, preferred_text):
-                    flags["preferred_missing_skills"].append(skill)
+                    if skill in MODERN_STACK_SKILLS:
+                        flags["modern_preferred_missing_skills"].append(skill)
+                    else:
+                        flags["preferred_missing_skills"].append(skill)
+
                     break
 
     flags["mandatory_missing_skills"] = sorted(set(flags["mandatory_missing_skills"]))
     flags["preferred_missing_skills"] = sorted(set(flags["preferred_missing_skills"]))
-    flags["has_hard_requirement_blockers"] = (
-     len(flags["mandatory_missing_skills"]) > 0
-    )
+    flags["modern_required_missing_skills"] = sorted(set(flags["modern_required_missing_skills"]))
+    flags["modern_preferred_missing_skills"] = sorted(set(flags["modern_preferred_missing_skills"]))
+
+    flags["has_hard_requirement_blockers"] = len(flags["mandatory_missing_skills"]) > 0
+
+    # Modern stack is a blocker only if multiple required missing modern skills show up
+    flags["has_modern_stack_blockers"] = len(flags["modern_required_missing_skills"]) >= 2
+
+    # Reason codes
+    if flags["mandatory_missing_skills"]:
+        flags["reason_codes"].append("core_required_missing")
+
+    if flags["modern_required_missing_skills"]:
+        flags["reason_codes"].append("modern_required_missing")
+
+    if flags["modern_preferred_missing_skills"]:
+        flags["reason_codes"].append("modern_preferred_missing")
+
+    if flags["is_lead_like"]:
+        flags["reason_codes"].append("lead_like")
+
+    if flags["years_required"]:
+        flags["reason_codes"].append("years_present")
 
     return flags

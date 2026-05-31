@@ -26,6 +26,7 @@ extracted_skills_*.txt
 *.html
 *.xlsx
 *.docx
+*.pdf
 
 # Archive files
 research_historical/
@@ -38,10 +39,13 @@ logging.zip
 # Generated outputs
 extracted_skills_*.txt
 ExportBlock-*.zip
-
+data/apify/
 data/analyze/
 data/outputs/
 data/research_historical/
+
+#Prompts
+skillfreq/prompts/
 
 #Cache files
 cache.py

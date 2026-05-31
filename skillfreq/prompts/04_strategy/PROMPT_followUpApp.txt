@@ -1,0 +1,211 @@
+I will provide:
+
+1. My base resume(s)
+2. One job description I already applied to or plan to apply to
+3. Optional context:
+   - recruiter name, if known
+   - company name, if not obvious
+   - whether this is for email or LinkedIn
+   - whether I already applied
+   - whether I want a short or slightly more detailed follow-up
+
+Your task is to write a job application follow-up message grounded ONLY in my resume and the JD.
+
+---
+
+# GOAL
+
+Write a professional follow-up message that helps me briefly remind the recruiter or hiring team why I am relevant for the role.
+
+The message should be:
+
+- concise
+- specific to the JD
+- grounded in my actual resume
+- not desperate
+- not overly formal
+- not generic
+- not exaggerated
+- recruiter-friendly
+- easy to send as an email or LinkedIn message
+
+---
+
+# MY BACKGROUND CONTEXT
+
+I am a backend/data-focused engineer.
+
+Strong in:
+- SQL
+- ETL / data workflows
+- data validation
+- reconciliation
+- APIs
+- integrations
+- debugging
+- backend/data processing
+- operational system troubleshooting
+- XML / JSON / SFTP
+- production debugging
+- logs / OpenSearch
+- Python automation
+- Azure DevOps / CI/CD exposure
+- Java only where the JD does NOT require strong Spring Boot/microservices ownership
+- REST APIs only where the JD does NOT require full API architecture ownership in an unsupported framework
+
+My strongest resume-backed positioning is:
+
+- SQL-heavy data workflows
+- ETL-style ingestion / transformation / validation
+- system-to-system integrations
+- API testing and troubleshooting
+- XML / JSON / SFTP data exchange
+- production debugging using SQL, logs, and OpenSearch
+- data validation and reconciliation
+- operational data workflow reliability
+- Python helper scripts / automation
+- enterprise system troubleshooting
+
+Do NOT invent experience beyond the resume.
+
+Do NOT imply I have strong ownership of tools, platforms, or frameworks that are not in my resume.
+
+---
+
+# FOLLOW-UP STRATEGY
+
+The follow-up should answer:
+
+“Why does my background make sense for this role?”
+
+It should pull 2-4 strongest overlaps between my resume and the JD, such as:
+
+- SQL
+- ETL / data workflows
+- data validation / reconciliation
+- APIs / integrations
+- XML / JSON / SFTP
+- production troubleshooting
+- logs / OpenSearch
+- backend data processing
+- operational systems
+- Python automation
+- Azure DevOps / CI/CD
+
+Focus on recruiter-screen realism.
+
+Do NOT over-explain.
+
+Do NOT sound like I am begging.
+
+Do NOT use hype language like:
+- perfect fit
+- dream role
+- uniquely qualified
+- passionate about leveraging synergies
+- I believe I would be an invaluable asset
+
+Do NOT use em dashes.
+
+---
+
+# OUTPUT REQUIREMENTS
+
+Return:
+
+1. A short email version
+2. A shorter LinkedIn/recruiter message version
+3. A subject line for the email
+4. Optional: one sentence explaining why this framing was chosen
+
+The email should be around 120-180 words.
+
+The LinkedIn message should be around 60-90 words.
+
+Use placeholders if needed:
+- [Recruiter Name]
+- [Company Name]
+- [Job Title]
+
+If the recruiter or hiring manager name is unknown, use:
+Hello,
+
+If the company or job title is obvious from the JD, fill it in.
+
+---
+
+# TONE
+
+Tone should be:
+
+- professional
+- calm
+- confident
+- concise
+- human
+- not robotic
+- not overly eager
+- not defensive
+- not desperate
+
+This should sound like a working engineer following up, not a student begging for a chance.
+
+---
+
+# IMPORTANT RULES
+
+Use the resume as the source of truth.
+
+Use the JD to choose what to emphasize.
+
+Do NOT mention every skill I have.
+
+Do NOT mention weak or unsupported tools unless the resume clearly supports them.
+
+If the JD is clearly a weak fit, still write a cautious follow-up, but avoid overstating alignment.
+
+If the JD has platform/tool requirements I do not strongly own, phrase around transferable overlap instead of pretending direct experience.
+
+If the JD is a strong match, make the follow-up more direct.
+
+If the role is support/application analyst/data operations oriented, frame me around:
+- SQL troubleshooting
+- data validation
+- production issue resolution
+- API/integration support
+- operational workflow reliability
+
+If the role is data engineer/ETL oriented, frame me around:
+- SQL
+- ETL-style workflows
+- validation/reconciliation
+- data transformation
+- integrations
+- Python automation
+- production debugging
+
+If the role is backend/API oriented, frame me around:
+- backend/data processing
+- REST/SOAP API testing
+- integration troubleshooting
+- production debugging
+- CI/CD exposure
+- Java/Python/SQL only where defensible
+
+---
+
+# INPUTS
+
+Resume(s):
+[PASTE OR ATTACH RESUME(S)]
+
+Job Description:
+[PASTE JD HERE]
+
+Optional context:
+- Already applied?: [yes/no]
+- Message type: [email / LinkedIn / both]
+- Recruiter name: [name if known]
+- Company: [company]
+- Job title: [title]
+- Preferred length: [short / normal]

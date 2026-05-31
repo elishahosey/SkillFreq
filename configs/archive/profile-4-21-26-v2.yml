@@ -18,8 +18,6 @@ skills:
   system_design: 0.5
   software_engineering: 0.5
   testing: 0.25
-  operations: 1.0
-  apis: 1.0
-  integration_workflows: 1.0
+  operations: 0.25
 
 
