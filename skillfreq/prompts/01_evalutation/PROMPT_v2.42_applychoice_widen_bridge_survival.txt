@@ -71,7 +71,7 @@ It means every row must be assigned one of:
 - do_not_apply
 
 Also include:
-- bridge_type for each row: target_core, strategic_bridge, weak_bridge, or not_a_bridge
+- bridge_type for each row: target_core, strategic_bridge, survival_bridge, weak_bridge, or not_a_bridge
 - fit_subtype for each row: good_fit, possible_2a, or possible_2b
 - pivot status for each row: pivotable, conditional, or risky
 
@@ -118,13 +118,15 @@ SkillFreq may use these role_lane values:
 - target_lane
 - secondary_lane
 - bridge_lane
+- survival_lane
 - wrong_lane
 
 Do NOT use adjacent_lane.
 
 If an upstream AI feedback column uses adjacent_lane, map it as follows:
 - adjacent_lane with technical/backend/data overlap = secondary_lane
-- adjacent_lane with support/analyst/survival overlap = bridge_lane
+- adjacent_lane with strong support/analyst technical bridge overlap = bridge_lane
+- adjacent_lane with weaker fallback technical survival overlap = survival_lane
 - adjacent_lane with weak technical substance = wrong_lane
 
 ---
@@ -634,6 +636,7 @@ For every role, classify bridge_type as one of:
 
 - target_core
 - strategic_bridge
+- survival_bridge
 - weak_bridge
 - not_a_bridge
 
@@ -675,9 +678,27 @@ Strategic bridge roles should usually be:
 - Pivotable? = pivotable or conditional
 - Apply Decision = apply_later, or apply_now only if it is genuinely one of the strongest roles in the batch and has low stack/platform/admin risk
 
+## survival_bridge
+
+Use survival_bridge when the role is a fallback technical survival option rather than a strong strategic bridge.
+
+Survival_bridge roles may include:
+- application support, software support, technical support, systems analyst, data operations, data quality, reporting analyst, SQL analyst, or application analyst roles where technical overlap exists but is not deep enough for strategic_bridge
+- roles where SQL, logs, APIs, data correctness, reconciliation, reporting systems, application troubleshooting, data operations, or operational workflows are present but the role is more support/ops/reporting than engineering
+- roles that could help preserve income and some technical credibility without pretending they are strong backend/data-engineering pivots
+
+Use survival_bridge only when the role has concrete technical substance.
+Do NOT use survival_bridge for fast food, retail, warehouse, pure call-center support, generic help desk, nontechnical admin, customer success, training, or business operations roles with no SQL/API/data/logs/workflow substance.
+
+Survival_bridge roles should usually be:
+- fit_subtype = possible_2b, or possible_2a only when SQL/API/data troubleshooting is central enough to be recruiter-credible
+- Pivotable? = conditional, rarely pivotable, or risky if the role is too support/reporting diluted
+- Apply Decision = apply_later only when the role is a credible survival fallback worth applying to, otherwise optional_stretch or do_not_apply
+- Never apply_now unless the batch is extremely weak and the role is unusually technical, stack-close, and low-risk
+
 ## weak_bridge
 
-Use weak_bridge when the role has some overlap, but the bridge value is diluted or risky.
+Use weak_bridge when the role has some overlap, but the bridge value is diluted, risky, or not worth treating as a survival fallback.
 
 Weak bridge roles may include:
 - BI/dashboard-heavy roles with limited ETL or operational troubleshooting
@@ -910,6 +931,7 @@ bridge_type:
 - Use only one of:
   - target_core
   - strategic_bridge
+  - survival_bridge
   - weak_bridge
   - not_a_bridge
 - Do NOT leave this column blank.
@@ -924,7 +946,7 @@ Reason:
   - how SkillFreq signals support or weaken the decision, if relevant
   - largest gaps, risks, or tradeoffs
   - specific vendor-tool/platform/admin/framework/stack ownership risks, if relevant
-  - bridge_type and whether the role is target_core, strategic_bridge, weak_bridge, or not_a_bridge
+  - bridge_type and whether the role is target_core, strategic_bridge, survival_bridge, weak_bridge, or not_a_bridge
   - pivot impact / pigeonhole risk
   - why the assigned Apply Decision is appropriate
 - If a role is downgraded from upstream good_fit, explicitly say why the good_fit label was too generous.
@@ -972,7 +994,7 @@ Before finishing, validate the output:
 8. Confirm that Apply Decision only uses:
    apply_now, apply_later, optional_stretch, do_not_apply
 9. Confirm that bridge_type only uses:
-   target_core, strategic_bridge, weak_bridge, not_a_bridge
+   target_core, strategic_bridge, survival_bridge, weak_bridge, not_a_bridge
 10. Confirm that fit_subtype only uses:
    good_fit, possible_2a, possible_2b
 11. Confirm that Pivotable? only uses:
@@ -1008,7 +1030,8 @@ Do NOT return a shortened preview instead of the file.
 - Do not let tool similarity hide a system/platform/admin/framework/stack role mismatch.
 - Do not let enterprise file transfer similarity hide an MFT platform/admin role mismatch.
 - Do not let “credible bridge role” become apply_now unless it is genuinely one of the strongest immediate applications in the batch.
-- Explicitly classify bridge_type so strategic bridge roles are separated from weak bridge roles and not_a_bridge roles.
+- Explicitly classify bridge_type so target_core, strategic_bridge, survival_bridge, weak_bridge, and not_a_bridge roles are separated.
+- Use survival_bridge for fallback technical survival roles with real SQL/data/application/logs/API/troubleshooting/reporting-system substance, but do not let generic support/admin/customer-service roles enter the survival bucket.
 - When in doubt between apply_now and apply_later, choose apply_later unless the role is clearly stack-close, target-lane, and low-risk.
 - When in doubt between apply_later and optional_stretch, choose optional_stretch if the role depends on a stack, framework, vendor tool, platform, admin function, or reporting/support identity I do not strongly own.
 - Prefer fewer, higher-quality immediate applications.

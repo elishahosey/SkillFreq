@@ -494,6 +494,11 @@ def classify_role_lane(row: Dict[str, Any]) -> str:
             and platform_heavy_count <= 3
         ):
             return "bridge_lane"
+        
+        if(
+            search_lane in ("survival", "contract_survival")
+        ):
+            return "survival_lane"
 
         if (
             platform_heavy_count <= 3

@@ -612,6 +612,9 @@ def decide_apply_bucket(row: Dict[str, Any]) -> str:
 
     if lane == "wrong_lane":
         return "skip"
+    
+    if search_lane in {"survival", "contract_survival"} or lane == "survival_lane":
+        return "manual_review"
 
     # Bridge searches are noisy. Even when a bridge-search result looks strong,
     # keep it in manual_review so it does not pollute the clean-shot apply_now bucket.

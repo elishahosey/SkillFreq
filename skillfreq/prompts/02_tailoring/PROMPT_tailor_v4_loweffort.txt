@@ -1,0 +1,1232 @@
+I will provide:
+
+1. My base resume(s)
+2. An XLSX of selected job roles.
+
+Use ONLY the sheet named:
+
+ApplyList
+
+Do NOT evaluate other sheets.
+
+The ApplyList sheet may include:
+- Order
+- Apply Decision
+- bridge_type
+- Reason
+- fit_subtype
+- Pivotable?
+- source
+- description
+- Company, if present
+- Role, if present
+- SkillFreq keyword/count/scoring columns, if present
+
+Some rows may include only a description column.
+
+Your task is NOT to re-evaluate every job from scratch.
+
+Your task is NOT to tailor every resume.
+
+The ApplyList sheet is already filtered down to roles I am seriously considering.
+
+Your task is to answer:
+
+“Which base resume should I send, and is tailoring worth the time at all?”
+
+The default strategy is:
+
+Base resume routing first.
+Tailoring only when there is clear ROI.
+
+---
+
+# APPLYLIST STRUCTURE NOTE
+
+The ApplyList sheet may not include Company or Role columns.
+
+In this batch, the sheet may include:
+- Order
+- Apply Decision
+- bridge_type
+- Reason
+- fit_subtype
+- Pivotable?
+- source
+- description
+
+Use Order as the primary row identifier.
+
+Use source only as a reference link. Do NOT rely on the source URL to infer fit or tailor the resume.
+
+If Company or Role is missing, infer a short Job Identifier from the description using the clearest available title or role phrase.
+
+Examples:
+- Systems Integration Engineer
+- Technical Business Analyst
+- Automation Engineer
+- Actuarial Data Analyst
+- L1/L2 Support Analyst
+- Data Engineer
+- Application Trade Support Analyst
+- AI Data Analyst & Systems Integration Specialist
+
+Do not overthink missing Company/Role fields.
+
+Do NOT invent a company name.
+
+Do NOT use the source URL as the job identifier.
+
+---
+
+# DESCRIPTION CLEANUP RULE
+
+The description column may contain scraped formatting, markdown artifacts, duplicated sections, encoding artifacts, benefits text, legal boilerplate, or job-board wrapper text.
+
+Ignore boilerplate such as:
+- benefits
+- equal opportunity statements
+- privacy notices
+- job board wrapper language
+- pay details unless relevant to seniority or role level
+- formatting artifacts
+- repeated title text
+
+Focus only on:
+- job title
+- responsibilities
+- required skills
+- preferred skills
+- qualifications
+- core role identity
+
+---
+
+# DEFAULT STRATEGY — BASE RESUME ROUTING FIRST
+
+My current strategy is to avoid unnecessary tailoring.
+
+For most roles, choose the best existing base resume and recommend sending it as-is.
+
+Tailoring should be the exception, not the default.
+
+Do NOT suggest tweaks just because a role has matching keywords.
+
+Only suggest tailoring when:
+- Apply Decision = apply_now
+- or fit_subtype = good_fit and the role is highly aligned
+- or a small wording change would clearly improve recruiter-screen realism without adding unsupported claims
+- or the JD has a safe keyword gap that the selected base resume does not already cover
+
+If the selected base resume already covers the role well enough, output:
+
+“No additional tweak needed — send selected base resume as-is.”
+
+Do NOT create tailoring work unless it materially improves the application.
+
+---
+
+# TAILORING ROI GATE
+
+Before suggesting any bullet change, ask:
+
+“Would this tweak materially improve recruiter-screen realism compared with simply sending the best base resume?”
+
+If no, do not suggest the tweak.
+
+Do NOT tailor for:
+- minor keyword matching
+- optional_stretch roles unless there is one obvious safe micro-tweak
+- roles where the main gap is unsupported tooling/platform/framework ownership
+- roles where tailoring would only hide a mismatch
+- roles where the selected base resume already covers the core overlap
+
+Prefer:
+- correct base resume selection
+- no tweak
+- applying faster
+
+The default successful outcome is:
+
+“Send selected base resume as-is.”
+
+---
+
+# SAFE JD KEYWORD MICRO-INSERTION RULE
+
+Yes, use JD keywords when they fit my real experience.
+
+For each role, look for safe JD keywords that are:
+- directly supported by my resume
+- interview-defensible
+- useful for recruiter/ATS matching
+- natural inside an existing bullet
+
+Add them only through small wording changes.
+
+Examples of safe keyword insertion:
+- “SQL checks” → “SQL validation and reconciliation checks”
+- “data transfer” → “SFTP data transfer and XML/JSON data exchange”
+- “investigated failures” → “investigated pipeline failures using SQL queries, logs, and OpenSearch”
+- “integration workflows” → “system-to-system integration workflows”
+- “tested APIs” → “tested REST/SOAP APIs and inspected request/response issues”
+- “data mapping” → “data mapping, schema comparison, and validation checks”
+- “production support” → “production support for data pipeline and integration issues”
+
+Do NOT insert JD keywords when they imply unsupported ownership.
+
+Do NOT insert:
+- vendor tools I have not used
+- cloud platforms I have not owned
+- frameworks I have not worked with
+- senior architecture language
+- domain-specific claims I cannot defend
+- dashboard/BI tools I have not used
+- platform administration tools I have not owned
+
+If a JD keyword is safe and fits an existing bullet, use it.
+
+If a JD keyword is unsafe, mention it in the risk check instead of adding it.
+
+---
+
+# APPLY DECISION BEHAVIOR FOR THIS APPLYLIST
+
+This ApplyList already represents a small selected batch.
+
+Still, do NOT tailor every row.
+
+Use this behavior:
+
+apply_now:
+- choose best base resume
+- suggest tailoring only if there is a clear safe keyword gap
+- otherwise send base as-is
+
+apply_later:
+- default to send base as-is
+- suggest at most one micro-tweak only if obvious
+
+optional_stretch:
+- default to no tailoring
+- only mention risk and best base resume if applying anyway
+
+do_not_apply:
+- no tailoring
+
+---
+
+# RESUME GROUNDING RULE
+
+Use my base resume(s) as the source of truth for what I can credibly claim.
+
+Do NOT invent experience beyond the resume.
+
+Do NOT assume I have strong hands-on ownership of tools listed only as:
+- foundational
+- conceptual
+- transferable
+- exposure-level
+- side-project-level
+
+Use the resume as grounding for:
+- SQL
+- ETL / data workflows
+- data validation / reconciliation
+- APIs / integrations
+- XML / JSON / SFTP
+- production debugging
+- logs / OpenSearch
+- Python automation
+- Azure DevOps / CI/CD exposure
+- backend/data processing
+- operational system troubleshooting
+- frontend/component debugging
+- browser DevTools
+- build logs / Maven logs
+- test outputs
+- API responses
+- frontend/backend data flow troubleshooting
+- data mapping using Excel and macros
+
+If a job mentions a tool or platform that is not strongly supported by my resume, do NOT fake alignment.
+
+Examples:
+- AWS exposure ≠ AWS ownership
+- Azure DevOps exposure ≠ Azure cloud engineering
+- Airflow/Kafka/Spark foundational ≠ production ownership
+- Python helper scripts ≠ production cloud pipelines
+- SQL validation/reconciliation ≠ analytics platform ownership
+- Browser DevTools/API response inspection ≠ backend service ownership
+- Build logs/Maven logs/test outputs ≠ backend architecture ownership
+- Frontend/backend data flow troubleshooting ≠ owning backend APIs end-to-end
+
+Resume truth overrides keyword excitement.
+
+---
+
+# CONTEXT ABOUT ME
+
+I am a backend/data-focused engineer with software engineering experience.
+
+Strong in:
+- SQL
+- data validation
+- ETL-style workflows
+- debugging data pipelines
+- APIs
+- integrations
+- production troubleshooting
+- backend/data processing
+- operational system troubleshooting
+- frontend/component debugging
+- test/debug workflows
+- tracing issues across logs, tests, browser DevTools, and API responses
+- data mapping using Excel and macros
+
+Experience with:
+- Python
+- Java
+- REST APIs
+- JSON/XML
+- SFTP / file-based workflows
+- SQL-based validation and reconciliation
+- logs / OpenSearch-style debugging
+- Azure DevOps / CI/CD exposure
+- system-to-system integrations
+- reusable web components
+- customer-facing web application components
+- browser DevTools
+- Maven/build logs
+- test outputs
+- API response inspection
+
+Target role types:
+- Data Engineer, SQL-heavy
+- ETL / integration roles
+- backend data processing roles
+- data quality / validation / reconciliation roles
+- systems/application analyst roles with strong SQL, integrations, APIs, logs, or operational data workflows
+- software engineering roles where Java/Python, APIs, testing/debugging, web components, or production troubleshooting are central
+- technical data/application support roles only when SQL, APIs, logs, integrations, or data correctness are central
+
+Experience level:
+- junior to mid-level
+- roughly 0–4 years
+
+---
+
+# HARD CONSTRAINTS — DO NOT VIOLATE
+
+Do NOT invent tools.
+
+Do NOT add unsupported tools such as:
+- AWS
+- Snowflake
+- Databricks
+- Airflow
+- Kafka
+- Spark
+- Power BI
+- Tableau
+- Microsoft Fabric
+- Azure Data Factory
+- Synapse
+- Informatica
+- Palantir
+- dbt
+- SSIS
+- Kubernetes
+- Terraform
+
+unless they already exist in the base resume and are described at the correct level.
+
+Do NOT exaggerate:
+- seniority
+- architecture ownership
+- platform ownership
+- cloud ownership
+- distributed systems ownership
+- production ownership of side projects
+- backend service ownership
+- API architecture ownership
+- full-stack product ownership
+- leadership scope
+
+Do NOT keyword-stuff.
+
+Do NOT add buzzwords just because the job description includes them.
+
+Do NOT rewrite the whole resume.
+
+Do NOT compensate for missing tools.
+
+Do NOT make the resume sound more senior than it is.
+
+---
+
+# STRICT TRANSLATION GUARD
+
+Every suggested bullet change must map to a specific, real action I actually performed.
+
+Optimize for:
+
+INTERVIEW DEFENSIBILITY + SAFE KEYWORD COVERAGE + LOW EFFORT
+
+Not:
+- impressiveness
+- abstraction
+- buzzwords
+- ATS stuffing
+- fake tool matching
+- perfect keyword mirroring
+
+Before finalizing each bullet, ask:
+
+1. Could I explain this in detail in an interview?
+2. Does this introduce anything I did not explicitly do?
+3. Is this phrasing more impressive than accurate?
+4. Did this generalize something small into something larger?
+5. Did I miss an obvious safe keyword from the JD that matches my real experience?
+6. Is this tweak worth the time compared with sending the base resume as-is?
+
+If the answer creates risk, simplify the bullet.
+
+If the bullet cannot be justified using ONLY my existing resume content:
+Do NOT modify it.
+
+If the only way to match the JD is to add unsupported tools/platforms:
+Say so in the risk check instead of adding them.
+
+---
+
+# SOFTWARE / FRONTEND-BACKEND DEBUGGING GUARDRAIL
+
+For GM software engineering experience, do NOT overstate backend ownership.
+
+My GM debugging experience can be described as:
+- frontend/component-side debugging
+- browser DevTools debugging
+- checking API responses
+- reviewing Maven/build logs
+- reviewing Azure DevOps/build logs
+- reviewing test outputs
+- debugging unit/automation test failures
+- troubleshooting component behavior
+- narrowing down whether issues came from component logic, returned API data, environment/build behavior, or test behavior
+- communicating findings clearly in an engineering workflow
+
+My GM debugging experience should NOT be described as:
+- owning backend services
+- owning backend APIs
+- architecting backend systems
+- independently resolving backend service defects
+- owning full-stack systems end-to-end
+- leading backend architecture work
+- owning production backend integrations
+- designing API contracts
+- building API platforms
+- deep backend service ownership
+
+Safe phrasing:
+- Used browser DevTools, Azure DevOps/build logs, Maven logs, test outputs, and API responses to troubleshoot component behavior, integration issues, and frontend/backend data flow problems.
+- Troubleshot customer-facing web component behavior by inspecting browser DevTools, build logs, test outputs, and API responses to isolate issues across component logic, returned data, and environment behavior.
+- Debugged reusable web components using DevTools, test outputs, build logs, and API response inspection to identify root causes and support reliable user-facing behavior.
+
+Risky phrasing:
+- Collaborated with backend engineers to debug and resolve API and integration issues.
+- Owned backend API debugging for customer-facing applications.
+- Resolved backend service defects across production systems.
+- Built and maintained backend services.
+- Designed full-stack application architecture.
+
+If a software/full-stack JD emphasizes backend ownership, API design, or full-stack product ownership:
+- Do NOT fake backend ownership.
+- Emphasize customer-facing web components, Java/Python, testing/debugging, CI/CD exposure, API response inspection, integration awareness, and frontend/backend data flow troubleshooting.
+- Mention in the risk check that backend service ownership should not be overstated.
+
+---
+
+# DO NOT USE VAGUE ABSTRACTIONS
+
+Avoid vague phrases like:
+- data solutions
+- analytics workflows
+- scalable systems
+- high-performance pipelines
+- enterprise platforms
+- cloud-native solutions
+- business intelligence outputs
+- strategic data products
+- end-to-end architecture
+- backend services
+- data products
+- enterprise architecture
+- platform ownership
+- full-stack architecture
+- API platform ownership
+
+Use concrete wording instead:
+- SQL queries
+- validation checks
+- reconciliation logic
+- XML / JSON records
+- schemas
+- logs
+- OpenSearch
+- system-to-system interfaces
+- ETL workflows
+- data transfer
+- APIs
+- API responses
+- SFTP
+- pipeline failures
+- deployment workflows
+- test records
+- test outputs
+- Maven/build logs
+- Azure DevOps/build logs
+- browser DevTools
+- web components
+- component behavior
+- frontend/backend data flow
+- interface records
+- validation checkpoints
+- dependency ordering
+- failure recovery
+
+---
+
+# SAFE KEYWORD COVERAGE RULE
+
+For each job, identify 3–6 SAFE keywords or phrases from the JD/Reason that match my real experience.
+
+Examples of SAFE keywords if supported by my resume:
+- SQL queries
+- SQL validation
+- reconciliation checks
+- data quality checks
+- pipeline stages
+- pipeline failures
+- failed loads
+- root-cause analysis
+- production support
+- logs
+- OpenSearch
+- validation checkpoints
+- follow-up validation checks
+- ingestion
+- transformation
+- schema validation
+- XML / JSON records
+- APIs
+- API responses
+- SFTP
+- system-to-system interfaces
+- data exchange
+- dependency ordering
+- scheduled workflows
+- failure recovery
+- reliable data processing
+- pipeline issue resolution
+- operational data workflows
+- interface records
+- record comparison
+- data integrity checks
+- browser DevTools
+- build logs
+- Maven logs
+- test outputs
+- automated tests
+- frontend/backend data flow
+- customer-facing web components
+- reusable web components
+- component behavior debugging
+
+Use these safe keywords only when they naturally improve an existing bullet.
+
+Do NOT add unsafe keywords just because they appear in the JD.
+
+Examples of UNSAFE keywords unless already in my resume at the correct level:
+- Snowflake
+- AWS
+- Glue
+- Lambda
+- Databricks
+- Spark hands-on
+- Kafka hands-on
+- Airflow hands-on
+- Informatica
+- SSIS
+- Azure Data Factory
+- Synapse
+- Microsoft Fabric
+- dbt
+- Tableau
+- Power BI
+- Kubernetes
+- Terraform
+- cloud architecture
+- platform ownership
+- distributed systems ownership
+- real-time streaming
+- data lake architecture
+- data mesh
+- data governance framework
+- backend service ownership
+- API architecture ownership
+- full-stack platform ownership
+- production backend ownership
+
+If a JD keyword is unsafe or unsupported, mention it in the risk check instead of forcing it into the resume.
+
+---
+
+# KEYWORD GAP CHECK
+
+Only run this check for effort_level = medium or high.
+
+Before finalizing, check whether the suggested bullets are missing obvious SAFE role keywords.
+
+Ask:
+
+1. Does the job emphasize data quality, validation, or reconciliation?
+   - If yes, at least one suggested bullet should include one of:
+     SQL validation, reconciliation checks, data quality issues, records, validation checks, record comparison, or data integrity checks.
+
+2. Does the job emphasize production support, failed loads, troubleshooting, or root-cause analysis?
+   - If yes, at least one suggested bullet should include one of:
+     production support, failed loads, pipeline failures, SQL queries, logs, OpenSearch, root-cause analysis, follow-up validation checks, or verifying corrected records.
+
+3. Does the job emphasize pipelines, ingestion, transformation, or workflow reliability?
+   - If yes, at least one suggested bullet should include one of:
+     ingestion, transformation, pipeline stages, dependency ordering, validation checkpoints, scheduling, failure recovery, or reliable data processing.
+
+4. Does the job emphasize APIs, integrations, SFTP, or data movement?
+   - If yes, at least one suggested bullet should include one of:
+     APIs, API responses, SFTP, XML/JSON records, data exchange, system-to-system interfaces, interface records, or data integrity.
+
+5. Does the job emphasize software debugging, web applications, frontend/backend behavior, or full-stack work?
+   - If yes, at least one suggested bullet should include one of:
+     browser DevTools, build logs, Maven logs, Azure DevOps/build logs, test outputs, API responses, component behavior, reusable web components, customer-facing web components, frontend/backend data flow, testing/debugging, or automated tests.
+
+Only add these phrases if they are already defensible from my resume.
+
+Do NOT stuff several keywords into one awkward bullet.
+
+Prefer one strong, concrete keyword phrase over several vague ones.
+
+---
+
+# MICRO-TWEAK RULE
+
+If a resume already looks mostly aligned, suggest only a micro-tweak instead of rewriting a full bullet.
+
+If the resume already has enough safe keyword coverage, say:
+
+“No additional tweak needed — send selected base resume as-is.”
+
+Do NOT force a micro-tweak if the current bullet already has strong keyword coverage.
+
+Do NOT suggest changes just to make the output look busy.
+
+Example:
+
+Current:
+- Built multi-step ETL workflows with dependency ordering, validation checkpoints, scheduling, and failure recovery to support reliable data processing
+
+Safe micro-tweak:
+- Built multi-step ETL workflows with dependency ordering, validation checkpoints, scheduling, and failure recovery to support reliable data processing and pipeline issue resolution
+
+This is acceptable because “pipeline issue resolution” maps to actual debugging/failure recovery work.
+
+Software example:
+
+Current:
+- Collaborated with backend engineers to debug and resolve integration issues, using logs, testing tools, and system outputs to identify root causes.
+
+Safer micro-tweak:
+- Used browser DevTools, Azure DevOps/build logs, test outputs, and API responses to troubleshoot component behavior, integration issues, and frontend/backend data flow problems.
+
+This is acceptable because it maps to real frontend/component debugging and avoids overstating backend ownership.
+
+---
+
+# EDGE CASE RULES
+
+## Python helper scripts
+
+If referencing Python helper scripts, describe them as:
+- helper scripts
+- validation scripts
+- automation scripts
+- testing/support scripts
+
+Do NOT describe them as:
+- production pipelines
+- data platforms
+- orchestration systems
+- cloud automation frameworks
+
+Allowed:
+- Developed Python helper scripts to validate sample records against defined schemas during pipeline testing.
+
+Not allowed:
+- Built scalable Python data pipelines for enterprise analytics processing.
+
+---
+
+## Integration work
+
+Describe integration work as:
+- system-to-system interfaces
+- data exchange
+- APIs
+- SFTP
+- XML / JSON payloads
+- interface records
+- integration workflows
+- validation across environments
+
+Do NOT describe it as:
+- platform architecture
+- backend service ownership
+- distributed system design
+- cloud-native integration platforms
+
+Allowed:
+- Developed and maintained system-to-system interfaces for exchanging XML/JSON data between internal databases and external client systems.
+
+Not allowed:
+- Architected scalable backend services for distributed data platforms.
+
+---
+
+## SQL work
+
+Describe SQL work as:
+- SQL queries
+- validation
+- reconciliation
+- schema checks
+- data quality checks
+- record comparison
+- troubleshooting data mismatches
+
+Do NOT describe it as:
+- analytics layers
+- semantic models
+- BI platforms
+- data products
+
+Allowed:
+- Used SQL queries to validate transformed records and reconcile data between source and target systems.
+
+Not allowed:
+- Designed analytics-ready data products for enterprise reporting layers.
+
+---
+
+## Debugging work
+
+Describe debugging work as:
+- root-cause analysis
+- investigating failures
+- SQL queries
+- logs
+- OpenSearch
+- verifying corrected records
+- follow-up validation checks
+- production issue resolution
+- browser DevTools
+- build logs
+- Maven logs
+- test outputs
+- API responses
+- component behavior
+- frontend/backend data flow troubleshooting
+
+Do NOT describe it as:
+- SRE ownership
+- platform reliability engineering
+- cloud operations ownership
+- enterprise observability ownership
+- backend service ownership
+- API platform ownership
+
+Allowed:
+- Investigated pipeline failures using SQL queries, logs, and OpenSearch, then verified corrected records through follow-up validation checks.
+- Used browser DevTools, Maven/build logs, test outputs, and API responses to troubleshoot component behavior and frontend/backend data flow issues.
+
+Not allowed:
+- Owned platform reliability engineering for distributed production systems.
+- Owned backend API debugging and service reliability across production systems.
+
+---
+
+## ETL / pipeline work
+
+Use “pipeline” only when the work truly involved multi-step data movement, transformation, validation, scheduling, dependency ordering, or failure recovery.
+
+Allowed:
+- Built multi-step ETL workflows with dependency ordering, validation checkpoints, and failure recovery logic.
+
+Not allowed:
+- Built pipelines from any small script, query, or one-off data check.
+
+Pipeline work MAY be described as:
+- ETL pipelines
+- ingestion
+- transformation
+- validation checkpoints
+- scheduling
+- dependency ordering
+- failure recovery
+- pipeline stages
+- pipeline issue resolution
+
+Pipeline work MUST NOT be described as:
+- distributed platforms
+- cloud-native systems
+- large-scale architecture
+- high-performance pipelines
+
+---
+
+## Web application / full-stack-adjacent work
+
+Describe GM web/application work as:
+- reusable web components
+- customer-facing web components
+- component functionality
+- content-data handling
+- browser DevTools debugging
+- build logs
+- Maven logs
+- test outputs
+- API response inspection
+- frontend/backend data flow troubleshooting
+- CI/CD exposure
+- automated test suites
+- release confidence
+- component behavior debugging
+
+Do NOT describe it as:
+- full-stack architecture
+- backend service ownership
+- backend API ownership
+- API platform design
+- owning backend systems end-to-end
+- production backend service reliability
+- cloud-native application ownership
+
+Allowed:
+- Used browser DevTools, Azure DevOps/build logs, test outputs, and API responses to troubleshoot component behavior, integration issues, and frontend/backend data flow problems.
+- Enhanced reusable web component functionality through content-data handling updates and testing/debugging to support reliable customer-facing behavior.
+
+Not allowed:
+- Owned backend services supporting customer-facing applications.
+- Designed full-stack application architecture for production platforms.
+- Resolved backend API defects across production services.
+
+---
+
+# BASE RESUME SELECTION RULE
+
+For each job, choose the best base resume from:
+
+- Engineer_Data
+- Engineer_Software
+- Engineer_Platform
+- Engineer_Analytics
+- Engineer_Support, if provided
+
+Choose based on the job’s center of gravity:
+
+Engineer_Data:
+- Data Engineer
+- ETL
+- SQL
+- data validation
+- data quality
+- data transformation
+- data warehousing
+- reporting systems tied to ETL/data workflows
+- pipeline reliability
+- operational data workflows
+
+Engineer_Software:
+- backend-heavy software roles
+- API/integration-heavy roles
+- Java/Python software engineering
+- web application roles
+- customer-facing web components
+- frontend/backend data flow troubleshooting
+- testing/debugging roles
+- CI/CD and development workflow roles
+- application/system development
+
+Engineer_Platform:
+- workflow reliability
+- automation
+- CI/CD
+- operational systems
+- multi-environment deployment
+- observability/debugging
+- platform-adjacent work
+- deployment/process reliability
+- but NOT cloud-platform ownership
+
+Engineer_Analytics:
+- analyst/reporting/data quality roles
+- data operations
+- SQL-heavy reporting systems
+- validation/reconciliation roles with less engineering depth
+- operational analytics
+
+Engineer_Support:
+- technical support roles
+- application support roles
+- production support roles
+- integration support roles
+- API troubleshooting
+- SQL/logs/OpenSearch troubleshooting
+- XML/JSON/SFTP support
+- issue triage
+- operational data support
+
+Do NOT choose a resume just because the title sounds close.
+
+Choose the resume that best supports recruiter-screen realism for the actual description.
+
+---
+
+# EFFORT LEVEL RULE
+
+Use Apply Decision first if present.
+
+1. If Apply Decision equals do_not_apply, skip, no_apply, or do not apply:
+   → effort_level = none
+
+2. If Apply Decision equals optional_stretch:
+   → effort_level = none or low
+   Default to none unless there is one obvious safe micro-tweak.
+
+3. If Apply Decision equals apply_later:
+   → effort_level = low
+   Default to sending the selected base resume as-is.
+
+4. If Apply Decision equals apply_now:
+   → effort_level = medium or high
+   Use high only if the role is one of the strongest immediate applications and the base resume has a clear safe keyword gap.
+
+5. If fit_subtype equals good_fit and Apply Decision is missing:
+   → effort_level = medium
+
+6. If fit_subtype equals possible_2a and Apply Decision is missing:
+   → effort_level = low
+
+7. If fit_subtype equals possible_2b and Apply Decision is missing:
+   → effort_level = none or low
+
+8. If the sheet only contains description and no Apply Decision / fit_subtype:
+   → treat the row as a selected serious role and use effort_level = medium
+
+9. If unsure between two levels:
+   → choose the LOWER effort level.
+
+Apply Decision overrides fit_subtype if both exist.
+
+---
+
+# BEHAVIOR BY EFFORT LEVEL
+
+## effort_level = none
+
+Output:
+- No tailoring
+- Send selected base resume as-is, if applying
+- Or no tailoring because the row is not worth resume effort
+
+Do NOT suggest changes.
+
+---
+
+## effort_level = low
+
+Minimal tailoring.
+
+Allowed:
+- At most 1 small wording tweak
+- No new bullets
+- No major repositioning
+- No skills-section overhaul
+
+Use when:
+- the role is apply_later
+- the role is optional_stretch
+- the role is credible but not immediate priority
+- platform/tool gaps exist
+- the fit is weaker
+- the role is not worth much resume effort
+
+Only add a safe keyword if the current bullet already supports it.
+
+If no obvious tweak exists, say:
+
+“No additional tweak needed — send selected base resume as-is.”
+
+---
+
+## effort_level = medium
+
+Light tailoring.
+
+Allowed:
+- Modify 1–2 existing bullets
+- Optional skills-section ordering suggestion
+- No new bullet unless extremely justified
+
+Use when:
+- the role is apply_now but the base resume is already mostly aligned
+- the role is good_fit but not worth a full custom pass
+- a small wording change improves recruiter-screen realism
+
+Focus on:
+- SQL
+- ETL / data workflows
+- validation / reconciliation
+- integrations
+- APIs
+- debugging
+- operational systems
+- web component debugging if relevant
+- test/build/API-response troubleshooting if relevant
+
+Do NOT over-engineer.
+
+---
+
+## effort_level = high
+
+Strongest allowed tailoring.
+
+Allowed:
+- Modify 2–3 existing bullets
+- Optional 1 new bullet only if clearly justified by existing resume content
+- Optional skills-section ordering suggestion
+
+Use high only when:
+- Apply Decision = apply_now
+- the role is a top immediate target
+- the role is highly aligned
+- the base resume has a clear, safe keyword gap
+- tailoring is likely to materially improve recruiter-screen realism
+
+Even for high effort:
+- Do NOT rewrite the whole resume
+- Do NOT add unsupported tools
+- Do NOT inflate scope
+- Do NOT force a new bullet if existing bullets are enough
+
+---
+
+# TAILORING PRIORITIES
+
+For each job, identify the strongest overlap between the job description and my resume.
+
+Prioritize edits around:
+
+1. SQL / validation / reconciliation
+2. ETL / ingestion / transformation workflows
+3. APIs / integrations / system-to-system interfaces
+4. XML / JSON / SFTP data exchange
+5. production debugging / logs / OpenSearch
+6. Python helper scripts / validation automation
+7. CI/CD / Azure DevOps exposure
+8. operational systems troubleshooting
+9. customer-facing/reusable web components
+10. browser DevTools / build logs / test outputs / API responses
+11. frontend/backend data flow troubleshooting
+
+If the job mentions missing tools:
+- Do not fake those tools
+- Emphasize transferable fundamentals only
+- Mention the tool gap in the risk check
+
+Examples:
+
+If job mentions AWS:
+- Acceptable: “cloud-based data workflow concepts” only if already in resume
+- Not acceptable: “built AWS data pipelines”
+
+If job mentions Power BI:
+- Acceptable: “supporting downstream reporting workflows”
+- Not acceptable: “built Power BI dashboards”
+
+If job mentions healthcare:
+- Acceptable: “validated structured records across source and target systems”
+- Not acceptable: “worked with healthcare datasets” unless resume says so
+
+If job mentions Snowflake:
+- Acceptable: “SQL-based validation and reconciliation”
+- Not acceptable: “Snowflake data warehouse development”
+
+If job mentions Airflow:
+- Acceptable: “multi-step ETL workflows with dependency ordering”
+- Not acceptable: “Airflow DAG ownership” unless resume says so
+
+If job mentions full-stack:
+- Acceptable: “customer-facing web components,” “API response inspection,” “frontend/backend data flow troubleshooting,” “testing/debugging,” “CI/CD exposure”
+- Not acceptable: “owned full-stack architecture” or “owned backend services”
+
+If job mentions backend APIs:
+- Acceptable: “inspected API responses,” “debugged frontend/backend data flow problems,” “worked with API integrations”
+- Not acceptable: “owned backend API development” unless the resume explicitly supports it
+
+---
+
+# OUTPUT FORMAT
+
+Use this exact structure:
+
+| Order | Job Identifier | Best Base Resume | Effort Level | Tailoring Action | Resume Routing Reason |
+|---|---|---|---|---|---|
+
+Tailoring Action must be one of:
+- Send base as-is
+- Micro-tweak only
+- Light tailoring
+- No tailoring
+
+If Order is missing, use the row number from the ApplyList sheet.
+
+If Company or Role is missing, infer Job Identifier from the description.
+
+Prefer the explicit job title if present.
+
+If no title is obvious, use a concise functional identifier such as:
+- Data Engineer
+- Data Integration Developer
+- ETL Developer
+- Backend Data Engineer
+- SQL Data Analyst
+- Application Support Analyst
+- Software Engineer
+- Web Application Engineer
+- Integration Support Engineer
+- Technical Business Analyst
+- Automation Engineer
+- Reporting Systems Analyst
+
+Do NOT invent a company name.
+
+Do NOT use the source URL as the job identifier.
+
+Then for each row:
+
+[Job: Order X — Job Identifier]
+
+1. Best base resume:
+- [Engineer_Data / Engineer_Software / Engineer_Platform / Engineer_Analytics / Engineer_Support]
+- Reason: [1–2 sentences explaining why this resume is the safest base]
+
+2. Safe keywords to cover:
+- [3–6 safe JD keywords that match my actual resume]
+- Do NOT include unsupported tool names here
+
+3. Suggested bullet tweaks:
+
+If no tweak is needed:
+- No additional tweak needed — send selected base resume as-is.
+
+If suggesting a tweak, use:
+
+- BEFORE:
+  [exact or near-exact existing resume bullet]
+
+- AFTER:
+  [revised bullet]
+
+- Why this tweak:
+  [1 sentence explaining the job-specific alignment]
+
+If effort_level = none:
+- No tailoring
+
+4. Optional new bullet:
+- [new bullet or "None"]
+
+Only include a new bullet if:
+- effort_level = high
+- the bullet is clearly justified by existing resume content
+- the bullet improves alignment with this specific job
+- the bullet is interview-defensible
+
+5. Skills section adjustment:
+- [small ordering or emphasis suggestion, or "None"]
+
+Do NOT add unsupported tools.
+
+6. Alignment summary:
+- [specific overlap point]
+- [specific overlap point]
+
+7. Risk check:
+- [missing tool/platform/seniority/domain risk, if any]
+- [guardrail against overclaiming]
+- For software/full-stack roles, explicitly mention whether backend ownership, API ownership, or full-stack ownership should be limited to what the resume supports.
+
+---
+
+# FINAL SAFEGUARDS
+
+No generic filler language.
+
+No invented tools.
+
+No fake platform ownership.
+
+No fake cloud ownership.
+
+No fake healthcare/domain experience.
+
+No unsupported seniority.
+
+No fake backend ownership.
+
+No fake API ownership.
+
+No fake full-stack architecture ownership.
+
+No full resume rewrite.
+
+No tailoring for rows marked do_not_apply / skip / no_apply.
+
+Do not tailor just to create work.
+
+Each change must map to:
+- the job description
+- and my real resume-backed experience
+
+If a tweak could apply to any generic Data Engineer or Software Engineer role, make it more specific using safe keywords.
+
+If a role’s main gap is unsupported tooling, acknowledge the gap instead of trying to hide it.
+
+If a software role’s main gap is backend ownership or full-stack depth, acknowledge the gap instead of trying to hide it.
+
+If the resume already has enough safe keyword coverage, say:
+
+“No additional tweak needed — send selected base resume as-is.”
+
+Goal:
+
+Act like a pragmatic engineer optimizing application speed, recruiter-screen realism, and defensibility.
+
+The main output should usually be:
+- which base resume to send
+- whether any tweak is actually worth the time
+
+Do not create tailoring work unless it has clear ROI.
+
+This is about getting a defensible resume version for selected roles, not pretending I am a perfect match.
