@@ -64,6 +64,9 @@ logging.basicConfig(
 class JobResult:
     id:str
     source: str
+    search_lane: str
+    search_term_used: str
+    review_priority: str
     score: float
     title: str
     label: str
@@ -123,10 +126,11 @@ def run_links(
     if no_scrape:
         jobspy_data_path = os.getenv("JOBSPY_DATA_PATH") or "../JobSpy"
         df = pd.read_csv(
-            #plan c
-           # jobspy_data_path + f"/lastresort-jobs-{datetime.now().month}-{datetime.now().day}-{datetime.now().strftime('%y')}.csv",
+            #WIDEN Search? uncomment for uncleaned_jobs
+            #jobspy_data_path + f"/jobs-5-24-26.csv",
+
             jobspy_data_path + f"/jobs-{datetime.now().month}-{datetime.now().day}-{datetime.now().strftime('%y')}.csv",
-            #jobspy_data_path + f"/cleaned_jobs-{datetime.now().month}-{datetime.now().day}-{datetime.now().strftime('%y')}.csv",
+           # jobspy_data_path + f"/cleaned_jobs-{datetime.now().month}-{datetime.now().day}-{datetime.now().strftime('%y')}.csv",
             encoding='latin1'
         ) #if encountering encoding issues, try 'latin1' or 'utf-8-sig'
         print(f"Loaded {len(df)} job descriptions from CSV for processing.")
@@ -139,6 +143,9 @@ def run_links(
                     "url": row.get("job_url", ""),
                     "title": row.get("title", ""),
                     "description": row.get("description", ""),
+                    "search_lane": row.get("search_lane", ""),
+                    "search_term_used": row.get("search_term_used", ""),
+                    "review_priority": row.get("review_priority", ""),
                 }
             )
 
@@ -148,6 +155,9 @@ def run_links(
                 id = job["id"]
                 title = job["title"]
                 description = job["description"]
+                search_lane = job["search_lane"]
+                search_term_used = job["search_term_used"]
+                review_priority = job["review_priority"]
 
                 counts = match_skills(description, skills)
                 flags = extract_requirement_flags(description, skills, profile)
@@ -171,17 +181,22 @@ def run_links(
                     "matched": matched,
                     "required_total": required_total,
                     "missing": ";".join(missing),
+                    "search_lane": search_lane,
                 }
 
                 apply_decision = decide_apply_bucket(row_payload)
                 fit_quality = derive_fit_quality(row_payload)
                 role_lane = classify_role_lane(row_payload)
 
-                if score >= min_score:
+                include_fallback_lane = search_lane in {"survival", "contract_survival"}
+
+                if score >= min_score or include_fallback_lane:
                     results.append(
                         JobResult(
                             source=url,
-                            id=id,
+                            search_lane=search_lane,
+                            search_term_used=search_term_used,
+                            review_priority=review_priority,
                             score=score,
                             title=title,
                             label=label,
@@ -245,25 +260,28 @@ def run_links(
                 fit_quality = derive_fit_quality(row_payload)
                 role_lane = classify_role_lane(row_payload)
 
-                if score >= min_score:
-                    results.append(
-                        JobResult(
+                #if score >= min_score: #I'm including survival lane
+                results.append(
+                    JobResult(
                             id=id,
-                            source=source,
+                        source=source,
                             title=title,
-                            score=score,
-                            label=label,
-                            matched=matched,
-                            required_total=required_total,
-                            missing=";".join(missing),
-                            matches_json=str(counts),
-                            description=description,
-                            reason_codes=reason_codes,
-                            apply_decision=apply_decision,
-                            fit_quality=fit_quality,
-                            role_lane=role_lane,
-                        )
+                        search_lane="",
+                        search_term_used="",
+                        review_priority="",
+                        score=score,
+                        label=label,
+                        matched=matched,
+                        required_total=required_total,
+                        missing=";".join(missing),
+                        matches_json=str(counts),
+                        description=description,
+                        reason_codes=reason_codes,
+                        apply_decision=apply_decision,
+                        fit_quality=fit_quality,
+                        role_lane=role_lane,
                     )
+                )
 
             except FetchBlocked as e:
                 failures.append(FailureRecord(source=line, reason="blocked", error=str(e)))
@@ -289,10 +307,10 @@ def run_links(
 def write_results_csv(path: Path, results: Iterable[JobResult]) -> None:
     with path.open("w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
-        w.writerow(["id","source","title", "score", "raw_match", "matched", "required_total",
+        w.writerow(["id","source","title", "search_lane", "search_term_used", "review_priority", "score", "raw_match", "matched", "required_total",
                     "missing", "matches", "description", "reason_codes", "fit_quality", "role_lane", "apply_decision"])
         for r in results:
-            w.writerow([r.id,r.source, r.title, f"{r.score:.3f}", r.label, r.matched, r.required_total, r.missing, r.matches_json, r.description, r.reason_codes, r.fit_quality, r.role_lane, r.apply_decision])
+            w.writerow([r.id,r.source, r.title, r.search_lane, r.search_term_used, r.review_priority, f"{r.score:.3f}", r.label, r.matched, r.required_total, r.missing, r.matches_json, r.description, r.reason_codes, r.fit_quality, r.role_lane, r.apply_decision])
 
 def write_failures_csv(path: Path, failures: Iterable[FailureRecord]) -> None:
     with path.open("w", newline="", encoding="utf-8") as f:

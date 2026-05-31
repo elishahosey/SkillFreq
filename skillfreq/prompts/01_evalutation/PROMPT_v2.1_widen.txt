@@ -1,0 +1,902 @@
+I will provide:
+
+1. My base resume(s)
+2. A CSV of job descriptions, including a description column and possibly additional columns
+3. SkillFreq keyword/count/scoring columns, if present
+
+Your task is to evaluate each job based on how well it matches MY ACTUAL experience.
+
+Use my base resume(s) as the source of truth for my actual experience.
+
+Use SkillFreq keyword/count/scoring columns as supporting evidence, not as the only source of truth.
+
+---
+
+# CONTEXT ABOUT ME
+
+I am a backend/data-focused engineer.
+
+Strong in:
+- SQL
+- data validation
+- ETL-style work
+- debugging data pipelines
+- APIs
+- integrations
+- production troubleshooting
+- operational data workflows
+
+Experience with:
+- Python
+- Java
+- REST APIs
+- JSON/XML
+- SFTP / file-based workflows
+- SQL-based validation and reconciliation
+- logs / OpenSearch-style production debugging
+- Azure DevOps / CI/CD exposure
+- backend/data processing workflows
+
+Target roles:
+- Data Engineer, SQL / ETL focused
+- Backend Engineer, data-heavy
+- Integration / ETL / pipeline roles
+- Systems / Application Analyst roles with strong SQL, integrations, or operational data workflows
+- Data Operations / Data Quality / Reporting Systems roles involving validation, reconciliation, and production troubleshooting
+- Technical application/data support roles where SQL, APIs, logs, integrations, or data correctness are central
+- Bridge roles where SQL, APIs, integrations, logs, production troubleshooting, data quality, or operational data workflows are central enough to preserve technical credibility
+
+I am targeting junior to mid-level roles, roughly 0-4 years.
+
+My actual background is strongest in:
+- SQL-heavy data work
+- ETL / ingestion / transformation flows
+- data validation / reconciliation
+- API / integration work
+- production debugging and reliability
+- backend data processing
+- operational data workflows
+- system/data troubleshooting
+
+I am NOT a strong match for roles centered on:
+- cloud platform ownership
+- distributed big-data frameworks
+- streaming/event-driven data systems
+- infrastructure/platform engineering
+- senior architecture ownership
+- ERP / implementation ecosystems
+- configuration-heavy consulting
+- dashboard-only BI
+- generic customer support
+- nontechnical operations/admin
+
+---
+
+# DATA PROVIDED RULE
+
+Each row may already include signals such as:
+- fit_quality
+- role_lane
+- apply_decision
+- missing
+- reason_codes
+- SkillFreq keyword/count/scoring columns
+- score
+- matched
+- required_total
+- seniority flags
+- platform/tool flags
+- keyword count columns
+
+You MUST:
+- Use existing signals only as supporting evidence
+- Override them if they conflict with the rules below
+- Never trust prior labels blindly
+- Evaluate from the raw job description first
+- Use my resume as the truth source for what I can credibly claim
+- Use SkillFreq as an evidence check to prevent inflated fit classifications
+- Preserve the original Order value from the CSV
+
+IMPORTANT:
+SkillFreq may use these role_lane values:
+- target_lane
+- secondary_lane
+- bridge_lane
+- wrong_lane
+
+Do NOT collapse secondary_lane and bridge_lane into the same category.
+Do NOT output adjacent_lane.
+The output Role Lane must use the same SkillFreq-compatible lane vocabulary listed above.
+
+---
+
+# RESUME GROUNDING RULE
+
+Use my base resume(s) as the source of truth for my actual experience.
+
+Do NOT invent experience beyond the resume.
+
+Do NOT assume I have strong hands-on ownership of tools listed only as foundational, conceptual, transferable, exposure-level, or side-project-level.
+
+When evaluating recruiter-screen realism, compare the job against my resume-backed experience, especially:
+- SQL
+- ETL / data workflows
+- data validation / reconciliation
+- APIs / integrations
+- XML / JSON / SFTP
+- production debugging
+- logs / OpenSearch
+- Python automation
+- Azure DevOps / CI/CD exposure
+- backend/data processing
+- operational system troubleshooting
+
+If the job requires major ownership of tools or systems not strongly supported by my resume, downgrade the role.
+
+Resume truth overrides keyword excitement.
+
+---
+
+# SKILLFREQ SIGNAL RULE
+
+The CSV may include SkillFreq keyword/count/scoring columns that show which skills were detected in the job description.
+
+Use SkillFreq signals as supporting evidence when deciding:
+- Fit Quality
+- Role Lane
+- Apply Decision
+- Reason
+
+SkillFreq should not override the resume, but it should prevent inflated classifications.
+
+Prioritize roles where SkillFreq evidence strongly supports my resume-backed strengths:
+- SQL
+- ETL / pipelines
+- data validation / reconciliation
+- data quality
+- integrations / APIs
+- XML / JSON / SFTP
+- backend data processing
+- production debugging
+- logs / observability
+- Python automation
+- operational systems troubleshooting
+
+Treat these as positive SkillFreq signals:
+- high SQL relevance
+- high ETL / pipeline relevance
+- high data validation / data quality / reconciliation relevance
+- high API / integration relevance
+- high backend/data processing relevance
+- high production debugging / logs / troubleshooting relevance
+- high XML / JSON / SFTP relevance
+- high Python automation relevance
+- high operational systems troubleshooting relevance
+
+Treat these as caution SkillFreq signals if they dominate the role:
+- cloud platform ownership
+- Snowflake / Databricks / Informatica / IDMC / PowerCenter as hard requirements
+- heavy AWS / Azure / GCP platform engineering
+- Kafka / streaming / real-time event systems
+- Spark / distributed data processing
+- BI/dashboard/reporting-only work
+- support-only work
+- configuration-heavy work
+- senior/lead/architecture ownership
+- generic analytics without data engineering depth
+- generic “data platform” language without SQL/ETL/integration/debugging substance
+- operations/support terms without SQL/API/integration/data correctness substance
+
+If SkillFreq shows strong keyword overlap only because of generic terms like:
+- data
+- platform
+- cloud
+- dashboard
+- analytics
+- support
+- reporting
+- operations
+- business process
+- documentation
+
+do NOT treat that as strong fit unless SQL/ETL/integration/debugging evidence is also clearly present.
+
+If SkillFreq shows high platform/tool counts but low SQL/ETL/integration/debugging counts, downgrade the role even if the title sounds close.
+
+When there is conflict:
+- Resume-backed experience is the source of truth
+- Raw job description is the primary role evidence
+- SkillFreq is the evidence check
+- Existing labels/signals are secondary
+- Final classification should reflect all of these, with resume realism weighted highest
+
+---
+
+# PRIMARY EVALUATION QUESTION
+
+For every job, answer this:
+
+"Would I realistically pass recruiter screening for this role based on my actual experience?"
+
+Do NOT answer:
+- "Could I learn this?"
+- "Does the title sound close?"
+- "Do a few keywords overlap?"
+- "Would this be interesting?"
+- "Could this be good career growth someday?"
+
+The standard is recruiter realism, not theoretical learnability.
+
+IMPORTANT:
+A role does NOT need to perfectly match "Data Engineer" title conventions if the day-to-day work strongly overlaps with:
+- SQL-heavy operational systems
+- data validation / reconciliation
+- integrations / APIs
+- backend data processing
+- application/system troubleshooting
+- reporting systems tied to operational data
+- production debugging
+- operational data workflows
+
+---
+
+# HARD FILTERS - RUN FIRST
+
+If ANY hard filter triggers, set:
+
+Fit Quality = weak_fit
+Role Lane = wrong_lane
+Apply Decision = skip
+
+IMPORTANT:
+- Even if a hard filter triggers, still provide a detailed reason.
+- Do NOT stop silently.
+- Do NOT let positive keywords override a hard filter.
+- Do NOT rescue a role just because it mentions SQL, Python, or data.
+
+---
+
+# 1. SENIORITY / EXPERIENCE DISQUALIFIERS
+
+Trigger hard filter if the job explicitly asks for:
+- 5+ years
+- 6+ years
+- 7+ years
+- 8+ years
+- 10+ years
+- ranges like 5-7, 6-8, 7-10, 8-12
+
+Also trigger hard filter for implicit seniority such as:
+- lead
+- leading systems end-to-end
+- architect
+- own / ownership of major systems
+- drive technical direction
+- mentor engineers
+- define strategy
+- scalability ownership
+- performance ownership across major systems
+- platform ownership
+- architecture ownership
+- cross-team technical direction
+
+IMPORTANT:
+Do not ignore seniority just because the title sounds close.
+
+A role can still fail even if the years requirement says only 3+ years if the responsibilities clearly reflect mid-senior, platform-level, or architecture-level expectations.
+
+If the CSV has seniority-related columns or reason_codes such as:
+- years_present
+- lead_like
+- seniority score greater than 0
+
+use them as caution evidence, but still confirm against the raw JD.
+
+---
+
+# 2. TITLE / LEVEL SANITY CHECK
+
+Be careful with titles such as:
+- Data Engineer II / III
+- Senior Data Engineer
+- Lead Data Engineer
+- Staff / Principal / Architect
+- Senior Backend Engineer
+- Senior Platform Engineer
+- Senior Analytics Engineer
+- Senior Data Platform Engineer
+- Cloud Data Engineer with ownership-heavy scope
+
+If the title or level suggests a stronger role than my background supports, treat that as a negative signal.
+
+If the title sounds junior/mid but the responsibilities imply ownership of modern platforms, architecture, distributed systems, or large-scale design, downgrade or skip.
+
+Generic software, systems, platform, admin, or developer titles should not become target_lane solely because the description contains SQL, APIs, or data.
+
+---
+
+# 3. MODERN DATA PLATFORM DETECTION - CRITICAL
+
+If the role emphasizes ANY TWO OR MORE of the following as CORE responsibilities, treat it as a hard filter:
+
+- cloud platform design / deployment / management, such as AWS, GCP, Azure
+- distributed data processing, such as Spark, Databricks, Flink, Hadoop
+- streaming or event-driven systems, such as Kafka, Kinesis, event-driven architectures
+- large-scale / big-data processing as a central responsibility
+- scalable data platform / data architecture ownership
+- storage/query optimization for very large-scale datasets as a primary focus
+- cloud-native data architecture
+- real-time or near-real-time platform engineering
+- platform reliability/ownership across large-scale data infrastructure
+
+Then set:
+
+Fit Quality = weak_fit
+Role Lane = wrong_lane
+Apply Decision = skip
+
+Reason MUST explicitly state:
+"This is a modern data platform role, not a SQL/ETL-focused role."
+
+IMPORTANT:
+Do NOT rescue the score just because SQL, Python, or data appears in the description.
+
+---
+
+# 4. HARD PLATFORM GATING RULE
+
+If a role appears to require direct hands-on experience with a specific platform/tool such as:
+- Snowflake
+- Informatica / IDMC / PowerCenter
+- Databricks
+- Palantir
+- SAP
+- Workday
+- Salesforce
+- ServiceNow
+- heavy AWS / cloud platform ownership
+- heavy Azure / GCP platform ownership
+- Spark
+- Kafka
+- Airflow as a central ownership requirement
+
+AND the job description or SkillFreq signals imply candidates will be filtered based on that experience,
+
+THEN:
+- do NOT classify the role as good_fit
+- usually classify it as possible_fit or weak_fit depending on severity
+- place it in manual_review or skip depending on recruiter-screen realism
+- mention platform gating clearly in the Reason
+
+General SQL/ETL overlap does not automatically override platform gating.
+
+If the resume only lists a tool as foundational, conceptual, transferable, or exposure-level, do NOT treat that as strong hands-on production ownership.
+
+---
+
+# TOOL VS SYSTEM RULE
+
+Distinguish between:
+
+TOOL DIFFERENCE, usually acceptable:
+- Example: Oracle vs SQL Server
+- Same type of work: SQL, ETL, data movement, validation, reconciliation, troubleshooting
+- These roles can be good_fit or possible_fit
+- Usually target_lane or secondary_lane depending on engineering depth
+
+SYSTEM / PLATFORM DIFFERENCE, higher risk:
+- Example: AWS modernization, DataOps platform, multi-system architecture ownership, Databricks platform buildout
+- Involves environment ownership, platform transitions, distributed systems, or cross-system design
+- These roles should usually be possible_fit, weak_fit, manual_review, or skip
+- Usually secondary_lane or wrong_lane depending on severity
+
+Prefer roles where the work is familiar even if the tool is different.
+
+Avoid roles where the system/platform context is the main job.
+
+---
+
+# ROLE LANE DEFINITIONS
+
+Use exactly one of:
+- target_lane
+- secondary_lane
+- bridge_lane
+- wrong_lane
+
+Do NOT use adjacent_lane.
+
+## target_lane
+
+Use target_lane for roles primarily involving:
+- SQL
+- ETL / ingestion / transformation
+- data validation / reconciliation
+- backend data processing
+- APIs / integrations
+- production debugging
+- operational data workflows
+- pipeline reliability
+- reporting systems tied to operational workflows
+- data quality tied to production/operational systems
+
+These are the strongest long-term growth roles.
+
+A target_lane role should preserve backend/data mobility.
+
+Do NOT classify generic Software Engineer, Python Developer, Java Developer, Full Stack, Systems Engineer, Platform Engineer, Admin, SRE, DevOps, or Infrastructure roles as target_lane unless the core role identity is clearly data engineering, ETL, SQL, integration, or backend data processing.
+
+## secondary_lane
+
+Use secondary_lane for adjacent technical roles involving:
+- backend engineering with meaningful data/API/integration overlap
+- software engineering with meaningful backend data workflow overlap
+- analytics engineering with strong SQL/data transformation overlap
+- BI/reporting engineering where SQL/data modeling/data quality is central
+- application engineering where integrations, APIs, SQL, or production debugging are central
+- database engineering where the work is development/data workflow oriented rather than DBA/admin
+
+Use secondary_lane when:
+- SQL, integrations, APIs, backend data processing, logs, troubleshooting, validation, or operational systems are materially important
+BUT
+- the role is not cleanly target_lane because engineering depth, title identity, tool stack, or platform risk is mixed
+
+Secondary_lane roles can be strategically useful, but they need more caution than target_lane roles.
+
+## bridge_lane
+
+Use bridge_lane for survival/bridge roles involving:
+- systems analyst
+- application analyst
+- production support analyst/engineer
+- application support analyst/engineer
+- technical support engineer
+- SQL analyst
+- data quality analyst
+- data operations analyst
+- data integrity analyst
+- reporting systems analyst
+- integration analyst
+- interface analyst
+- API support engineer
+- ETL support analyst
+- technical consultant only when SQL/API/integration/data troubleshooting is central
+
+Bridge_lane roles must still involve meaningful technical overlap, such as:
+- SQL
+- data validation / reconciliation
+- APIs / integrations
+- XML / JSON / SFTP
+- logs / troubleshooting
+- production data issues
+- operational data workflows
+- reporting systems tied to operational workflows
+
+Bridge_lane is acceptable when the role helps preserve SQL, systems thinking, debugging, integration, or operational data credibility.
+
+Do NOT classify a role as bridge_lane if it is only generic customer support, help desk, nontechnical operations, generic business analyst work, training, customer success, or configuration-only implementation.
+
+## wrong_lane
+
+Use wrong_lane for roles centered on:
+- pure infrastructure/platform engineering
+- cloud-native platform ownership
+- distributed systems/platform engineering
+- AI/ML-heavy work
+- frontend/UI work
+- ERP/configuration ecosystems
+- dashboard-only BI
+- generic customer support
+- nontechnical operations/admin
+- consulting-heavy delivery without SQL/API/data workflow substance
+- implementation/configuration-heavy work
+- senior architecture ownership
+- business analyst work without technical data workflows
+- DBA/admin work where administration is central
+- security/cybersecurity/SOC/detection roles
+- hardware/data center/technician roles
+- QA/testing roles without data validation or SQL-centered work
+
+---
+
+# CONSULTANT / IMPLEMENTATION RULE
+
+Consultant roles are allowed only when the actual work is SQL/data/integration/API/support oriented.
+
+Potentially acceptable consultant roles:
+- Data Integration Consultant
+- SQL Consultant
+- Interface Consultant
+- API Consultant
+- Data Quality Consultant
+- Technical Consultant with SQL/API/XML/SFTP/data mapping
+- Application Consultant with production data troubleshooting and integration work
+
+Risky or usually wrong-lane consultant roles:
+- Implementation Consultant without strong SQL/API/data workflow substance
+- ERP Consultant
+- SAP Consultant
+- Workday Consultant
+- Salesforce Consultant
+- ServiceNow Consultant
+- Functional Consultant
+- Configuration Consultant
+- Business Process Consultant
+- Customer Success Consultant
+- Training Consultant
+
+Do NOT upgrade consultant roles because they mention implementation, client-facing work, requirements, or configuration.
+Only upgrade if the JD clearly centers SQL, API integrations, interface work, data mapping, validation, troubleshooting, production support, or operational data workflows.
+
+Consultant roles should usually be manual_review at best, unless the role is exceptionally resume-aligned and low-risk.
+
+---
+
+# IMPORTANT ENTERPRISE SYSTEMS RULE
+
+Do not downrank a role simply because the title sounds operational, internal, or non-glamorous.
+
+Many legitimate technical roles in enterprise, healthcare, government, finance, and internal systems environments are labeled as:
+- analyst
+- systems analyst
+- application analyst
+- reporting systems analyst
+- data operations
+- support engineer
+- application support analyst
+- technical analyst
+- interface analyst
+- integration analyst
+
+Evaluate the actual day-to-day technical responsibilities rather than title prestige.
+
+If the role is operationally titled but still heavily involves SQL, integrations, APIs, logs, troubleshooting, data validation, reconciliation, or operational workflows, it may be bridge_lane, secondary_lane, or target_lane depending on technical depth.
+
+---
+
+# GOOD_FIT VALIDATION RULE - STRICT
+
+Do NOT assign good_fit just because:
+- the title sounds close
+- the role mentions SQL
+- the role mentions data
+- SkillFreq shows generic keyword overlap
+- the job seems learnable
+- the role is interesting
+- the prior row label says good_fit
+
+A row may be good_fit only if ALL of the following are true:
+- the resume supports the core day-to-day responsibilities
+- the raw job description centers work I have actually done or can credibly screen for
+- SkillFreq shows meaningful evidence for my core strengths, if SkillFreq columns are present
+- the role is not mainly driven by generic data/platform/reporting/support terms
+- the role has realistic recruiter-screen alignment for my background
+- the role does not depend heavily on tools/platforms I do not strongly own
+- the role is junior-to-mid realistic
+- cloud/distributed/platform ownership is NOT central
+- senior/lead/architecture ownership is NOT central
+
+For a role to be good_fit, the job description and/or SkillFreq should show strong or clearly meaningful evidence in at least TWO of these areas:
+- SQL
+- ETL / pipelines
+- data validation / data quality / reconciliation
+- integrations / APIs
+- XML / JSON / SFTP
+- backend data processing
+- production debugging / logs / troubleshooting
+- Python automation
+- operational systems troubleshooting
+
+If the role has only one strong core signal, classify it as possible_fit unless the single signal is overwhelmingly central and resume-backed.
+
+If the role mainly scores on generic terms like:
+- data
+- analytics
+- reporting
+- dashboard
+- support
+- platform
+- operations
+- cloud
+- business process
+
+do NOT classify it as good_fit unless SQL/ETL/integration/debugging signals are also clearly present.
+
+---
+
+# GOOD_FIT STANDARD
+
+Only assign good_fit if MOST of the following are true:
+- the role is primarily centered on SQL, ETL/transformation, integrations/APIs, operational systems, data validation/reconciliation, backend data processing, production troubleshooting/debugging, or reporting systems tied to operational workflows
+- the responsibilities align with my proven experience in operational backend/data systems
+- SkillFreq evidence supports the fit with core signals, not only generic data/reporting/platform terms
+- cloud/distributed/platform ownership is not central
+- senior/lead/architecture ownership is not central
+- the role appears realistic for junior-to-mid recruiter screening
+- the day-to-day work looks close to my actual production/debugging/data-flow experience
+- the role preserves long-term backend/data mobility
+
+If those conditions are not met, do NOT assign good_fit.
+
+---
+
+# POSSIBLE_FIT STANDARD
+
+Assign possible_fit if:
+- there is meaningful overlap with my background
+- the role is still somewhat in target_lane, secondary_lane, or bridge_lane
+- some ramp would be needed
+- the missing tools are not overwhelmingly central
+- recruiter pass is possible but not especially strong
+- SkillFreq evidence is mixed, partial, or shows only one strong core signal
+- the role may preserve some backend/data mobility but has tradeoffs
+
+Roles may still qualify as possible_fit if:
+- the title is analyst/support-oriented
+BUT
+- the actual responsibilities are strongly SQL/integration/data-workflow driven
+
+Possible_fit is appropriate when:
+- the role has real overlap but not enough to justify good_fit
+- the role is a strategic bridge but not an ideal target
+- the role has platform/tool gaps but still has strong SQL/ETL/API/debugging relevance
+- the role is secondary_lane or bridge_lane but technically credible
+
+---
+
+# WEAK_FIT STANDARD
+
+Assign weak_fit if:
+- recruiter-screen realism is low
+- core work is outside my resume-backed strengths
+- the role is too senior
+- the role is too platform/cloud/distributed-system heavy
+- the role is mostly reporting/dashboard-only
+- the role is mostly support/configuration/implementation without strong SQL/API/debugging overlap
+- the role is AI/ML-heavy
+- the role is infrastructure/platform-heavy
+- the role is too vague or low-signal
+- SkillFreq overlap is mostly generic or misleading
+- the role creates poor long-term backend/data mobility
+
+---
+
+# APPLY DECISION RULES
+
+Use only one of:
+- apply_now
+- manual_review
+- skip
+
+## apply_now
+
+Use apply_now only when:
+- recruiter-screen realism is strong
+- fit_quality is good_fit
+- role_lane is usually target_lane, or rarely very strong secondary_lane
+- there is strong overlap with resume-backed experience
+- SkillFreq shows strong core signals if SkillFreq columns are present
+- seniority/platform/tool gating risk is low
+- the role is worth applying without much hesitation
+
+Do NOT use apply_now for:
+- bridge_lane
+- consultant roles
+- senior/lead/architect roles
+- roles with meaningful platform/tool gating
+- roles from noisy bridge searches unless the JD is exceptionally clean and target-aligned
+- roles where SkillFreq overlap is mostly generic
+
+## manual_review
+
+Use manual_review when:
+- recruiter-screen realism is possible, but some risk exists
+- fit_quality is usually possible_fit
+- role_lane is target_lane, secondary_lane, or bridge_lane
+- the role has platform/tool ambiguity
+- SkillFreq signals are mixed
+- the role might be worthwhile but needs human judgment
+- the role is not clearly skip but not clearly apply_now
+
+## skip
+
+Use skip when:
+- recruiter-screen realism is weak
+- hard filter triggered
+- role_lane is wrong_lane
+- fit_quality is weak_fit
+- the role is too senior
+- the role is too platform-heavy
+- the role is too configuration/implementation/support-only
+- the role is too reporting/dashboard-only
+- the role is too vague
+- there is too little resume support
+- SkillFreq evidence shows inflated or generic overlap instead of real SQL/ETL/integration/debugging overlap
+
+---
+
+# SKILLFREQ VS FINAL DECISION CALIBRATION RULE
+
+The CSV may include SkillFreq's existing:
+- fit_quality
+- role_lane
+- apply_decision
+
+Your final output may agree or disagree with SkillFreq.
+
+If you disagree with SkillFreq, the Reason must explicitly explain why.
+
+Common disagreement cases:
+- SkillFreq manual_review -> final skip:
+  Explain whether SkillFreq was inflated by generic operations/support/reporting/platform terms, seniority, weak resume grounding, or platform/tool gating.
+
+- SkillFreq skip -> final manual_review:
+  Explain whether SkillFreq may have missed a valid bridge/secondary role with SQL/API/integration/data-quality/troubleshooting overlap.
+
+- SkillFreq target_lane -> final secondary_lane or bridge_lane:
+  Explain why the title or role identity is not truly core data/ETL even if keywords overlap.
+
+- SkillFreq wrong_lane -> final bridge_lane or secondary_lane:
+  Explain the specific resume-backed technical overlap that makes it worth review.
+
+Do NOT change a role just to disagree with SkillFreq.
+Only override when the raw JD and resume-grounded analysis justify it.
+
+---
+
+# FINAL PRIORITY ORDER
+
+Favor roles that are clearly:
+- SQL-heavy
+- ETL / pipeline focused
+- validation / reconciliation heavy
+- API / integration driven
+- backend data processing oriented
+- operational systems oriented
+- production debugging oriented
+- realistic for junior-to-mid screening
+- supported by resume-backed experience
+- supported by SkillFreq core signals, if available
+
+Downrank or skip roles that are:
+- cloud/platform-heavy
+- distributed/big-data heavy
+- streaming/event-driven heavy
+- infra-heavy
+- consulting-heavy
+- ERP/configuration-heavy
+- AI/ML-heavy
+- BI/dashboard-only
+- vague or low-signal
+- title-inflated relative to my background
+- senior/lead/architecture-heavy
+- supported only by generic SkillFreq overlap
+
+Be strict.
+Do not overrate based on title.
+Do not overrate based on keywords.
+Do not overrate based on theoretical learnability.
+Do not overrate based on generic SkillFreq matches.
+Do not call something good_fit unless it passes strict good_fit validation.
+
+---
+
+# OUTPUT FORMAT
+
+Return the result as CSV-compatible table output.
+
+The output MUST use EXACTLY these column names and order:
+
+Order,Fit Quality,Role Lane,Apply Decision,Reason
+
+Column rules:
+
+Order:
+- Use the original Order value from the input CSV.
+
+Fit Quality:
+- Use only one of:
+  - good_fit
+  - possible_fit
+  - weak_fit
+
+Role Lane:
+- Use only one of:
+  - target_lane
+  - secondary_lane
+  - bridge_lane
+  - wrong_lane
+
+Apply Decision:
+- Use only one of:
+  - apply_now
+  - manual_review
+  - skip
+
+Reason:
+- 4-7 sentences.
+- Must be detailed and decision-oriented.
+- Must explain:
+  - why the role fits or fails
+  - recruiter-screen realism
+  - the most important resume-backed overlap areas
+  - how SkillFreq signals support or weaken the classification, if SkillFreq columns are present
+  - the largest risks or gaps
+  - whether the role preserves long-term backend/data mobility
+  - whether the role is target_lane, secondary_lane, bridge_lane, or wrong_lane
+  - why the assigned Fit Quality, Role Lane, and Apply Decision are appropriate
+- If a role is downgraded despite a good title or keyword overlap, explicitly explain why.
+- If SkillFreq overlap is generic or misleading, explicitly say that.
+- If platform/tool gating is a concern, explicitly say that.
+- If seniority is a concern, explicitly say that.
+- If the final decision disagrees with SkillFreq's existing labels, explicitly explain why.
+- Avoid vague filler.
+
+Strong reasons should reference relevant items such as:
+- SQL / ETL overlap
+- integrations / APIs
+- XML / JSON / SFTP
+- debugging / production workflows
+- operational systems alignment
+- data validation / reconciliation
+- title realism
+- platform/tool gating
+- SkillFreq support or weakness
+- pivot preservation
+- seniority realism
+- reporting/support dilution risk
+- bridge-role value or bridge-role risk
+
+Avoid vague filler such as:
+- "good overlap"
+- "not a fit"
+- "some matching skills"
+- "could be learned"
+- "matches the background"
+- "might be okay"
+
+Reasons should sound like realistic hiring analysis, not generic ATS commentary.
+
+---
+
+# CSV OUTPUT REQUIREMENTS
+
+Return ONLY the CSV-compatible table.
+
+Do NOT include:
+- markdown bullet lists
+- grouped sections
+- extra commentary before or after the table
+- summary paragraphs
+- renamed columns
+- extra columns
+- markdown tables
+
+The first row must be the header:
+
+Order,Fit Quality,Role Lane,Apply Decision,Reason
+
+Each following row must contain one role evaluation.
+
+If a field contains commas, wrap it in quotes.
+
+The Reason column should be detailed enough to stand alone when reviewed later in a tracker.
+
+---
+
+# FINAL RULES
+
+- Be strict.
+- Be decisive.
+- Do not hedge.
+- Do not repeat the entire job description.
+- Do not include weak roles just to create volume.
+- Do not upgrade roles based on theoretical learnability.
+- Do not upgrade roles based on generic keyword overlap.
+- Do not classify a role as good_fit unless it passes strict good_fit validation.
+- Use the resume as the grounding source for what I can credibly claim in recruiter screening.
+- Use SkillFreq as an evidence check to prevent inflated good_fit decisions.
+- Prefer possible_fit over good_fit when the role has meaningful overlap but lacks enough core signals.
+- Use weak_fit when recruiter-screen realism is genuinely low.
+- Use bridge_lane deliberately for survival/bridge roles with real technical overlap.
+- Do not use adjacent_lane.

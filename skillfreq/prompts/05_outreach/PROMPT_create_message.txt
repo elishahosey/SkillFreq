@@ -1,0 +1,115 @@
+I will provide:
+
+1. My base resume(s)
+2. One or more chosen roles with:
+   - Company
+   - Role Title
+   - JDText
+   - Recruiter/contact name if available
+   - Whether I already applied
+   - Job ID if available
+   - Whether I am attaching my resume
+   - Any notes about fit, gaps, or why this role was chosen
+
+Your task is to write recruiter outreach messages I can copy/paste.
+
+GOAL:
+Create short, tailored LinkedIn and email messages that connect my real resume experience to the specific JD without exaggerating.
+
+MY BACKGROUND:
+- Backend/data-focused engineer
+- Strong in SQL, ETL-style workflows, data validation/reconciliation, APIs, integrations, production debugging, and operational data workflows
+- Experience with Python, Java, SQL Server, REST APIs, XML/JSON, SFTP, logs/OpenSearch, CI/CD, and production support
+- Targeting junior-to-mid roles in:
+  - Data Engineering
+  - SQL-heavy ETL / integration
+  - backend data processing
+  - data quality / data operations
+  - systems/application roles involving SQL, APIs, integrations, troubleshooting, or operational data workflows
+
+STRICT RULES:
+- Use only experience supported by my resume.
+- Do NOT exaggerate seniority or architecture ownership.
+- Do NOT claim direct experience with tools I do not have.
+- Do NOT say “perfect fit.”
+- Do NOT sound desperate.
+- Do NOT mention job loss or unemployment.
+- Do NOT write a cover letter.
+- Do NOT use hype/buzzwords/filler like “passionate about data.”
+- Do NOT over-focus on missing tools.
+- Do NOT frame missing tools as weaknesses.
+- Do NOT sound like I am asking to be trained from scratch.
+- Do NOT overstate readiness for platform ownership.
+- Keep the message grounded in the JD.
+
+TAILORING RULES:
+- Identify 1–2 strongest JD overlaps.
+- Tie those overlaps to my actual resume experience.
+- Prioritize:
+  - SQL
+  - ETL/data workflows
+  - validation/reconciliation
+  - APIs/integrations
+  - production troubleshooting
+  - logs/debugging
+  - operational systems
+- If the JD mentions a tool I do not have, reference the underlying transferable work only.
+  Example:
+  - Snowflake → discuss SQL/data validation/pipeline troubleshooting, not Snowflake experience.
+  - Alteryx → discuss ETL/data validation/testing, not Alteryx ownership.
+  - Salesforce/MuleSoft/ERP → discuss system-to-system integrations, APIs, data exchange, validation, and troubleshooting, not platform ownership.
+
+ROLE INTEREST RULE:
+The “why this role” sentence should be specific, realistic, and allowed to mention growth areas.
+
+It should explain:
+1. what parts of the role connect to my current experience
+2. what parts would expand my skills
+3. why that combination is appealing
+
+Good pattern:
+“The role caught my attention because it builds on [my current strength] while also offering exposure to [new tool/domain/work area from the JD].”
+
+Good examples:
+- “The role caught my attention because it builds on the ETL and data validation work I’ve done while also offering exposure to cloud data warehouse and orchestration tools.”
+- “The role caught my attention because it combines system-to-system integration work I’ve done with broader exposure to enterprise application workflows.”
+- “The role caught my attention because it connects to my SQL and production data troubleshooting background while giving me room to grow into more modern data pipeline tooling.”
+- “The role caught my attention because it builds on hands-on validation and reconciliation work while expanding into larger-scale data warehouse workflows.”
+- “The role caught my attention because it ties together operational data workflows, data quality checks, and newer tooling I’m looking to grow into.”
+
+Avoid generic interest lines like:
+- “The role stood out because of its focus on data pipelines.”
+- “I’m excited about the opportunity.”
+- “I believe my background aligns well.”
+- “I am passionate about data.”
+- “The role seems like a great fit.”
+
+STYLE REQUIREMENTS:
+- LinkedIn message should be concise: 70–110 words max.
+- Email message should be concise: 100–150 words max.
+- Use a natural, direct tone.
+- If I am attaching my resume, mention it naturally near the end.
+- If a Job ID is provided, include it in the first sentence.
+- The message should sound like a practical engineer reaching out, not a cover letter.
+
+FOR EACH ROLE, OUTPUT:
+
+[Company] — [Role Title]
+
+LinkedIn header:
+[short header/subject if LinkedIn asks for one]
+
+Best JD overlap:
+- [1–2 bullets]
+
+LinkedIn message:
+[70–110 words max. Start with “Hi [Name],”. Mention that I applied if applicable. Include Job ID if available. Include attachment mention if applicable. End with a light call to action.]
+
+Email subject:
+[short subject line]
+
+Email message:
+[100–150 words max. Start with “Hi [Name],”. Mention that I applied if applicable. Include Job ID if available. Include attachment mention if applicable. End with a light call to action.]
+
+Avoid mentioning:
+- [tools/platforms/seniority/domain claims I should not overstate]

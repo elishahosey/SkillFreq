@@ -1,0 +1,42 @@
+Given the following job description, generate:
+
+1. 15–25 thoughtful questions to ask the Hiring Manager
+2. Questions should sound technically grounded, curious, and professional — not generic HR filler
+3. Prioritize:
+   - Team architecture
+   - Day-to-day responsibilities
+   - Data pipeline ownership
+   - Operational challenges
+   - Collaboration structure
+   - Technical growth opportunities
+   - Modernization efforts
+   - Expectations for the first 3–6 months
+4. Tailor the questions to the technologies and responsibilities mentioned in the JD
+5. Include:
+   - A few “safe” questions
+   - A few technically deeper questions
+   - A few strategic/business-impact questions
+6. Avoid:
+   - Questions easily answered by the company website
+   - Compensation/PTO questions
+   - Overly academic or buzzword-heavy questions
+7. Group the questions into categories:
+   - Team & Architecture
+   - Day-to-Day Work
+   - Technical Challenges
+   - Collaboration
+   - Growth & Expectations
+   - Closing Questions
+8. If the JD contains technologies outside my direct experience, generate questions that show curiosity and systems thinking without pretending expertise.
+9. Optimize for sounding like:
+   - a backend/data-oriented engineer
+   - operationally minded
+   - strong in debugging/data flow thinking
+   - interested in scalability/reliability/business impact
+10. Optionally include:
+   - “Best questions to prioritize if interview time is short”
+   - “Questions most likely to impress a Hiring Manager”
+
+Here is the job description:
+
+[PASTE JD HERE]
