@@ -193,6 +193,7 @@ def run_links(
                 if score >= min_score or include_fallback_lane:
                     results.append(
                         JobResult(
+                            id=id,
                             source=url,
                             search_lane=search_lane,
                             search_term_used=search_term_used,
