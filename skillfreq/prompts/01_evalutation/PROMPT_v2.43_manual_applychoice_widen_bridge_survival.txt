@@ -2,10 +2,12 @@ I will provide:
 
 1. My base resume(s)
 2. One or more manual_scrape .txt files containing raw job postings copied from job boards such as:
-   - LinkedIn
-   - Glassdoor
-   - ZipRecruiter
-   - other manual job board searches
+
+   * LinkedIn
+   * Glassdoor
+   * ZipRecruiter
+   * Indeed
+   * other manual job board searches
 
 The manual scrape search target is usually:
 
@@ -14,23 +16,28 @@ Remote or hybrid
 Posted in the past 24 hours
 
 Each posting may include:
-- job title
-- company
-- location
-- remote / hybrid / on-site status
-- source job board
-- job link
-- job description
-- requirements
-- preferred qualifications
-- pay / contract info
-- messy formatting
-- duplicate text
-- duplicate jobs across multiple job boards
 
-Your task is to evaluate the raw postings against my actual resume background and return a final CSV decision list answering:
+* job title
+* company
+* location
+* remote / hybrid / on-site status
+* source job board
+* job link
+* job description
+* requirements
+* preferred qualifications
+* pay / contract info
+* messy formatting
+* duplicate text
+* duplicate jobs across multiple job boards
+
+Your task is to evaluate the raw postings against my actual resume background and create a downloadable CSV file answering:
 
 "What should I ACTUALLY apply to right now given limited time and realistic recruiter outcomes?"
+
+The output file must be named:
+
+manual_scrape_decisions.csv
 
 ---
 
@@ -41,15 +48,16 @@ This prompt is used when my normal SkillFreq batch did not produce enough strong
 Manual scrape roles are backup candidates, not the primary pipeline.
 
 Therefore:
-- Be stricter, not looser.
-- Do not force applications just because I provided roles.
-- Only recommend roles that are realistically worth applying to.
-- It is acceptable to return zero apply_now roles.
-- Manual roles should supplement SkillFreq, not lower the quality bar.
-- The goal is to find worthwhile backup applications, not to justify weak roles.
-- Prefer fewer, higher-quality applications over more applications.
 
-If the manual scrape contains no strong roles, still return the CSV with all parsed roles and mark them appropriately as apply_later, optional_stretch, or do_not_apply.
+* Be stricter, not looser.
+* Do not force applications just because I provided roles.
+* Only recommend roles that are realistically worth applying to.
+* It is acceptable to return zero apply_now roles.
+* Manual roles should supplement SkillFreq, not lower the quality bar.
+* The goal is to find worthwhile backup applications, not to justify weak roles.
+* Prefer fewer, higher-quality applications over more applications.
+
+If the manual scrape contains no strong roles, still create the CSV file with all parsed roles and mark them appropriately as apply_later, optional_stretch, or do_not_apply.
 
 ---
 
@@ -62,58 +70,63 @@ Do NOT infer skills, tools, domain experience, seniority, or ownership beyond wh
 Do NOT invent experience.
 
 Do NOT assume I have strong hands-on ownership of tools, platforms, frameworks, stacks, or systems listed only as:
-- foundational
-- conceptual
-- transferable
-- exposure-level
-- side-project-level
+
+* foundational
+* conceptual
+* transferable
+* exposure-level
+* side-project-level
 
 If a job requires tools or responsibilities not supported by the resumes:
-- mark the gap clearly
-- do NOT pretend alignment
-- do NOT compensate by over-weighting general experience
-- downgrade the fit and/or apply decision if the gap is central to recruiter screening
+
+* mark the gap clearly
+* do NOT pretend alignment
+* do NOT compensate by over-weighting general experience
+* downgrade the fit and/or apply decision if the gap is central to recruiter screening
 
 Resume evidence matters more than generic career context.
 
 ---
 
-# CONTEXT
+# CONTEXT ABOUT ME
 
 I am a backend/data-focused engineer.
 
 Strong in:
-- SQL
-- ETL / data workflows
-- data validation
-- reconciliation
-- APIs
-- integrations
-- debugging
-- backend/data processing
-- operational system troubleshooting
-- XML / JSON / SFTP
-- production debugging
-- logs / OpenSearch
-- Python automation
-- Java only where the JD does NOT require strong Spring Boot/microservices ownership
-- REST APIs only where the JD does NOT require full API architecture ownership in an unsupported framework
+
+* SQL
+* ETL / data workflows
+* data validation
+* reconciliation
+* APIs
+* integrations
+* debugging
+* backend/data processing
+* operational system troubleshooting
+* XML / JSON / SFTP
+* production debugging
+* logs / OpenSearch
+* Python automation
+* Java only where the JD does NOT require strong Spring Boot/microservices ownership
+* REST APIs only where the JD does NOT require full API architecture ownership in an unsupported framework
 
 Target roles:
-- Data Engineer, especially SQL-heavy
-- ETL / integration roles
-- backend data processing roles
-- data quality / validation / reconciliation roles
-- operational systems/application roles involving SQL, integrations, APIs, logs, or production troubleshooting
-- systems/application analyst roles with strong technical operational overlap
-- data operations / data quality roles preserving backend/data-system leverage
-- technical data/application support roles only when SQL, APIs, integrations, logs, troubleshooting, or data correctness are central
-- survival-lane technical fallback roles only when SQL, data quality, reporting systems, application support, logs, API troubleshooting, operational data workflows, or production issue triage are present enough to preserve some technical credibility
-- backend roles only when the stack and day-to-day are realistically close to my resume-backed experience
+
+* Data Engineer, especially SQL-heavy
+* ETL / integration roles
+* backend data processing roles
+* data quality / validation / reconciliation roles
+* operational systems/application roles involving SQL, integrations, APIs, logs, or production troubleshooting
+* systems/application analyst roles with strong technical operational overlap
+* data operations / data quality roles preserving backend/data-system leverage
+* technical data/application support roles only when SQL, APIs, integrations, logs, troubleshooting, or data correctness are central
+* survival-lane technical fallback roles only when SQL, data quality, reporting systems, application support, logs, API troubleshooting, operational data workflows, or production issue triage are present enough to preserve some technical credibility
+* backend roles only when the stack and day-to-day are realistically close to my resume-backed experience
 
 Experience level:
-- junior to mid-level
-- roughly 0-4 years
+
+* junior to mid-level
+* roughly 0-4 years
 
 I want to avoid unnecessary pigeonholing if I need to pivot because of a weak market.
 
@@ -124,10 +137,11 @@ I want to avoid unnecessary pigeonholing if I need to pivot because of a weak ma
 Before evaluating jobs:
 
 Identify:
-- strongest resume-aligned signals
-- supported tools and technologies
-- unsupported or only-foundational tools
-- experience boundaries that should not be exaggerated
+
+* strongest resume-aligned signals
+* supported tools and technologies
+* unsupported or only-foundational tools
+* experience boundaries that should not be exaggerated
 
 Use this only to improve evaluation accuracy.
 
@@ -142,24 +156,31 @@ Do NOT invent missing tools.
 Treat each distinct job posting as one role.
 
 Input may contain multiple manual scrape files, such as:
-- manual-linkedin
-- manual-glassdoor
-- manual-ziprecruiter
+
+* manual-linkedin
+* manual-glassdoor
+* manual-ziprecruiter
+* manual-indeed
 
 For each distinct posting, extract when available:
-- source job board
-- job ID if available
-- job title
-- company
-- location
-- remote / hybrid / on-site status
-- contract / full-time / part-time status
-- job link
-- core responsibilities
-- required tools / stack
-- years of experience required
-- local-candidate, travel, clearance, citizenship, or domain-specific constraints
-- pay range if available
+
+* source job board
+* job ID if available
+* job title
+* company
+* location
+* remote / hybrid / on-site status
+* contract / full-time / part-time status
+* job link
+* core responsibilities
+* required tools / stack
+* years of experience required
+* local-candidate, travel, clearance, citizenship, or domain-specific constraints
+* pay range if available
+
+If a posting has a direct URL, preserve it exactly in the output column named job_link.
+
+If no direct URL is visible, set job_link to blank only if no link is available in the scrape text.
 
 If a posting is incomplete, evaluate only what is visible.
 
@@ -170,26 +191,31 @@ If a posting is incomplete, evaluate only what is visible.
 Deduplicate repeated postings before final decision-making.
 
 A role is likely a duplicate if it has the same or highly similar:
-- job title
-- company
-- location
-- job description
-- job link
-- required stack
+
+* job title
+* company
+* location
+* job description
+* job link
+* required stack
 
 If the same job appears across multiple boards:
-- keep one row only
-- use the earliest or clearest posting as the main source
-- in the source column, list all known sources separated by "+"
-  - example: LinkedIn+ZipRecruiter
-- do not count duplicates as separate application options
-- mention in the Reason if duplicate visibility affects confidence or if one posting is incomplete
+
+* keep one row only
+* use the earliest or clearest posting as the main source
+* in the source column, list all known sources separated by "+"
+
+  * example: LinkedIn+ZipRecruiter
+* preserve the clearest direct job link in the job_link column
+* do not count duplicates as separate application options
+* mention in the Reason if duplicate visibility affects confidence or if one posting is incomplete
 
 Assign Order after deduplication:
-- Manual 1
-- Manual 2
-- Manual 3
-- etc.
+
+* Manual 1
+* Manual 2
+* Manual 3
+* etc.
 
 ---
 
@@ -198,235 +224,196 @@ Assign Order after deduplication:
 For each distinct role, determine:
 
 Apply Decision:
-- apply_now
-- apply_later
-- optional_stretch
-- do_not_apply
+
+* apply_now
+* apply_later
+* optional_stretch
+* do_not_apply
 
 fit_subtype:
-- good_fit
-- possible_2a
-- possible_2b
+
+* good_fit
+* possible_2a
+* possible_2b
 
 bridge_type:
-- target_core
-- strategic_bridge
-- survival_bridge
-- weak_bridge
-- not_a_bridge
+
+* target_core
+* strategic_bridge
+* survival_bridge
+* weak_bridge
+* not_a_bridge
 
 Pivotable?:
-- pivotable
-- conditional
-- risky
+
+* pivotable
+* conditional
+* risky
 
 Reason:
-- 4-7 sentences
-- decision-oriented
-- grounded in both the job posting and my resume evidence
 
-Also create a compact description field that includes:
-- title
-- company
-- location
-- work mode if visible
-- employment type if visible
-- job ID if available
-- source if useful
-- the main role identity and required stack
-- the most important visible requirements
+* 4-7 sentences
+* decision-oriented
+* grounded in both the job posting and my resume evidence
+
+Also create:
+
+* source
+* job_link
+* compact description
+
+The description field should include:
+
+* title
+* company
+* location
+* work mode if visible
+* employment type if visible
+* job ID if available
+* source if useful
+* the main role identity and required stack
+* the most important visible requirements
 
 The description field should be short enough to fit cleanly into a tracker cell but detailed enough that I can recognize the posting later.
-
----
-
-# ROLE LANE VOCABULARY REFERENCE
-
-You do NOT need to output Role Lane in the final CSV.
-
-However, use these lane definitions internally when deciding bridge_type, fit_subtype, Pivotable?, and Apply Decision.
-
-Use exactly one of these internally:
-- target_lane
-- secondary_lane
-- bridge_lane
-- survival_lane
-- wrong_lane
-
-Do NOT use adjacent_lane.
-
-## target_lane
-
-Use target_lane for roles primarily involving:
-- SQL-heavy data engineering
-- ETL / ingestion / transformation
-- data validation / reconciliation
-- backend data processing
-- APIs / integrations
-- production debugging
-- operational data workflows
-- pipeline reliability
-- reporting systems tied to operational workflows
-- data quality tied to production/operational systems
-
-These are the strongest long-term growth roles.
-
-## secondary_lane
-
-Use secondary_lane for adjacent technical roles involving:
-- backend engineering with meaningful data/API/integration overlap
-- software engineering with meaningful backend data workflow overlap
-- analytics engineering with strong SQL/data transformation overlap
-- BI/reporting engineering where SQL/data modeling/data quality is central
-- application engineering where integrations, APIs, SQL, or production debugging are central
-- database engineering where the work is development/data workflow oriented rather than DBA/admin
-
-Use secondary_lane when:
-- SQL, integrations, APIs, backend data processing, logs, troubleshooting, validation, or operational systems are materially important
-BUT
-- the role is not cleanly target_lane because engineering depth, title identity, tool stack, or platform risk is mixed
-
-## bridge_lane
-
-Use bridge_lane for survival/bridge roles involving:
-- systems analyst
-- application analyst
-- production support analyst/engineer
-- application support analyst/engineer
-- technical support engineer
-- SQL analyst
-- data quality analyst
-- data operations analyst
-- data integrity analyst
-- reporting systems analyst
-- integration analyst
-- interface analyst
-- API support engineer
-- ETL support analyst
-- technical consultant only when SQL/API/integration/data troubleshooting is central
-
-Bridge_lane roles must still involve meaningful technical overlap, such as:
-- SQL
-- data validation / reconciliation
-- APIs / integrations
-- XML / JSON / SFTP
-- logs / troubleshooting
-- production data issues
-- operational data workflows
-- reporting systems tied to operational workflows
-
-Do NOT classify a role as bridge_lane if it is only generic customer support, help desk, nontechnical operations, generic business analyst work, training, customer success, or configuration-only implementation.
-
-## survival_lane
-
-Use survival_lane internally for fallback technical survival roles that are not strong enough to be target_lane, secondary_lane, or bridge_lane, but still preserve some technical credibility.
-
-Survival_lane roles may include:
-- application support analyst / software support analyst roles where SQL, logs, APIs, data issues, or workflow troubleshooting appear but are not deeply central
-- technical support engineer roles where troubleshooting application behavior, integrations, data delivery, logs, or API issues is visible
-- reporting analyst / data analyst roles where SQL, reconciliation, data quality, or operational reporting exists but the role is more reporting/support than engineering
-- data operations / data quality / data integrity roles where SQL or validation is present but the role is lighter-weight or more operational
-- systems/application analyst roles where technical workflow troubleshooting exists but engineering depth is limited
-
-Do NOT use survival_lane for fast food, retail, warehouse, call-center-only, generic customer-service, pure help desk, nontechnical admin, generic business analyst, training, or customer success roles with no SQL/API/data/logs/workflow substance.
-
-## wrong_lane
-
-Use wrong_lane for roles centered on:
-- pure infrastructure/platform engineering
-- cloud-native platform ownership
-- distributed systems/platform engineering
-- AI/ML-heavy work
-- frontend/UI work
-- ERP/configuration ecosystems
-- dashboard-only BI
-- generic customer support
-- nontechnical operations/admin
-- consulting-heavy delivery without SQL/API/data workflow substance
-- implementation/configuration-heavy work
-- senior architecture ownership
-- business analyst work without technical data workflows
-- DBA/admin work where administration is central
-- security/cybersecurity/SOC/detection roles
-- hardware/data center/technician roles
-- QA/testing roles without data validation or SQL-centered work
-- mechanical/manufacturing engineering roles
 
 ---
 
 # ROLE IDENTITY SANITY CHECK - CRITICAL
 
 Before assigning:
-- fit_subtype = good_fit
-- fit_subtype = possible_2a
-- Apply Decision = apply_now
-- Apply Decision = apply_later
+
+* fit_subtype = good_fit
+* fit_subtype = possible_2a
+* Apply Decision = apply_now
+* Apply Decision = apply_later
+* bridge_type = target_core
+* bridge_type = strategic_bridge
+* Pivotable? = pivotable
 
 check the actual identity of the role.
 
-Do NOT classify a role as strong simply because it contains familiar keywords like:
-- SQL
-- Python
-- Java
-- data
-- ETL
-- workflow
-- automation
-- troubleshooting
-- support
-- platform
-- operations
-- SFTP
-- file transfer
-- data movement
-- REST APIs
-- backend
-- microservices
-- CI/CD
-- Git
-- SDLC
-- enterprise systems
+Do NOT classify a role as strong, apply-worthy, or pivotable simply because it contains familiar keywords like:
+
+* SQL
+* Python
+* Java
+* data
+* ETL
+* workflow
+* automation
+* troubleshooting
+* support
+* platform
+* operations
+* SFTP
+* file transfer
+* data movement
+* REST APIs
+* backend
+* microservices
+* CI/CD
+* Git
+* SDLC
+* enterprise systems
+* reporting
+* dashboards
+* analyst
+* business process
+* documentation
 
 Ask:
 
 1. Is this role actually centered on the kind of work I have done?
-   - SQL-heavy data workflows
-   - ETL / ingestion / transformation
-   - validation / reconciliation
-   - APIs / integrations
-   - XML / JSON / SFTP data exchange
-   - production debugging
-   - operational data workflows
-   - backend/data processing
-   - file-based data workflows
-   - system-to-system integration troubleshooting
+
+   * SQL-heavy data workflows
+   * ETL / ingestion / transformation
+   * validation / reconciliation
+   * APIs / integrations
+   * XML / JSON / SFTP data exchange
+   * production debugging
+   * operational data workflows
+   * backend/data processing
+   * file-based data workflows
+   * system-to-system integration troubleshooting
+   * reporting systems tied to operational data correctness
+   * data quality tied to production or business-critical workflows
 
 2. Or is the role identity actually something else?
-   - database administration
-   - cloud platform ownership
-   - infrastructure/platform engineering
-   - vendor-tool administration
-   - Managed File Transfer platform administration
-   - enterprise file transfer operations
-   - secure file transfer platform support
-   - reporting/dashboard development
-   - ERP/configuration work
-   - generic support
-   - system administration
-   - security/access administration
-   - senior architecture/ownership
-   - unsupported language/framework application development
-   - legacy application modernization
-   - Java Spring Boot microservices engineering
-   - .NET / C# / VB application modernization
-   - frontend/full-stack development where frontend/framework work is central
-   - AI evaluator or AI coding assessment work
-   - AI/ML model development
-   - data science / quantitative modeling role
+
+   * QA / SDET / test automation
+   * market research / marketing analytics
+   * generic business analyst work
+   * dashboard-only BI/reporting
+   * database administration
+   * cloud platform ownership
+   * infrastructure/platform engineering
+   * vendor-tool administration
+   * Managed File Transfer platform administration
+   * enterprise file transfer operations
+   * secure file transfer platform support
+   * ERP/configuration work
+   * techno-functional ERP consulting
+   * generic support
+   * help desk / desktop support
+   * system administration
+   * security/access administration
+   * IAM / IGA / cybersecurity
+   * senior architecture/ownership
+   * unsupported language/framework application development
+   * legacy application modernization
+   * Java Spring Boot microservices engineering
+   * .NET / C# / VB application modernization
+   * frontend/full-stack development where frontend/framework work is central
+   * AI evaluator or AI coding assessment work
+   * AI/ML model development
+   * data science / quantitative modeling role
+   * nontechnical operations/admin
+   * unrelated business operations
 
 If the role identity is outside my actual resume-backed lane, downgrade even if the JD contains SQL, ETL, Python, Java, REST APIs, data, automation, troubleshooting, SFTP, file transfer, data movement, backend, or CI/CD keywords.
 
 Keyword overlap is not enough. The center of gravity matters.
+
+---
+
+# FALSE PIVOTABILITY GUARDRAIL - CRITICAL
+
+Do NOT classify a role as pivotable just because it has technical keywords.
+
+A role is pivotable only if it helps me tell a stronger future recruiter story for:
+
+* Data Engineer
+* SQL-heavy ETL roles
+* integration roles
+* backend/data processing roles
+* data validation / reconciliation roles
+* operational data workflow roles
+* technical application/data support roles with SQL/API/logs/debugging depth
+* systems/application analyst roles with real data workflow or integration substance
+
+If the role would require heavy resume spinning to explain as relevant later, it is usually conditional or risky, not pivotable.
+
+Common false-pivotable cases:
+
+* SDET / QA roles with Java, Selenium, Playwright, CI/CD, or automation keywords
+* Market Analyst or marketing analytics roles with SQL, Python, dashboards, Google Analytics, Adobe Analytics, or SPSS
+* Generic Business Analyst roles with light SQL or reporting but mostly requirements, BRDs, UAT, process mapping, and stakeholder work
+* BI/dashboard roles where Power BI/Tableau/reporting is the main job and SQL/data quality is secondary
+* ERP roles such as Oracle EBS, SAP, Workday, Salesforce, ServiceNow, or techno-functional consulting roles
+* Vendor-platform roles such as Maximo, Palantir, Informatica, Snowflake, Databricks, Alteryx, or MFT tools
+* DBA or SQL Server administration roles where SQL appears but the work is backups, permissions, HA/DR, tuning, patching, migrations, or platform ownership
+* MFT / enterprise file transfer roles where SFTP appears but the work is platform administration, certificate/key management, monitoring, or operations
+* Full-stack or backend framework roles where the true screen is Spring Boot, .NET, C#, ASP.NET, Java microservices, cloud-native services, or frontend frameworks
+* Support roles where the work is generic customer support, help desk, desktop support, training, onboarding, or ticket routing without SQL/API/logs/data correctness substance
+* Operations roles where the work is nontechnical business operations, admin, coordination, or process tracking
+
+Default these roles to:
+
+* weak_bridge / possible_2b / conditional / optional_stretch
+  OR
+* not_a_bridge / possible_2b / risky / do_not_apply
+
+Do NOT mark them pivotable unless the JD clearly centers SQL investigation, data validation, application/data troubleshooting, APIs/integrations, logs/debugging, reconciliation, or operational data workflows.
 
 ---
 
@@ -435,18 +422,22 @@ Keyword overlap is not enough. The center of gravity matters.
 Apply_now requires not only transferable overlap, but close day-to-day stack realism.
 
 Do NOT assign apply_now when the strongest match is indirect, such as:
-- SQL inside a VB/.NET modernization role
-- Java inside a Spring Boot microservices role when I do not have resume-backed Spring Boot ownership
-- SQL Server inside a DBA/platform administration role
-- REST APIs inside a frontend/full-stack role with a major unsupported framework
-- REST API exposure inside a role requiring full API architecture ownership
-- debugging inside a platform/admin role
-- SFTP inside an MFT administration role
-- data validation inside a BI/dashboard role
-- Python scripting inside an AI evaluator or automation-only role
-- CI/CD exposure inside a DevOps/platform ownership role
-- reporting/data terms inside a business analyst or dashboard-heavy role
-- SQL/Python inside a data science or ML modeling role
+
+* SQL inside a VB/.NET modernization role
+* Java inside a Spring Boot microservices role when I do not have resume-backed Spring Boot ownership
+* SQL Server inside a DBA/platform administration role
+* REST APIs inside a frontend/full-stack role with a major unsupported framework
+* REST API exposure inside a role requiring full API architecture ownership
+* debugging inside a platform/admin role
+* SFTP inside an MFT administration role
+* data validation inside a BI/dashboard role
+* Python scripting inside an AI evaluator or automation-only role
+* CI/CD exposure inside a DevOps/platform ownership role
+* reporting/data terms inside a business analyst or dashboard-heavy role
+* Java/testing exposure inside an SDET role
+* SQL/Python inside a market research or marketing analytics role
+* SQL/Python inside a data science or ML modeling role
+* API/Java/Python inside a vendor-platform developer role
 
 For apply_now, the role’s main identity must be close to my resume-backed strengths, not merely adjacent through shared keywords.
 
@@ -467,31 +458,37 @@ If no, assign apply_later instead.
 For every row, classify fit_subtype as one of:
 
 good_fit:
-- Use only when the role has strong recruiter-screen realism.
-- The role clearly aligns with SQL, ETL, integration, API, validation, reconciliation, backend data processing, production debugging, or operational systems experience.
-- The role has limited platform/tool/seniority/admin/framework/stack risk.
-- The role does NOT depend on direct hands-on ownership of a specific tool/platform/admin function/framework/stack that my resume does not strongly support.
+
+* Use only when the role has strong recruiter-screen realism.
+* The role clearly aligns with SQL, ETL, integration, API, validation, reconciliation, backend data processing, production debugging, or operational systems experience.
+* The role has limited platform/tool/seniority/admin/framework/stack risk.
+* The role does NOT depend on direct hands-on ownership of a specific tool/platform/admin function/framework/stack that my resume does not strongly support.
+* The role has clear future recruiter-story value for data/backend/integration work.
 
 possible_2a:
-- Use when the role is a strong possible fit.
-- The core work still maps to my resume-backed background.
-- SQL, ETL, data validation, integrations, APIs, operational systems, backend data processing, or production debugging are central.
-- Gaps exist, but they are not the main identity of the role.
-- Recruiter pass is realistic, but weaker than good_fit.
-- Use possible_2a when a tool/platform/framework gap exists, but the job is still mainly about SQL/ETL/API/integration/debugging work and the specific tool/framework is not the dominant screening requirement.
+
+* Use when the role is a strong possible fit.
+* The core work still maps to my resume-backed background.
+* SQL, ETL, data validation, integrations, APIs, operational systems, backend data processing, or production debugging are central.
+* Gaps exist, but they are not the main identity of the role.
+* Recruiter pass is realistic, but weaker than good_fit.
+* Use possible_2a when a tool/platform/framework gap exists, but the job is still mainly about SQL/ETL/API/integration/debugging work and the specific tool/framework is not the dominant screening requirement.
 
 possible_2b:
-- Use when the overlap is weaker, diluted, or riskier.
-- Data/backend overlap may be secondary.
-- The role may lean more toward reporting, analytics, support, configuration, domain-specific tooling, platform requirements, database administration, Managed File Transfer administration, system administration, unsupported framework ownership, stack-specific application development, AI/ML, or responsibilities I do not strongly own.
-- Recruiter pass is more conditional.
-- Use possible_2b when the role appears conceptually adjacent but depends heavily on a tool/platform/admin function/framework/stack I do not have resume-backed production ownership of.
-- Use possible_2b for weak roles for tracking consistency.
+
+* Use when the overlap is weaker, diluted, or riskier.
+* Data/backend overlap may be secondary.
+* The role may lean more toward reporting, analytics, support, configuration, domain-specific tooling, platform requirements, database administration, Managed File Transfer administration, system administration, QA/SDET, market analytics, ERP/vendor-platform work, unsupported framework ownership, stack-specific application development, AI/ML, or responsibilities I do not strongly own.
+* Recruiter pass is more conditional.
+* Use possible_2b when the role appears conceptually adjacent but depends heavily on a tool/platform/admin function/framework/stack I do not have resume-backed production ownership of.
+* Use possible_2b for weak roles for tracking consistency.
 
 Rules:
-- Do NOT leave fit_subtype blank.
-- Do NOT upgrade a role beyond what the resume supports.
-- Do NOT classify a role as good_fit if the JD likely screens for direct hands-on ownership of a tool/platform/admin function/framework/stack not strongly supported by my resume.
+
+* Do NOT leave fit_subtype blank.
+* Do NOT upgrade a role beyond what the resume supports.
+* Do NOT classify a role as good_fit if the JD likely screens for direct hands-on ownership of a tool/platform/admin function/framework/stack not strongly supported by my resume.
+* Do NOT classify a role as good_fit if the role’s future pivot value is weak or would require heavy spinning.
 
 ---
 
@@ -501,88 +498,121 @@ For every deduplicated manual role, classify the role’s bridge value before ma
 
 Use bridge_type as one of:
 
-- target_core
-- strategic_bridge
-- survival_bridge
-- weak_bridge
-- not_a_bridge
+* target_core
+* strategic_bridge
+* survival_bridge
+* weak_bridge
+* not_a_bridge
 
 ## target_core
 
 Use target_core when the role is not really a bridge role because it directly matches my main lane.
 
 These roles are centered on:
-- SQL-heavy data engineering
-- ETL / ingestion / transformation workflows
-- integration engineering
-- backend data processing
-- data validation / reconciliation
-- data quality tied to operational systems
-- production debugging of data workflows
-- APIs / XML / JSON / SFTP data exchange
-- operational data pipeline reliability
+
+* SQL-heavy data engineering
+* ETL / ingestion / transformation workflows
+* integration engineering
+* backend data processing
+* data validation / reconciliation
+* data quality tied to operational systems
+* production debugging of data workflows
+* APIs / XML / JSON / SFTP data exchange
+* operational data pipeline reliability
 
 Target_core roles should usually be:
-- fit_subtype = good_fit or possible_2a
-- Pivotable? = pivotable
-- Apply Decision = apply_now or apply_later depending on batch strength
+
+* fit_subtype = good_fit or possible_2a
+* Pivotable? = pivotable
+* Apply Decision = apply_now or apply_later depending on batch strength
+
+Do NOT use target_core for QA/SDET, market analyst, marketing analytics, ERP techno-functional, vendor-platform, DBA, MFT admin, generic dashboard, generic BA, or unrelated support/operations roles merely because they contain SQL/data/API keywords.
 
 ## strategic_bridge
 
 Use strategic_bridge when the role is not a perfect target role, but it preserves useful mobility back toward data/backend/integration work.
 
 Strategic bridge roles may include:
-- Systems Analyst with strong SQL, APIs, logs, data validation, or integrations
-- Application Analyst with strong operational data troubleshooting
-- Data Operations role involving SQL, validation, reconciliation, or data quality
-- Reporting Systems role where SQL/data correctness and operational workflows are central
-- Integration Analyst / Interface Analyst with real system-to-system data exchange
-- Technical Application Support where SQL, APIs, logs, integrations, or data correctness are central
-- SQL-heavy Data Analyst only when the work involves data quality, reconciliation, operational data workflows, or backend-adjacent troubleshooting
+
+* Systems Analyst with strong SQL, APIs, logs, data validation, or integrations
+* Application Analyst with strong operational data troubleshooting
+* Data Operations role involving SQL, validation, reconciliation, or data quality
+* Reporting Systems role where SQL/data correctness and operational workflows are central
+* Integration Analyst / Interface Analyst with real system-to-system data exchange
+* Technical Application Support where SQL, APIs, logs, integrations, or data correctness are central
+* SQL-heavy Data Analyst only when the work involves data quality, reconciliation, operational data workflows, or backend-adjacent troubleshooting
+* Business Analyst only when the work is technical systems/data/integration heavy, not generic BRD/process work
 
 Strategic bridge roles should usually be:
-- fit_subtype = possible_2a when the bridge is strong
-- Pivotable? = pivotable or conditional
-- Apply Decision = apply_later, or apply_now only if it is genuinely one of the strongest roles in the batch and has low stack/platform/admin risk
+
+* fit_subtype = possible_2a when the bridge is strong
+* Pivotable? = pivotable or conditional
+* Apply Decision = apply_later, or apply_now only if it is genuinely one of the strongest roles in the batch and has low stack/platform/admin risk
+
+Do NOT use strategic_bridge for roles where the bridge value depends mainly on spinning generic analytics, reporting, support, QA, market research, ERP, vendor tools, or business process experience into a data/backend story.
 
 ## survival_bridge
 
 Use survival_bridge when the role is a fallback technical survival option rather than a strong strategic bridge.
 
 Survival_bridge roles may include:
-- application support, software support, technical support, systems analyst, data operations, data quality, reporting analyst, SQL analyst, or application analyst roles where technical overlap exists but is not deep enough for strategic_bridge
-- roles where SQL, logs, APIs, data correctness, reconciliation, reporting systems, application troubleshooting, data operations, or operational workflows are present but the role is more support/ops/reporting than engineering
-- roles that could help preserve income and some technical credibility without pretending they are strong backend/data-engineering pivots
+
+* application support, software support, technical support, systems analyst, data operations, data quality, reporting analyst, SQL analyst, or application analyst roles where technical overlap exists but is not deep enough for strategic_bridge
+* roles where SQL, logs, APIs, data correctness, reconciliation, reporting systems, application troubleshooting, data operations, or operational workflows are present but the role is more support/ops/reporting than engineering
+* roles that could help preserve income and some technical credibility without pretending they are strong backend/data-engineering pivots
 
 Use survival_bridge only when the role has concrete technical substance.
-Do NOT use survival_bridge for fast food, retail, warehouse, pure call-center support, generic help desk, nontechnical admin, customer success, training, or business operations roles with no SQL/API/data/logs/workflow substance.
+
+Do NOT use survival_bridge for:
+
+* fast food
+* retail
+* warehouse
+* pure call-center support
+* generic help desk
+* nontechnical admin
+* customer success
+* training
+* business operations
+* QA/SDET
+* market research
+* ERP configuration
+* vendor-platform administration
+* generic dashboard roles with no SQL/API/data/logs/workflow substance
 
 Survival_bridge roles should usually be:
-- fit_subtype = possible_2b, or possible_2a only when SQL/API/data troubleshooting is central enough to be recruiter-credible
-- Pivotable? = conditional, rarely pivotable, or risky if the role is too support/reporting diluted
-- Apply Decision = apply_later only when the role is a credible survival fallback worth applying to, otherwise optional_stretch or do_not_apply
-- Never apply_now unless the manual scrape is extremely weak and the role is unusually technical, stack-close, and low-risk
+
+* fit_subtype = possible_2b, or possible_2a only when SQL/API/data troubleshooting is central enough to be recruiter-credible
+* Pivotable? = conditional, rarely pivotable, or risky if the role is too support/reporting diluted
+* Apply Decision = apply_later only when the role is a credible survival fallback worth applying to, otherwise optional_stretch or do_not_apply
+* Never apply_now unless the manual scrape is extremely weak and the role is unusually technical, stack-close, and low-risk
 
 ## weak_bridge
 
-Use weak_bridge when the role has some overlap, but the bridge value is diluted, risky, or not worth treating as a survival fallback.
+Use weak_bridge when the role has some overlap, but the bridge value is diluted, risky, or not worth treating as a strong survival fallback.
 
 Weak bridge roles may include:
-- BI/dashboard-heavy roles with limited ETL or operational troubleshooting
-- Data analyst roles centered mostly on reporting, metrics, or stakeholder analysis
-- Application support roles where SQL/API/logs are secondary
-- DBA-tilted roles
-- Managed File Transfer / enterprise file-transfer administration roles
-- vendor-tool-heavy roles
-- configuration-heavy roles
-- implementation-like roles
-- Java Spring Boot / .NET / unsupported framework roles where the stack is the main screen
-- cloud/platform/data platform roles where direct ownership is expected
+
+* BI/dashboard-heavy roles with limited ETL or operational troubleshooting
+* Data analyst roles centered mostly on reporting, metrics, or stakeholder analysis
+* Application support roles where SQL/API/logs are secondary
+* Business Analyst roles where requirements/process/UAT are central and SQL/data workflow depth is light
+* QA/SDET roles where testing is the main role identity
+* Market Analyst / marketing analytics roles where business/marketing strategy is the main role identity
+* DBA-tilted roles
+* Managed File Transfer / enterprise file-transfer administration roles
+* vendor-tool-heavy roles
+* ERP/techno-functional roles
+* configuration-heavy roles
+* implementation-like roles
+* Java Spring Boot / .NET / unsupported framework roles where the stack is the main screen
+* cloud/platform/data platform roles where direct ownership is expected
 
 Weak bridge roles should usually be:
-- fit_subtype = possible_2b
-- Pivotable? = conditional or risky
-- Apply Decision = optional_stretch or do_not_apply
+
+* fit_subtype = possible_2b
+* Pivotable? = conditional or risky
+* Apply Decision = optional_stretch or do_not_apply
 
 Do NOT let weak_bridge become apply_now merely because it has familiar keywords.
 
@@ -591,40 +621,28 @@ Do NOT let weak_bridge become apply_now merely because it has familiar keywords.
 Use not_a_bridge when the role does not preserve useful mobility back toward data/backend/integration work.
 
 Not-a-bridge roles include:
-- generic customer support
-- helpdesk / desktop support
-- nontechnical operations/admin
-- pure business analyst work with minimal SQL/data workflow depth
-- pure dashboard/reporting delivery with no meaningful SQL/ETL/debugging depth
-- senior/lead/architect roles outside my demonstrated level
-- cloud/platform/infra ownership roles I do not strongly match
-- AI/ML/modeling roles outside my resume-backed lane
-- security/IAM/IGA roles
-- ERP/configuration consulting roles
-- mechanical/manufacturing/non-software engineering roles
+
+* generic customer support
+* helpdesk / desktop support
+* nontechnical operations/admin
+* pure business analyst work with minimal SQL/data workflow depth
+* pure dashboard/reporting delivery with no meaningful SQL/ETL/debugging depth
+* QA/SDET roles with no data/integration troubleshooting substance
+* market research / marketing analytics roles with no operational data system substance
+* senior/lead/architect roles outside my demonstrated level
+* cloud/platform/infra ownership roles I do not strongly match
+* AI/ML/modeling roles outside my resume-backed lane
+* security/IAM/IGA/cybersecurity roles
+* ERP/configuration consulting roles
+* vendor-platform roles requiring direct hands-on platform ownership I do not have
+* mechanical/manufacturing/non-software engineering roles
+* unrelated business operations
 
 Not_a_bridge roles should usually be:
-- fit_subtype = possible_2b
-- Pivotable? = risky
-- Apply Decision = do_not_apply
 
-## Bridge decision guardrail
-
-Before assigning apply_now, ask:
-
-1. Is this target_core, or an unusually strong strategic_bridge?
-2. Would this role still be worth applying to first if I only had energy for 3 applications today?
-3. Would a recruiter quickly understand the connection to my resume without me needing to over-explain?
-4. Does the role preserve SQL/ETL/backend-data/integration mobility?
-
-If the answer is no, do not assign apply_now.
-
-Possible_2a does NOT automatically mean strategic_bridge.
-Strategic_bridge does NOT automatically mean apply_now.
-Weak_bridge should not be apply_now.
-Not_a_bridge should not be apply_now or apply_later.
-
-If a role is a bridge role, the Reason must explicitly state whether it is a strategic bridge, weak bridge, or not a useful bridge, and why.
+* fit_subtype = possible_2b
+* Pivotable? = risky
+* Apply Decision = do_not_apply
 
 ---
 
@@ -633,432 +651,75 @@ If a role is a bridge role, the Reason must explicitly state whether it is a str
 For every row, classify Pivotable? as one of:
 
 pivotable:
-- The role helps preserve or improve mobility between:
-  - Data Engineer
-  - SQL-heavy ETL / integration roles
-  - backend data processing roles
-  - data validation / reconciliation roles
-  - backend roles that are realistically close to my resume-backed stack
-- The work reinforces transferable skills like SQL, ETL, APIs, integrations, debugging, backend/data systems, operational workflows, or technical troubleshooting.
-- The role does not lock me into a narrow vendor tool, support-only function, reporting-only path, DBA-only path, MFT-only path, implementation/configuration niche, unsupported framework niche, legacy modernization niche, or platform administration niche.
+
+* The role helps preserve or improve mobility between:
+
+  * Data Engineer
+  * SQL-heavy ETL / integration roles
+  * backend data processing roles
+  * data validation / reconciliation roles
+  * backend roles that are realistically close to my resume-backed stack
+* The work reinforces transferable skills like SQL, ETL, APIs, integrations, debugging, backend/data systems, operational workflows, or technical troubleshooting.
+* The role does not lock me into a narrow vendor tool, support-only function, QA-only function, marketing analytics path, reporting-only path, DBA-only path, MFT-only path, implementation/configuration niche, unsupported framework niche, legacy modernization niche, or platform administration niche.
+* A future recruiter would reasonably understand how this role connects to backend/data/integration work without extreme resume spin.
 
 conditional:
-- The role has some transferable value, but there is a real tradeoff.
-- It may still be acceptable in a weak market.
-- It may involve reporting/analytics tilt, database administration tilt, Managed File Transfer platform tilt, domain-specific work, tool-specific requirements, weaker engineering depth, support/operations dilution, unsupported framework work, legacy modernization work, or partial mismatch with backend/data engineering work.
-- The role may preserve some SQL/data/system/backend troubleshooting value but has pigeonhole risk.
+
+* The role has some transferable value, but there is a real tradeoff.
+* It may still be acceptable in a weak market.
+* It may involve reporting/analytics tilt, support/operations dilution, QA/testing tilt, market analytics tilt, database administration tilt, Managed File Transfer platform tilt, domain-specific work, tool-specific requirements, weaker engineering depth, unsupported framework work, legacy modernization work, or partial mismatch with backend/data engineering work.
+* Future pivot value exists, but the story would need careful framing.
 
 risky:
-- The role has high pigeonhole risk or weak future transfer.
-- It is likely too tied to a narrow platform, implementation/support-only work, reporting/dashboard-only work, DBA/platform administration, Managed File Transfer platform administration, cloud/platform ownership I do not strongly match, senior expectations, generic nontechnical operations, configuration-heavy consulting, unsupported framework ownership, security/IAM/IGA, AI/ML modeling, or legacy modernization stack work.
-- The role may make it harder to pivot back toward backend/data engineering if the day-to-day work is mostly tool administration, database administration, MFT administration, reporting/dashboard delivery, customer support, configuration, or unsupported stack-specific development.
+
+* The role has high pigeonhole risk or weak future transfer.
+* It is likely too tied to a narrow platform, implementation/support-only work, QA/testing, market research, marketing analytics, reporting/dashboard-only work, DBA/platform administration, Managed File Transfer platform administration, cloud/platform ownership I do not strongly match, senior expectations, generic nontechnical operations, configuration-heavy consulting, unsupported framework ownership, ERP/vendor-platform ownership, AI/ML/modeling, security/IAM/IGA, or legacy modernization stack work.
+* A future recruiter may not view the role as strengthening my data/backend/integration profile.
 
 Rules:
-- Do NOT leave Pivotable? blank.
-- For apply_now roles, prefer pivotable unless there is a clear tradeoff.
-- For apply_later roles, use pivotable or conditional depending on transfer strength.
-- For optional_stretch roles, usually use conditional or risky.
-- For do_not_apply roles, usually use risky when the rejection reason is platform, vendor-tool ownership, DBA/admin ownership, MFT/admin ownership, unsupported framework ownership, seniority, pigeonholing, weak transfer, wrong-lane risk, or poor recruiter-screen realism.
+
+* Do NOT leave Pivotable? blank.
+* For apply_now roles, prefer pivotable unless there is a clear tradeoff.
+* For apply_later roles, use pivotable or conditional depending on transfer strength.
+* For optional_stretch roles, usually use conditional or risky.
+* For do_not_apply roles, usually use risky when the rejection reason is platform, vendor-tool ownership, DBA/admin ownership, MFT/admin ownership, unsupported framework ownership, QA/SDET identity, market analytics identity, ERP/vendor-platform identity, AI/ML identity, security/IAM/IGA identity, seniority, pigeonholing, weak transfer, wrong-lane risk, or poor recruiter-screen realism.
+* Do NOT mark a survival role as pivotable unless the day-to-day work clearly preserves SQL/API/data/logs/integration/debugging credibility.
 
 ---
 
 # HARD PLATFORM / TOOL / FRAMEWORK GATING RULE
 
 If a role appears to require direct hands-on experience with a specific platform/tool/framework such as:
-- Snowflake
-- Informatica / IDMC / PowerCenter
-- Databricks
-- Palantir
-- SAP
-- Salesforce
-- ServiceNow
-- heavy AWS / Azure / GCP cloud platform ownership
-- Kubernetes / Terraform / infrastructure as code ownership
-- dbt / Airflow as required production ownership skills
-- Java Spring Boot / Spring Framework / JPA / Hibernate
-- Spring Security / OAuth2 / JWT
-- Java microservices / backend architecture ownership
-- VB.NET / Classic VB / VB6
-- .NET Core / C# / ASP.NET / Entity Framework Core
-- Managed File Transfer platforms
-- SQL Server DBA / database administration
+
+* Snowflake
+* Informatica / IDMC / PowerCenter
+* Databricks
+* Palantir
+* SAP
+* Salesforce
+* ServiceNow
+* Oracle EBS
+* Maximo
+* heavy AWS / Azure / GCP cloud platform ownership
+* Kubernetes / Terraform / infrastructure as code ownership
+* dbt / Airflow as required production ownership skills
+* Java Spring Boot / Spring Framework / JPA / Hibernate
+* Spring Security / OAuth2 / JWT
+* Java microservices / backend architecture ownership
+* VB.NET / Classic VB / VB6
+* .NET Core / C# / ASP.NET / Entity Framework Core
+* Managed File Transfer platforms
+* SQL Server DBA / database administration
 
 AND the job description implies candidates will be filtered based on that experience,
 
 THEN:
-- do not place this role in apply_now unless the rest of the role is an unusually strong match and the unsupported tool is clearly secondary
-- usually place it in optional_stretch or do_not_apply
-- mark it conditional or risky depending on severity
+
+* do not place this role in apply_now unless the rest of the role is an unusually strong match and the unsupported tool is clearly secondary
+* usually place it in optional_stretch or do_not_apply
+* mark it conditional or risky depending on severity
 
 General SQL/ETL/API/debugging overlap does not automatically override platform, framework, stack, or admin gating.
-
----
-
-# FOUNDATIONAL TOOL RULE
-
-If a base resume lists a tool only as “Foundational,” “Concepts,” “Exposure,” or side-project-level:
-- Do NOT treat it as hands-on production experience.
-- Do NOT use it to justify apply_now by itself.
-- It may only slightly reduce risk if the role does not require direct production ownership.
-
-Examples:
-- Airflow, Kafka, Spark listed as foundational do not equal production experience.
-- AWS/Azure/GCP foundational does not equal cloud platform ownership.
-- Java exposure does not equal Spring Boot microservices ownership.
-- REST API exposure does not equal API architecture ownership.
-- JUnit exposure does not equal production Java backend framework ownership.
-
----
-
-# LANGUAGE / FRAMEWORK / STACK OWNERSHIP SANITY CHECK
-
-Be especially careful with roles centered on:
-- Java Spring Boot
-- Spring Framework
-- Spring Security
-- JPA / Hibernate
-- Java microservices
-- REST API architecture
-- backend architecture patterns
-- OAuth2 / JWT authentication
-- Docker / containerized backend services
-- cloud-deployed backend services
-- high-availability backend systems
-- independent full-stack or full software stack development
-- VB.NET
-- Classic VB / VB6
-- .NET Core / C#
-- Entity Framework Core
-- ASP.NET
-- legacy application modernization
-- React / Angular / Vue when frontend is central
-- Ruby on Rails
-- PHP / Laravel
-- Node.js / Express when central
-- Mainframe / COBOL
-
-My resume supports:
-- Java
-- Python
-- SQL
-- REST APIs / integration exposure
-- JSON / XML
-- backend/data workflow troubleshooting
-- production debugging
-- Git
-- Azure DevOps / CI/CD exposure
-- SDLC
-- enterprise system troubleshooting
-- JUnit/testing exposure
-
-My resume does NOT strongly support direct production ownership of:
-- Spring Boot
-- Spring Framework
-- JPA / Hibernate
-- Spring Security
-- OAuth2 / JWT implementation
-- Java microservices architecture
-- Dockerized Java service deployment
-- cloud-native Java backend ownership
-- independent ownership of high-availability backend systems
-- VB.NET
-- Classic VB / VB6
-- .NET Core / C#
-- Entity Framework Core
-- ASP.NET
-- legacy VB-to-.NET modernization
-- frontend framework ownership
-
-If the JD’s core identity is centered on a language/framework/stack I do not strongly own, do NOT assign apply_now.
-
-If downgrading for this reason, explicitly say:
-"The SQL/API/debugging overlap is real, but the role identity appears to be [STACK] application development or modernization rather than SQL/ETL/backend-data work."
-
----
-
-# JAVA / SPRING BOOT / MICROSERVICES SANITY CHECK
-
-Be especially careful with roles centered on:
-- Java Spring Boot
-- Spring Framework
-- Spring Security
-- JPA / Hibernate
-- Java microservices
-- REST API architecture
-- backend architecture patterns
-- OAuth2 / JWT authentication
-- Docker / containerized Java services
-- cloud-deployed Java services
-- high-availability backend systems
-- independent full-stack or full software stack development
-
-Do NOT treat Java keyword overlap as equivalent to Spring Boot / microservices production ownership.
-
-Do NOT treat REST API exposure as equivalent to owning REST API architecture in Spring Boot microservices.
-
-Do NOT treat JUnit exposure as equivalent to production Java backend framework ownership.
-
-Do NOT treat SQL/database overlap inside a Spring Boot role as equivalent to SQL/ETL/backend-data work.
-
-If a role’s core identity is Java Spring Boot microservices engineering and my resume does not show strong hands-on Spring Boot ownership:
-- Do NOT assign good_fit.
-- Do NOT assign apply_now.
-- Usually classify as possible_2b unless the JD is clearly more about general Java, SQL, APIs, debugging, and application support than Spring Boot/microservices ownership.
-- Use apply_later only if the role is otherwise realistic, junior/mid-level, and has strong SQL/API/debugging overlap.
-- Use optional_stretch if Spring Boot, microservices, cloud, security, Docker, or backend architecture are central screening filters.
-
-If downgrading for this reason, explicitly say:
-"The Java/API/database overlap is real, but the role identity appears to be Spring Boot microservices engineering rather than SQL/ETL/backend-data work."
-
----
-
-# VB / .NET / LEGACY MODERNIZATION SANITY CHECK
-
-Be especially careful with roles centered on:
-- VB.NET
-- Classic VB / VB6
-- .NET Core
-- C#
-- Entity Framework Core
-- ASP.NET
-- legacy VB application maintenance
-- legacy application modernization
-- application migration to .NET Core
-- stored procedures embedded inside a .NET modernization role
-- finance/insurance/enterprise application modernization where VB/.NET is the main screening filter
-
-My resume supports:
-- SQL Server
-- SQL debugging
-- REST APIs
-- Git
-- CI/CD exposure
-- production troubleshooting
-- enterprise systems
-- SDLC
-
-My resume does NOT strongly support direct production ownership of:
-- VB.NET
-- Classic VB / VB6
-- .NET Core
-- C#
-- Entity Framework Core
-- ASP.NET
-- legacy VB-to-.NET modernization
-- .NET application architecture
-
-Do NOT treat SQL Server keyword overlap as equivalent to VB/.NET application modernization ownership.
-
-Do NOT treat REST API exposure as equivalent to .NET Core backend ownership.
-
-Do NOT treat debugging/CI/CD/SDLC overlap as enough for apply_now when VB/.NET is the core identity.
-
-If a role’s core identity is VB/.NET legacy modernization and my resume does not show strong hands-on VB/.NET ownership:
-- Do NOT assign good_fit.
-- Do NOT assign apply_now.
-- Usually classify as possible_2b unless the JD is clearly more about SQL/data workflow troubleshooting than VB/.NET modernization.
-- Use apply_later only if the role is otherwise realistic and has strong SQL/API/debugging overlap.
-- Use optional_stretch if VB.NET, Classic VB, .NET Core, C#, Entity Framework, or legacy migration are central screening filters.
-
-If downgrading for this reason, explicitly say:
-"The SQL/API/debugging overlap is real, but the role identity appears to be VB/.NET application modernization rather than SQL/ETL/backend-data work."
-
----
-
-# DATABASE ADMINISTRATION / DBA SANITY CHECK
-
-Be especially careful with roles titled or centered on:
-- SQL Server Administrator
-- Database Administrator
-- DBA
-- SQL DBA
-- Database Reliability Engineer
-- Cloud Database Administrator
-- Database Platform Engineer
-- Oracle DBA
-- PostgreSQL DBA
-- MySQL DBA
-- Systems / Database Manager
-
-My resume supports:
-- SQL Server usage
-- SQL queries
-- SQL validation
-- reconciliation checks
-- data workflow troubleshooting
-- query optimization / indexing exposure
-- production debugging with logs/OpenSearch
-- ETL-style workflows
-- operational data reliability
-
-My resume does NOT strongly support direct DBA ownership such as:
-- backups and restores
-- disaster recovery
-- HA/DR design
-- clustering
-- replication administration
-- database patching/upgrades
-- SQL Server Agent administration
-- index maintenance ownership at DBA level
-- database security/access administration
-- user/role/permission management
-- SQL Profiler / DMV ownership
-- performance tuning as a primary DBA function
-- database migrations as an administrator
-- Azure SQL / AWS RDS administration
-- 24/7 database platform ownership
-
-If a role’s core identity is SQL Server administration or DBA ownership:
-- Do NOT classify it as good_fit.
-- Do NOT classify it as possible_2a unless the JD is clearly more about SQL/data workflow troubleshooting than DBA platform ownership.
-- Usually classify it as possible_2b.
-- Usually assign optional_stretch unless the DBA ownership requirements are light and the role has strong SQL/data workflow overlap.
-- Set Pivotable? to conditional or risky depending on how much the role preserves SQL/data workflow mobility versus pushing me into database administration.
-
-If downgrading a SQL Server or DBA-like role, explicitly say:
-"The SQL keyword overlap is real, but the role identity appears to be database administration/platform ownership rather than SQL/ETL-focused data work."
-
-Do NOT let SQL Server keyword overlap inflate a DBA role into possible_2a or good_fit.
-
----
-
-# MANAGED FILE TRANSFER / MFT SANITY CHECK
-
-Be especially careful with roles titled or centered on:
-- Managed File Transfer
-- MFT Engineer
-- File Transfer Engineer
-- File Transfer Operations Engineer
-- Secure File Transfer Engineer
-- MFT Operations Support
-- Enterprise File Transfer
-- Axway SecureTransport
-- IBM Sterling
-- Connect:Direct
-- NDM
-- GoAnywhere MFT
-- MOVEit
-- Globalscape EFT
-- Control-M file transfer workflows
-- enterprise file transfer platform administration
-
-My resume supports:
-- SFTP / file-based workflows
-- data exchange between systems
-- XML / JSON data movement
-- system-to-system integrations
-- validation checks
-- reconciliation checks
-- troubleshooting data transfer or workflow failures
-- production debugging with SQL, logs, and OpenSearch
-- operational workflow reliability
-
-My resume does NOT strongly support direct Managed File Transfer platform ownership such as:
-- Axway SecureTransport administration
-- IBM Sterling / Connect:Direct / NDM administration
-- GoAnywhere MFT administration
-- MOVEit administration
-- Globalscape EFT administration
-- enterprise MFT platform monitoring/ownership
-- certificate/key management for file transfer platforms
-- encryption/key rotation ownership
-- MFT user/account administration
-- MFT platform configuration
-- MFT job scheduling/operations ownership
-- MFT infrastructure support
-- mainframe file transfer operations
-- network/security ownership for transfer platforms
-- 24/7 enterprise MFT platform support
-
-If a role’s core identity is Managed File Transfer platform administration or enterprise file transfer operations:
-- Do NOT classify it as good_fit.
-- Do NOT classify it as possible_2a unless the JD is clearly more about general SFTP/file-based data workflows, integrations, validation, and troubleshooting than MFT platform administration.
-- Usually classify it as possible_2b.
-- Usually assign optional_stretch unless the MFT ownership requirements are light and the role has strong SFTP/integration/data workflow overlap.
-- Set Pivotable? to conditional or risky depending on how much the role preserves integration/data workflow mobility versus pushing me into MFT platform administration.
-
-If downgrading an MFT-like role, explicitly say:
-"The SFTP/file-transfer overlap is real, but the role identity appears to be Managed File Transfer platform administration rather than general integration or file-based data workflow work."
-
-Do NOT let SFTP, file transfer, data movement, or troubleshooting keyword overlap inflate an MFT platform role into possible_2a or good_fit.
-
----
-
-# AI / ML / DATA SCIENCE SANITY CHECK
-
-Be careful with roles that are really:
-- ML Engineer
-- AI Engineer
-- Data Scientist
-- Quantitative Analyst
-- AI evaluator
-- LLM workflow engineer
-- model development role
-- regression/modeling role
-- forecasting role
-- GenAI application engineer
-- AI-native software engineer
-
-My resume supports:
-- data workflows
-- SQL
-- ETL
-- Python automation
-- validation/reconciliation
-- data processing
-- debugging
-
-My resume does NOT strongly support:
-- production ML model development
-- LLM application ownership
-- model evaluation and fine-tuning
-- quantitative trading models
-- data science research
-- AI application architecture
-- GenAI production ownership
-
-If the role’s core identity is AI/ML/modeling rather than SQL/ETL/backend-data work:
-- Do NOT assign good_fit.
-- Do NOT assign apply_now.
-- Usually assign optional_stretch or do_not_apply depending on severity.
-- Mark Pivotable? as conditional or risky.
-
-If downgrading for this reason, explicitly say:
-"The Python/data overlap is real, but the role identity appears to be AI/ML/modeling work rather than SQL/ETL/backend-data work."
-
----
-
-# CONSULTANT / IMPLEMENTATION RULE
-
-Consultant roles are allowed only when the actual work is SQL/data/integration/API/support oriented.
-
-Potentially acceptable consultant roles:
-- Data Integration Consultant
-- SQL Consultant
-- Interface Consultant
-- API Consultant
-- Data Quality Consultant
-- Technical Consultant with SQL/API/XML/SFTP/data mapping
-- Application Consultant with production data troubleshooting and integration work
-
-Risky or usually wrong-lane consultant roles:
-- Implementation Consultant without strong SQL/API/data workflow substance
-- ERP Consultant
-- SAP Consultant
-- Workday Consultant
-- Salesforce Consultant
-- ServiceNow Consultant
-- Functional Consultant
-- Configuration Consultant
-- Business Process Consultant
-- Customer Success Consultant
-- Training Consultant
-
-Do NOT upgrade consultant roles because they mention implementation, client-facing work, requirements, or configuration.
-
-Only upgrade if the JD clearly centers SQL, API integrations, interface work, data mapping, validation, troubleshooting, production support, or operational data workflows.
-
-Consultant roles should usually be apply_later or optional_stretch at best, unless the role is exceptionally resume-aligned and low-risk.
 
 ---
 
@@ -1067,38 +728,43 @@ Consultant roles should usually be apply_later or optional_stretch at best, unle
 Use only one of:
 
 apply_now:
-- Top 0-3 preferred backup applications.
-- 5 max only if unusually strong.
-- Best recruiter-screen realism in the manual scrape.
-- Strongest match to resume-backed experience.
-- Close day-to-day alignment with SQL, ETL, integration, API, validation, reconciliation, backend data processing, production debugging, or operational systems experience.
-- Low stack/framework/platform/seniority/admin risk.
-- Low vendor-tool ownership risk.
-- Low language/framework ownership risk.
-- Usually good_fit, target_core, and pivotable.
-- May include a very strong possible_2a ONLY if it is one of the best roles in the scrape, has low stack/framework/platform/admin risk, and the day-to-day work is very close to my SQL/ETL/API/integration/debugging background.
-- Should preserve backend/data mobility.
-- Must be target_core or an unusually strong strategic_bridge.
-- Do NOT assign apply_now merely because the role is credible, possible_2a, a decent bridge, better than market filler, or worth applying to eventually.
+
+* Top 0-3 preferred backup applications.
+* 5 max only if unusually strong.
+* Best recruiter-screen realism in the manual scrape.
+* Strongest match to resume-backed experience.
+* Close day-to-day alignment with SQL, ETL, integration, API, validation, reconciliation, backend data processing, production debugging, or operational systems experience.
+* Low stack/framework/platform/seniority/admin risk.
+* Low vendor-tool ownership risk.
+* Low language/framework ownership risk.
+* Usually good_fit, target_core, and pivotable.
+* May include a very strong possible_2a ONLY if it is one of the best roles in the scrape, has low stack/framework/platform/admin risk, and the day-to-day work is very close to my SQL/ETL/API/integration/debugging background.
+* Should preserve backend/data mobility.
+* Must be target_core or an unusually strong strategic_bridge.
+* Do NOT assign apply_now merely because the role is credible, possible_2a, a decent bridge, better than market filler, or worth applying to eventually.
 
 apply_later:
-- Worth applying to, but not in the immediate backup batch.
-- Use for valid good_fit roles that are realistic but not the strongest immediate priorities.
-- Use for strong possible_2a roles that are credible but slightly below the top batch.
-- These are not bad roles; they are simply lower priority than apply_now.
-- May include roles with mild tool/platform/framework gaps if the core day-to-day still maps strongly to SQL/ETL/integration/debugging work.
-- Use apply_later for credible bridge roles where recruiter-screen realism exists, but the role has enough stack/framework/tool/platform/identity risk that it should not consume immediate energy.
+
+* Worth applying to, but not in the immediate backup batch.
+* Use for valid good_fit roles that are realistic but not the strongest immediate priorities.
+* Use for strong possible_2a roles that are credible but slightly below the top batch.
+* These are not bad roles; they are simply lower priority than apply_now.
+* May include roles with mild tool/platform/framework gaps if the core day-to-day still maps strongly to SQL/ETL/integration/debugging work.
+* Use apply_later for credible bridge roles where recruiter-screen realism exists, but the role has enough stack/framework/tool/platform/identity risk that it should not consume immediate energy.
+* Do NOT use apply_later for not_a_bridge roles.
 
 optional_stretch:
-- Some realistic overlap, but meaningful risk exists.
-- Use for possible_2b roles, weaker possible_2a roles, platform/tool-gated roles, framework/stack-gated roles, vendor-tool-gated roles, DBA/admin-tilted roles, MFT/admin-tilted roles, reporting/support-diluted roles, configuration-heavy roles, mixed-signal roles, or roles with weaker recruiter-screen probability.
-- Could be considered only after apply_now and apply_later if the market is weak or the application is very quick.
+
+* Some realistic overlap, but meaningful risk exists.
+* Use for possible_2b roles, weaker possible_2a roles, platform/tool-gated roles, framework/stack-gated roles, vendor-tool-gated roles, DBA/admin-tilted roles, MFT/admin-tilted roles, QA/SDET-tilted roles, market analytics roles, ERP/vendor-platform roles, reporting/support-diluted roles, configuration-heavy roles, mixed-signal roles, or roles with weaker recruiter-screen probability.
+* Could be considered only after apply_now and apply_later if the market is weak or the application is very quick.
 
 do_not_apply:
-- Genuinely not worth applying to.
-- Use when the role has weak fit, wrong lane, seniority mismatch, platform gating, vendor-tool ownership gating, framework/stack ownership gating, DBA/admin ownership gating, MFT platform ownership gating, AI/ML mismatch, poor recruiter-screen realism, high pigeonhole risk, weak long-term mobility, too much support/configuration/reporting dilution, lack of resume support, or inflated/generic keyword overlap.
-- Do NOT use do_not_apply just because a role did not fit into the top apply_now group.
-- Valid good_fit roles should usually become apply_later, not do_not_apply, unless there is a clear rejection reason.
+
+* Genuinely not worth applying to.
+* Use when the role has weak fit, wrong lane, seniority mismatch, platform gating, vendor-tool ownership gating, framework/stack ownership gating, DBA/admin ownership gating, MFT platform ownership gating, AI/ML mismatch, security/IAM/IGA mismatch, poor recruiter-screen realism, high pigeonhole risk, weak long-term mobility, too much support/configuration/reporting dilution, lack of resume support, or inflated/generic keyword overlap.
+* Do NOT use do_not_apply just because a role did not fit into the top apply_now group.
+* Valid good_fit roles should usually become apply_later, not do_not_apply, unless there is a clear rejection reason.
 
 ---
 
@@ -1114,11 +780,12 @@ You MUST follow these:
 6. I am NOT optimizing for learning or stretch.
 7. I am NOT optimizing for interesting roles.
 8. I am optimizing for:
-   - realistic resume match
-   - recruiter pass likelihood
-   - minimal stack gap
-   - avoiding unnecessary pigeonholing
-   - preserving backend/data/integration pivot options
+
+   * realistic resume match
+   * recruiter pass likelihood
+   * minimal stack gap
+   * avoiding unnecessary pigeonholing
+   * preserving backend/data/integration pivot options
 
 ---
 
@@ -1127,144 +794,180 @@ You MUST follow these:
 Rank based on:
 
 1. Day-to-day overlap with:
-   - SQL
-   - ETL / pipelines
-   - data validation / reconciliation
-   - integrations / APIs
-   - backend data processing
-   - production troubleshooting
+
+   * SQL
+   * ETL / pipelines
+   * data validation / reconciliation
+   * integrations / APIs
+   * backend data processing
+   * production troubleshooting
 
 2. Low risk from:
-   - ecosystem lock-in
-   - platform ownership expectations
-   - framework/stack ownership expectations
-   - vague or inflated responsibilities
-   - senior/lead expectations
-   - narrow domain pigeonholing
-   - reporting/support dilution
-   - admin/tool ownership
+
+   * ecosystem lock-in
+   * platform ownership expectations
+   * framework/stack ownership expectations
+   * vague or inflated responsibilities
+   * senior/lead expectations
+   * narrow domain pigeonholing
+   * reporting/support dilution
+   * admin/tool ownership
 
 3. Recruiter realism:
-   - Would a recruiter quickly understand why my resume matches?
+
+   * Would a recruiter quickly understand why my resume matches?
 
 4. Bridge value and pivot preservation:
-   - Is the role target_core, strategic_bridge, survival_bridge, weak_bridge, or not_a_bridge?
-   - Does the role preserve my ability to stay in data/backend/integration lanes?
+
+   * Is the role target_core, strategic_bridge, survival_bridge, weak_bridge, or not_a_bridge?
+   * Does the role preserve my ability to stay in data/backend/integration lanes?
 
 Prefer:
-- good_fit over possible_2a
-- possible_2a over possible_2b
-- target_core over strategic_bridge
-- strategic_bridge over weak_bridge
-- weak_bridge over not_a_bridge
-- pivotable over conditional
-- conditional over risky
-- apply_later over optional_stretch when the role is credible but not urgent
-- optional_stretch over do_not_apply when there is real but risky overlap
+
+* good_fit over possible_2a
+* possible_2a over possible_2b
+* target_core over strategic_bridge
+* strategic_bridge over survival_bridge
+* survival_bridge over weak_bridge
+* weak_bridge over not_a_bridge
+* pivotable over conditional
+* conditional over risky
+* apply_later over optional_stretch when the role is credible but not urgent
+* optional_stretch over do_not_apply when there is real but risky overlap
 
 ---
 
-# OUTPUT FORMAT
+# OUTPUT FILE REQUIREMENTS
 
-Return ONLY CSV-compatible table output.
+Create and return a downloadable CSV file named:
 
-Do NOT include:
-- markdown
-- bullet lists
-- grouped sections
-- explanations before or after the CSV
-- summary paragraphs
-- markdown tables
-- code fences
-- extra columns
-- renamed columns
+manual_scrape_decisions.csv
 
-The output MUST use EXACTLY these column names and order:
+Do NOT only print the CSV in chat.
 
-Order,Apply Decision,bridge_type,Reason,fit_subtype,Pivotable?,source,description
+Do NOT return a preview instead of the file.
+
+The CSV file must contain every distinct deduplicated role from the manual scrape.
+
+The CSV must contain EXACTLY these columns in this exact order:
+
+Order,Apply Decision,bridge_type,Reason,fit_subtype,Pivotable?,source,job_link,description
+
+Do not add extra columns.
+Do not rename columns.
+Do not omit job_link.
+Do not hide the link only inside the description.
+The job_link column must contain the corresponding direct job posting URL when available.
 
 Column rules:
 
 Order:
-- Use Manual 1, Manual 2, Manual 3, etc.
-- Assign after deduplication.
+
+* Use Manual 1, Manual 2, Manual 3, etc.
+* Assign after deduplication.
 
 Apply Decision:
-- Use only one of:
-  - apply_now
-  - apply_later
-  - optional_stretch
-  - do_not_apply
+
+* Use only one of:
+
+  * apply_now
+  * apply_later
+  * optional_stretch
+  * do_not_apply
 
 bridge_type:
-- Use only one of:
-  - target_core
-  - strategic_bridge
-  - survival_bridge
-  - weak_bridge
-  - not_a_bridge
-- Do NOT leave blank.
+
+* Use only one of:
+
+  * target_core
+  * strategic_bridge
+  * survival_bridge
+  * weak_bridge
+  * not_a_bridge
+* Do NOT leave blank.
 
 Reason:
-- 4-7 sentences.
-- Must be detailed and decision-oriented.
-- Must explain:
-  - recruiter-screen realism
-  - why the role should or should not be prioritized right now
-  - main resume-backed overlap areas
-  - largest gaps, risks, or tradeoffs
-  - specific vendor-tool/platform/admin/framework/stack ownership risks, if relevant
-  - bridge_type and whether the role is target_core, strategic_bridge, survival_bridge, weak_bridge, or not_a_bridge
-  - pivot impact / pigeonhole risk
-  - why the assigned Apply Decision is appropriate
-- If the role is apply_now, explain why it belongs in the immediate backup batch.
-- If the role is apply_later, explain why it is worth applying to but not immediate priority.
-- If the role is optional_stretch, explain the exact stretch/risk.
-- If the role is do_not_apply, explain the rejection reason.
-- If a role has SQL/API/debugging overlap but the main role identity is unsupported language/framework modernization, explicitly say that the overlap is real but secondary.
-- If a role has Java/API/database overlap but the main role identity is Spring Boot microservices ownership, explicitly say that the overlap is real but secondary.
-- If a SQL Server / DBA-like role is downgraded, explicitly state whether the issue is database administration/platform ownership versus SQL/ETL-focused data work.
-- If a Managed File Transfer / MFT-like role is downgraded, explicitly state whether the issue is enterprise MFT platform administration versus general SFTP/file-based workflow experience.
-- Do NOT repeat the entire original evaluation.
-- Do NOT use vague filler.
-- The Reason column should be detailed enough to stand alone in a tracker.
+
+* 4-7 sentences.
+* Must be detailed and decision-oriented.
+* Must explain:
+
+  * recruiter-screen realism
+  * why the role should or should not be prioritized right now
+  * main resume-backed overlap areas
+  * largest gaps, risks, or tradeoffs
+  * specific vendor-tool/platform/admin/framework/stack ownership risks, if relevant
+  * bridge_type and whether the role is target_core, strategic_bridge, survival_bridge, weak_bridge, or not_a_bridge
+  * pivot impact / pigeonhole risk
+  * why the assigned Apply Decision is appropriate
+* If the role is apply_now, explain why it belongs in the immediate backup batch.
+* If the role is apply_later, explain why it is worth applying to but not immediate priority.
+* If the role is optional_stretch, explain the exact stretch/risk.
+* If the role is do_not_apply, explain the rejection reason.
+* If a role has SQL/API/debugging overlap but the main role identity is unsupported language/framework modernization, explicitly say that the overlap is real but secondary.
+* If a role has Java/API/database overlap but the main role identity is Spring Boot microservices ownership, explicitly say that the overlap is real but secondary.
+* If a SQL Server / DBA-like role is downgraded, explicitly state whether the issue is database administration/platform ownership versus SQL/ETL-focused data work.
+* If a Managed File Transfer / MFT-like role is downgraded, explicitly state whether the issue is enterprise MFT platform administration versus general SFTP/file-based workflow experience.
+* Do NOT repeat the entire original evaluation.
+* Do NOT use vague filler.
+* The Reason column should be detailed enough to stand alone in a tracker.
 
 fit_subtype:
-- Use only one of:
-  - good_fit
-  - possible_2a
-  - possible_2b
-- Do NOT leave blank.
+
+* Use only one of:
+
+  * good_fit
+  * possible_2a
+  * possible_2b
+* Do NOT leave blank.
 
 Pivotable?:
-- Use only one of:
-  - pivotable
-  - conditional
-  - risky
-- Do NOT leave blank.
+
+* Use only one of:
+
+  * pivotable
+  * conditional
+  * risky
+* Do NOT leave blank.
 
 source:
-- Use the source file or job board when clear:
-  - LinkedIn
-  - Glassdoor
-  - ZipRecruiter
-  - Unknown
-- If duplicate across boards, combine sources:
-  - LinkedIn+ZipRecruiter
+
+* Use the source file or job board when clear:
+
+  * LinkedIn
+  * Glassdoor
+  * ZipRecruiter
+  * Indeed
+  * Unknown
+* If duplicate across boards, combine sources:
+
+  * LinkedIn+ZipRecruiter
+
+job_link:
+
+* Include the corresponding direct job posting URL for the role.
+* Preserve the exact job link from the scrape when available.
+* If duplicate postings have multiple links, use the clearest or most direct job posting link.
+* If no link is visible, leave this field blank.
+* Do NOT put unrelated company homepage URLs here.
+* Do NOT invent a URL.
+* Do NOT omit the column.
 
 description:
-- Include a compact summary of the role so I can identify it later.
-- Include title, company, location, work mode, employment type, job ID if available, and the main role identity/stack.
-- Keep this description concise but useful for my tracker.
-- Do NOT paste the full job description.
-- Do NOT leave blank.
+
+* Include a compact summary of the role so I can identify it later.
+* Include title, company, location, work mode, employment type, job ID if available, and the main role identity/stack.
+* Keep this description concise but useful for my tracker.
+* Do NOT paste the full job description.
+* Do NOT leave blank.
 
 CSV rules:
-- The first row must be the header.
-- Each following row must contain one distinct deduplicated role decision.
-- If a field contains commas, wrap it in quotes.
-- If a field contains quotes, escape them by doubling them.
-- Return valid CSV only.
+
+* The first row must be the header.
+* Each following row must contain one distinct deduplicated role decision.
+* If a field contains commas, wrap it in quotes.
+* If a field contains quotes, escape them by doubling them.
+* Return a valid downloadable CSV file.
 
 ---
 
@@ -1274,8 +977,8 @@ Before finishing, validate the output:
 
 1. Confirm every distinct deduplicated posting has exactly one output row.
 2. Confirm the CSV has only these columns:
-   Order,Apply Decision,bridge_type,Reason,fit_subtype,Pivotable?,source,description
-3. Confirm no required field is blank.
+   Order,Apply Decision,bridge_type,Reason,fit_subtype,Pivotable?,source,job_link,description
+3. Confirm no required field is blank except job_link, which may be blank only if no job link is visible in the scrape.
 4. Confirm Apply Decision only uses:
    apply_now, apply_later, optional_stretch, do_not_apply
 5. Confirm bridge_type only uses:
@@ -1285,40 +988,43 @@ Before finishing, validate the output:
 7. Confirm Pivotable? only uses:
    pivotable, conditional, risky
 8. Confirm source and description are populated for every row.
-9. Confirm the CSV is valid and can be opened in Excel without columns shifting.
+9. Confirm the job_link column is present and populated wherever a link was visible in the manual scrape.
+10. Confirm the CSV is valid and can be opened in Excel without columns shifting.
 
 ---
 
 # FINAL RULES
 
-- Be decisive.
-- Do not hedge.
-- Do not include weak roles just to fill space.
-- Prefer fewer, higher-quality applications over more.
-- If zero roles meet strong criteria, return zero apply_now roles.
-- Do not force weak options.
-- Do not optimize for curiosity, learning, prestige, or salary.
-- Optimize for realistic recruiter pass chance and preserving backend/data pivot options.
-- Every decision must be grounded in the base resumes and the manual scrape text.
-- Apply the role-identity sanity check before allowing good_fit, possible_2a, apply_later, or apply_now.
-- Apply the vendor-tool/platform/admin ownership sanity check before allowing good_fit or apply_now.
-- Apply the stack/framework/language ownership sanity check before allowing good_fit or apply_now.
-- Do not let SQL keyword overlap inflate DBA/database administrator roles.
-- Do not let SFTP or file-transfer keyword overlap inflate Managed File Transfer platform roles.
-- Do not treat general file-based workflows as direct MFT platform ownership.
-- Do not let Java keyword overlap inflate Spring Boot / microservices roles into apply_now.
-- Do not treat REST API exposure as equivalent to owning REST API architecture in Spring Boot microservices.
-- Do not treat JUnit exposure as equivalent to production Java backend framework ownership.
-- Do not treat SQL/database overlap inside a Spring Boot role as equivalent to SQL/ETL/backend-data work.
-- Do not let SQL/API/debugging overlap inflate unsupported language/framework roles into apply_now.
-- Do not let SQL Server inside a VB/.NET modernization role become equivalent to SQL/ETL/backend-data work.
-- Do not let REST API mentions inside an unsupported full-stack or framework-heavy role become equivalent to integration/backend-data ownership.
-- Do not let Python/data overlap inflate AI/ML/modeling roles into apply_now.
-- Do not let tool similarity hide a system/platform/admin/framework/stack role mismatch.
-- Do not let enterprise file transfer similarity hide an MFT platform/admin role mismatch.
-- Do not let “credible bridge role” become apply_now unless it is genuinely one of the strongest immediate applications in the scrape.
-- Explicitly classify bridge_type so target_core, strategic_bridge, survival_bridge, weak_bridge, and not_a_bridge roles are separated.
-- Use survival_bridge for fallback technical survival roles with real SQL/data/application/logs/API/troubleshooting/reporting-system substance, but do not let generic support/admin/customer-service roles enter the survival bucket.
-- When in doubt between apply_now and apply_later, choose apply_later unless the role is clearly stack-close, target-lane, and low-risk.
-- When in doubt between apply_later and optional_stretch, choose optional_stretch if the role depends on a stack, framework, vendor tool, platform, admin function, AI/ML function, or reporting/support identity I do not strongly own.
-- Use do_not_apply only when the role is genuinely not worth the time.
+* Be decisive.
+* Do not hedge.
+* Do not include weak roles just to fill space.
+* Prefer fewer, higher-quality applications over more.
+* If zero roles meet strong criteria, return zero apply_now roles.
+* Do not force weak options.
+* Do not optimize for curiosity, learning, prestige, or salary.
+* Optimize for realistic recruiter pass chance and preserving backend/data pivot options.
+* Every decision must be grounded in the base resumes and the manual scrape text.
+* Apply the role-identity sanity check before allowing good_fit, possible_2a, apply_later, or apply_now.
+* Apply the vendor-tool/platform/admin ownership sanity check before allowing good_fit or apply_now.
+* Apply the stack/framework/language ownership sanity check before allowing good_fit or apply_now.
+* Do not let SQL keyword overlap inflate DBA/database administrator roles.
+* Do not let SFTP or file-transfer keyword overlap inflate Managed File Transfer platform roles.
+* Do not treat general file-based workflows as direct MFT platform ownership.
+* Do not let Java keyword overlap inflate Spring Boot / microservices roles into apply_now.
+* Do not treat REST API exposure as equivalent to owning REST API architecture in Spring Boot microservices.
+* Do not treat JUnit exposure as equivalent to production Java backend framework ownership.
+* Do not treat SQL/database overlap inside a Spring Boot role as equivalent to SQL/ETL/backend-data work.
+* Do not let SQL/API/debugging overlap inflate unsupported language/framework roles into apply_now.
+* Do not let SQL Server inside a VB/.NET modernization role become equivalent to SQL/ETL/backend-data work.
+* Do not let REST API mentions inside an unsupported full-stack or framework-heavy role become equivalent to integration/backend-data ownership.
+* Do not let Python/data overlap inflate AI/ML/modeling roles into apply_now.
+* Do not let QA/testing overlap inflate SDET roles into apply_now.
+* Do not let market analytics overlap inflate Market Analyst roles into apply_now.
+* Do not let tool similarity hide a system/platform/admin/framework/stack role mismatch.
+* Do not let enterprise file transfer similarity hide an MFT platform/admin role mismatch.
+* Do not let “credible bridge role” become apply_now unless it is genuinely one of the strongest immediate applications in the scrape.
+* Explicitly classify bridge_type so target_core, strategic_bridge, survival_bridge, weak_bridge, and not_a_bridge roles are separated.
+* Use survival_bridge for fallback technical survival roles with real SQL/data/application/logs/API/troubleshooting/reporting-system substance, but do not let generic support/admin/customer-service roles enter the survival bucket.
+* When in doubt between apply_now and apply_later, choose apply_later unless the role is clearly stack-close, target-lane, and low-risk.
+* When in doubt between apply_later and optional_stretch, choose optional_stretch if the role depends on a stack, framework, vendor tool, platform, admin function, AI/ML function, or reporting/support identity I do not strongly own.
+* Use do_not_apply only when the role is genuinely not worth the time.
