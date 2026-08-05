@@ -1,0 +1,144 @@
+I will provide:
+
+1. My base resume (source of truth)
+2. A CSV of Upwork job postings
+
+Columns may include:
+
+* title
+* description
+* budget (optional)
+* hourly/fixed (optional)
+
+---
+
+## Objective
+
+Filter and prioritize jobs based on REALISTIC chances of getting hired on Upwork.
+
+NOT:
+
+* learning value
+* interesting work
+* long-term potential
+
+ONLY:
+
+* response probability
+* fast win potential
+* alignment with my actual experience
+
+---
+
+## Context about me
+
+* Backend / data-focused engineer (0–4 YOE)
+* Strong in:
+
+  * SQL (validation, joins, cleanup, reconciliation)
+  * ETL-style workflows
+  * Debugging data pipelines
+  * JSON/XML processing and mapping
+  * API data handling (testing, formatting payloads — NOT designing APIs)
+* Tools:
+
+  * Python (data processing)
+  * SQL Server
+  * Postman
+* Real work:
+
+  * Extract → validate → transform → export data
+  * Fix mismatches between systems
+  * Prepare structured outputs for downstream systems
+
+---
+
+## Hard Filters (STRICT)
+
+Immediately downgrade if:
+
+* Requires AWS / Spark / Airflow / Kafka
+* Senior/architect expectations
+* “Build full data platform”
+* Heavy DevOps/infrastructure
+* Vague with no concrete task
+
+---
+
+## High-Value Targets
+
+Strongly prefer:
+
+* SQL fixes / queries
+* Data cleanup / validation
+* CSV/Excel transformations
+* JSON/XML mapping
+* API data extraction or formatting
+* Debugging broken pipelines
+
+---
+
+## Output Format (TABLE)
+
+For EACH job, return:
+
+| Title | Fit (1–5) | Decision | Reason | Red Flags | Proposal Angle |
+
+---
+
+### Fit Scale
+
+* 5 → high chance of reply (ideal Upwork job)
+* 4 → good chance, apply
+* 3 → possible but competitive
+* 2 → unlikely
+* 1 → skip
+
+---
+
+### Decision
+
+* APPLY
+* FAST APPLY (quick generic proposal ok)
+* SKIP
+
+---
+
+### Reason (1–2 lines)
+
+* Focus on task alignment + competition realism
+
+---
+
+### Proposal Angle (VERY IMPORTANT)
+
+* How to position myself specifically for THIS job
+* Keep it grounded in my experience
+* No fake tools, no exaggeration
+
+---
+
+## Final Step
+
+After the table, provide:
+
+### 🎯 Top Picks (Max 5)
+
+* The BEST jobs to apply to immediately
+* Prioritize:
+
+  * highest response probability
+  * fastest turnaround
+  * lowest competition friction
+
+---
+
+## Rules
+
+* Be brutally realistic (Upwork is competitive)
+* Do NOT be optimistic
+* Do NOT overrate jobs
+* Favor SMALL, CLEAR tasks over impressive ones
+* If unclear → SKIP
+
+Think like a client choosing fast + proven freelancers.

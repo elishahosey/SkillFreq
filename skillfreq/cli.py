@@ -7,6 +7,11 @@ from .skills.jds.extract import process_all_jobs
 from .skills.extract import extract_jd_skills
 from collections import Counter
 from .resume_router import route_resumes_for_csv
+from .io.excel_to_postgres import (
+    import_skillfreq_batch,
+    load_csv_folder_to_postgres,
+    load_excel_to_postgres,
+)
 try:
     import truststore
     truststore.inject_into_ssl()  # optional SSL fix for some platforms
@@ -58,6 +63,41 @@ def main() -> None:
     titles.add_argument("filename", help="Path to the CSV file")
     titles.add_argument("--title-col", default="title", help="Title column name in the CSV")
 
+    excel_load = sub.add_parser("excel-load", help="Load an Excel sheet or CSV file into a PostgreSQL table")
+    excel_source = excel_load.add_mutually_exclusive_group(required=True)
+    excel_source.add_argument("--excel", help="Path to a .csv, .xlsx, .xls, or .xlsm file")
+    excel_source.add_argument("--folder", help="Folder whose CSV files should be loaded recursively")
+    excel_load.add_argument("--table", required=True, help="Destination table, e.g. jobs or staging.jobs")
+    excel_load.add_argument("--sheet", default=0, help="Sheet name or zero-based sheet index")
+    excel_load.add_argument("--schema", default="public", help="Default schema when --table omits one")
+    excel_load.add_argument("--log-file", default="", help="Optional path for the Excel load log file")
+    excel_load.add_argument(
+        "--mode",
+        choices=["append", "replace", "upsert"],
+        default="append",
+        help="How to write rows into the destination table",
+    )
+    excel_load.add_argument(
+        "--primary-key",
+        nargs="*",
+        default=[],
+        help="Normalized column name(s) used for upsert conflicts",
+    )
+
+    import_batch = sub.add_parser("import-batch", help="Import JobSpy, SkillFreq, and AI review outputs into PostgreSQL")
+    import_batch.add_argument("--jobs-csv", required=True, help="Path to JobSpy jobs CSV")
+    import_batch.add_argument("--scores-csv", required=True, help="Path to SkillFreq results CSV")
+    import_batch.add_argument("--review-xlsx", default="", help="Optional AI review workbook")
+    import_batch.add_argument("--review-sheet", default="Base", help="Review workbook sheet to import")
+    import_batch.add_argument("--batch-id", required=True, help="Stable batch id, e.g. 2026-06-18")
+    import_batch.add_argument("--batch-mode", choices=["append", "replace"], default="append")
+    import_batch.add_argument("--scoring-version", default="unknown")
+    import_batch.add_argument("--rules-version", default="unknown")
+    import_batch.add_argument("--cleaning-version", default="unknown")
+    import_batch.add_argument("--run-name", default="")
+    import_batch.add_argument("--run-notes", default="")
+    import_batch.add_argument("--log-file", default="", help="Optional path for the import log file")
+
     extract_skills = sub.add_parser("extract", help="Used to extract skills from resume and update your profile yaml")
     extract_skills.add_argument("--file", required=True,help="Enter the filename of the resume, including the file extension")
 
@@ -81,6 +121,8 @@ def main() -> None:
     resume_suggest.set_defaults(command="suggest")
     route.set_defaults(command="route")
     titles.set_defaults(command="titles")
+    excel_load.set_defaults(command="excel-load")
+    import_batch.set_defaults(command="import-batch")
     
     if args.cmd == "fetch":
         fetch_links(
@@ -133,6 +175,58 @@ def main() -> None:
             csv_path=Path(args.filename),
             title_col=args.title_col,
         )
+    elif args.cmd == "excel-load":
+        sheet: str | int = args.sheet
+        if isinstance(sheet, str) and sheet.isdigit():
+            sheet = int(sheet)
+
+        if args.folder:
+            result = load_csv_folder_to_postgres(
+                folder_path=Path(args.folder),
+                table_name=args.table,
+                mode=args.mode,
+                primary_key=args.primary_key,
+                schema=args.schema,
+                log_file=Path(args.log_file) if args.log_file else None,
+            )
+            print(f"Loaded {result.rows} rows from {result.files} CSV files into {result.table} ({result.mode})")
+        else:
+            result = load_excel_to_postgres(
+                excel_path=Path(args.excel),
+                table_name=args.table,
+                sheet_name=sheet,
+                mode=args.mode,
+                primary_key=args.primary_key,
+                schema=args.schema,
+                log_file=Path(args.log_file) if args.log_file else None,
+            )
+            print(f"Loaded {result.rows} rows into {result.table} ({result.mode})")
+            print("Columns:", ", ".join(result.columns))
+        if result.log_file:
+            print(f"Log file: {result.log_file}")
+    elif args.cmd == "import-batch":
+        result = import_skillfreq_batch(
+            jobs_csv=Path(args.jobs_csv),
+            scores_csv=Path(args.scores_csv),
+            review_xlsx=Path(args.review_xlsx) if args.review_xlsx else None,
+            review_sheet=args.review_sheet,
+            batch_id=args.batch_id,
+            batch_mode=args.batch_mode,
+            scoring_version=args.scoring_version,
+            rules_version=args.rules_version,
+            cleaning_version=args.cleaning_version,
+            run_name=args.run_name or None,
+            run_notes=args.run_notes or None,
+            log_file=Path(args.log_file) if args.log_file else None,
+        )
+        print(f"Imported batch {result.batch_id}")
+        print(f"Raw jobs: {result.raw_jobs}")
+        print(f"Skill scores: {result.skill_scores}")
+        print(f"Calibration results: {result.calibration_results}")
+        if result.calibration_run_id:
+            print(f"Calibration run id: {result.calibration_run_id}")
+        if result.log_file:
+            print(f"Log file: {result.log_file}")
         
         
 if __name__ == "__main__":

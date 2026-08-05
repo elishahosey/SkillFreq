@@ -1,0 +1,102 @@
+id,site,job_url,job_url_direct,title,company,location,date_posted,job_type,salary_source,interval,min_amount,max_amount,currency,is_remote,job_level,job_function,listing_type,emails,description,company_industry,company_url,company_logo,company_url_direct,company_addresses,company_num_employees,company_revenue,company_description,skills,experience_range,company_rating,company_reviews_count,vacancy_count,work_from_home_type,search_lane,search_term_used,review_priority
+in-cc6e818bcad02854,indeed,https://www.indeed.com/viewjob?jk=cc6e818bcad02854,https://click.appcast.io/t/_3J4fRtPLAp9KMsrhBgu1amZiWtoUrWywal0CVTLnHI=,Staff Engineer - JAVA (HYBRID),GEICO,"Richardson, TX, US",6/9/2026,fulltime,direct_data,yearly,110000,230000,USD,FALSE,,,,,"**At GEICO, we offer a rewarding career where your ambitions are met with endless possibilities.**
+
+**Every day we honor our iconic brand by offering quality coverage to millions of customers and being there when they need us most. We thrive through relentless innovation to exceed our customers’ expectations while making a real impact for our company through our shared purpose.**
+
+**When you join our company, we want you to feel valued, supported and proud to work here. That’s why we offer The GEICO Pledge: Great Company, Great Culture, Great Rewards and Great Careers.**
+
+**At GEICO, we offer a rewarding career where your ambitions are met with endless possibilities.**
+
+**Every day we honor our iconic brand by offering quality coverage to millions of customers and being there when they need us most. We thrive through relentless innovation to exceed our customers’ expectations while making a real impact for our company through our shared purpose.**
+
+ **When you join our company, we want you to feel valued, supported, and proud to work here. That’s why we offer The GEICO Pledge: Great Company, Great Culture, Great Rewards and Great Careers.**
+
+
+Position Responsibilities  
+
+As a Staff Engineer, you will:
+
+* Focus on a few key areas and provide leadership to the engineering teams.
+* Own complete solution across its entire life cycle.
+* Design and implement messaging and UI applications using the Java platform and Open Source frameworks.
+* Collaborate with engineering team to define the overall system architecture, ensuring scalability, fault tolerance, and performance optimization.
+* Act as a technical and thought leader for domains like Messaging, GraphQL API, or data streaming.
+* Influence and build vision with product managers, team members, customers, and other engineering teams to solve complex problems for building enterprise\\-class business applications.
+* Accountable for the quality, usability \\& performance of the solutions.
+* Implement monitoring and logging solutions to track system performance and troubleshoot issues.
+* Lead in design sessions and code reviews to elevate the quality of engineering across the organization.
+* Utilize programming languages like Java, SQL, and NoSQL databases, Container Orchestration services including Docker and Kubernetes, and a variety of Azure tools and services.
+* Mentor more junior team members professionally to help them realize their full potential.
+* Consistently share best practices and improve processes within and across teams.
+
+
+Qualifications
+
+* Fluency and Specialization with modern languages such as Java, including object\\-oriented design.
+* Experience in building products using micro\\-services oriented architecture and extensible APIs.
+* Experience building the architecture and design (architecture, design patterns, reliability, and scaling) of new and current systems.
+* Experience containerizing applications using Docker or Kubernetes (AKS preferred)
+* Experience designing and implementing performance testing with tools such as JMeter or LoadRunner
+* Familiarity with continuous delivery and infrastructure as code.
+* Experience in leveraging Powershell scripting
+* Understanding of Monitoring Portals such as Splunk or Application Insights
+* Understanding of Security Protocols \\& Products: Active Directory, Windows Authentication, SAML, OAuth
+* Strong familiarity with GraphQL web services
+* Experience and passion for documentation and mentoring junior developers
+* Understanding of CI/CD tooling like Jenkins, Gradle, and Artifactory
+* Strong problem\\-solving ability
+* Hands\\-on experience with real\\-time event\\-steaming platforms such as Apache Kafka
+* Familiarity with NoSQL and Graph databases
+* Experience writing unit tests using common testing frameworks and actively contributing to code quality
+* Ability to excel in a fast\\-paced, startup\\-like environment
+* Knowledge of developer tooling across the software development life cycle (task management, source code, building, deployment, operations, real\\-time communication)
+
+
+Experience
+
+* 6\\+ years of professional software development experience
+* 3\\+ years of experience with architecture and design
+* 3\\+ years of experience with AWS, GCP, Azure, or another cloud service
+* 4\\+ years of experience in open source frameworks
+
+  
+
+Education
+
+* Bachelor’s degree in Computer Science, Information Systems, or equivalent education or work experience
+
+ **Annual Salary**
+
+
+$110,000\\.00 \\- $230,000\\.00
+The above annual salary range is a general guideline. Multiple factors are taken into consideration to arrive at the final hourly rate/ annual salary to be offered to the selected candidate. Factors include, but are not limited to, the scope and responsibilities of the role, the selected candidate’s work experience, education and training, the work location as well as market and business considerations.
+
+  
+
+
+GEICO will consider sponsoring a new qualified applicant for employment authorization for this position. **The GEICO Pledge:**
+
+**Great Company:** At GEICO, we help our customers through life’s twists and turns. Our mission is to protect people when they need it most and we’re constantly evolving to stay ahead of their needs.
+
+
+We’re an iconic brand that thrives on innovation, exceeding our customers’ expectations and enabling our collective success. From day one, you’ll take on exciting challenges that help you grow and collaborate with dynamic teams who want to make a positive impact on people’s lives.
+
+**Great Careers:** We offer a career where you can learn, grow, and thrive through personalized development programs, created with your career – and your potential – in mind. You’ll have access to industry leading training, certification assistance, career mentorship and coaching with supportive leaders at all levels.
+
+**Great Culture:** We foster an inclusive culture of shared success, rooted in integrity, a bias for action and a winning mindset. Grounded by our core values, we have an an established culture of caring, inclusion, and belonging, that values different perspectives. Our teams are led by dynamic, multi\\-faceted teams led by supportive leaders, driven by performance excellence and unified under a shared purpose.
+
+
+As part of our culture, we also offer employee engagement and recognition programs that reward the positive impact our work makes on the lives of our customers.
+
+**Great Rewards:** We offer compensation and benefits built to enhance your physical well\\-being, mental and emotional health and financial future.
+
+* Comprehensive Total Rewards program that offers personalized coverage tailor\\-made for you and your family’s overall well\\-being.
+* Financial benefits including market\\-competitive compensation; a 401K savings plan vested from day one that offers a 6% match; performance and recognition\\-based incentives; and tuition assistance.
+* Access to additional benefits like mental healthcare as well as fertility and adoption assistance.
+* Supports flexibility\\- We provide workplace flexibility as well as our GEICO Flex program, which offers the ability to work from anywhere in the US for up to four weeks per year.
+
+
+The equal employment opportunity policy of the GEICO Companies provides for a fair and equal employment opportunity for all associates and job applicants regardless of race, color, religious creed, national origin, ancestry, age, gender, pregnancy, sexual orientation, gender identity, marital status, familial status, disability or genetic information, in compliance with applicable federal, state and local law. GEICO hires and promotes individuals solely on the basis of their qualifications for the job to be filled.
+
+
+GEICO reasonably accommodates qualified individuals with disabilities to enable them to receive equal employment opportunity and/or perform the essential functions of the job, unless the accommodation would impose an undue hardship to the Company. This applies to all applicants and associates. GEICO also provides a work environment in which each associate is able to be productive and work to the best of their ability. We do not condone or tolerate an atmosphere of intimidation or harassment. We expect and require the cooperation of all associates in maintaining an atmosphere free from discrimination and harassment with mutual respect by and for all associates and applicants.",,https://www.indeed.com/cmp/Geico,,https://www.geico.com/careers/,,"10,000+",Decline to state,"At GEICO, we offer a rewarding career where your ambitions are met with endless possibilities.",,,,,,,core,junior data engineer,1

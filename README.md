@@ -40,6 +40,7 @@ It can:
 - score job descriptions against a local profile and weights
 - classify roles based on score and requirement flags
 - count repeated job titles in a CSV
+- load Excel sheets into PostgreSQL staging or target tables
 - route jobs toward resume variants when role configuration is available
 - export results, failures, logs, and extracted skill summaries
 
@@ -118,6 +119,41 @@ Count job titles in a CSV:
 ```powershell
 python -m skillfreq.cli titles data/outputs/results.csv --title-col title
 ```
+
+Load an Excel sheet into PostgreSQL:
+
+```powershell
+python -m skillfreq.cli excel-load --excel data/inputs/jobs.xlsx --table staging.jobs --mode replace
+```
+
+The loader reads connection settings from `.env`. Use either `DATABASE_URL` or the existing `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`, and optional `DB_PORT` variables. Excel headers are normalized to PostgreSQL-friendly column names like `Job Title` -> `job_title`.
+
+Each run writes an import log to `logging/excel_load_*.log` with the source file, sheet, normalized columns, destination table, mode, and row count. To choose the log path:
+
+```powershell
+python -m skillfreq.cli excel-load --excel data/inputs/jobs.xlsx --table staging.jobs --log-file logging/jobs_excel_load.log
+```
+
+For incremental loads, use a normalized Excel column as a conflict key:
+
+```powershell
+python -m skillfreq.cli excel-load --excel data/inputs/jobs.xlsx --table staging.jobs --mode upsert --primary-key job_url
+```
+
+Import a full JobSpy + SkillFreq + AI review batch into the PostgreSQL tables from the pgModeler schema:
+
+```powershell
+python -m skillfreq.cli import-batch `
+  --batch-id 2026-06-18 `
+  --jobs-csv C:\Users\ehose\Development\JobSpy\jobs-6-18-26.csv `
+  --scores-csv data\outputs\results-6-18-26.csv `
+  --review-xlsx data\analyze\chatGPTFeedback\results-6-18-26-review.xlsx `
+  --scoring-version skillfreq-local `
+  --rules-version ai-review-2026-06-18 `
+  --cleaning-version v1
+```
+
+This writes scraped jobs to `raw_jobs`, SkillFreq scoring rows to `skill_scores`, one review batch row to `calibration_runs`, and AI review labels/reasons from the workbook's `Base` sheet to `calibration_results`. Use `--batch-mode replace` to re-run the same batch id after clearing only that batch's rows.
 
 Extract resume signals:
 

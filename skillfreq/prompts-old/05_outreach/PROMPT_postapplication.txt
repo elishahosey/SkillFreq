@@ -1,0 +1,231 @@
+I will provide:
+
+1. An XLSX workbook
+2. My base resume files
+
+Use ONLY these workbook sheets:
+
+1. ApplyList
+2. Tailor
+
+Do NOT evaluate any other sheets.
+
+The job descriptions are in the ApplyList sheet under the column:
+
+description
+
+The resume version already sent or planned for the application is in the Tailor sheet under the column:
+
+Best Base Resume
+
+Use Order as the primary row identifier to match rows between ApplyList and Tailor.
+
+Use the uploaded base resume files as the source of truth for what I can credibly claim.
+
+Resume labels may include:
+
+* Engineer_Data
+* Engineer_Software
+* Engineer_Platform
+* Engineer_Analytics
+* Engineer_Support
+
+Match each Tailor.Best Base Resume value to the corresponding uploaded resume file.
+
+Do NOT invent experience beyond the uploaded resumes.
+Do NOT assume a tool is supported unless it appears in the relevant uploaded resume or is clearly supported by the actual experience described there.
+Do NOT use my general background from memory unless it appears in the uploaded resume files.
+
+This is NOT a resume-tailoring task.
+This is NOT a job-fit reevaluation task.
+This is only for post-application outreach decisions and short message drafting.
+
+Your task is to decide whether I should message the recruiter, job poster, hiring manager, or visible contact after applying, based on:
+
+* the JD in ApplyList.description
+* the resume used in Tailor.Best Base Resume
+* the corresponding uploaded resume file
+* whether a short outreach message would add value
+
+Assume my goal is:
+
+* low-effort outreach
+* short professional messages
+* recruiter-screen realism
+* no desperation
+* no fake claims
+* no long networking messages
+* only resume-backed overlap
+* avoiding wasted effort on weak outreach
+
+Decision rules:
+
+Use outreach_decision = yes when:
+
+* the role is a reasonable fit
+* the resume used has clear overlap with the JD
+* there is likely a recruiter/job poster/hiring manager/contact worth messaging
+* a short message could reinforce the strongest resume-backed match
+
+Use outreach_decision = maybe when:
+
+* the role is a stretch but not absurd
+* there is some resume-backed overlap, but major tools/domain/seniority gaps exist
+* outreach might be worth doing only if it takes under 1 minute
+
+Use outreach_decision = no when:
+
+* the fit is weak
+* the JD has major unsupported tool/platform/domain/seniority requirements
+* outreach would sound like forcing a mismatch
+* the message would not add value beyond the application
+
+Message rules:
+
+* 3–5 sentences max
+* professional but not stiff
+* no cover-letter energy
+* no begging
+* no “I’m the perfect fit”
+* no fake enthusiasm
+* no unsupported tools
+* no unsupported domain claims
+* mention that I already applied
+* briefly connect my resume-backed background to the role
+* end with a simple consideration line
+
+Safe outreach angles may include only experience directly supported by the uploaded resume used for that role, such as:
+
+* SQL validation
+* reconciliation checks
+* data quality checks
+* ETL-style workflows
+* ingestion/transformation workflows
+* APIs
+* REST/SOAP
+* XML/JSON
+* SFTP
+* system-to-system integrations
+* production troubleshooting
+* logs/OpenSearch
+* application support
+* issue triage
+* data mapping
+* schema comparison
+* Python helper scripts
+* Azure DevOps / CI/CD exposure
+* automated testing/debugging
+* browser DevTools
+* API response inspection
+* reusable web components
+* frontend/backend data flow troubleshooting
+
+Do NOT claim unsupported experience such as:
+
+* AWS ownership
+* Snowflake ownership
+* Databricks
+* Airflow
+* Kafka
+* Spark production ownership
+* Power BI
+* Tableau
+* Microsoft Fabric
+* Azure Data Factory
+* Synapse
+* Informatica
+* SSIS
+* Kubernetes
+* Terraform
+* cloud architecture
+* platform ownership
+* backend service ownership
+* API architecture ownership
+* full-stack architecture ownership
+* senior architecture
+* domain-specific experience not shown in the resume
+
+For each row, check whether the selected resume actually supports the outreach angle.
+
+If the strongest JD keywords are missing from the selected resume, mention the gap in Risk Check instead of using those keywords in the message.
+
+Create and return an actual CSV file.
+
+CSV columns:
+
+Order,Job Identifier,Best Base Resume,Outreach Decision,Outreach Priority,Best Outreach Angle,Risk Check,Draft Message,Follow Up Timing,Tracker Category
+
+Column definitions:
+
+Order:
+
+* Use ApplyList.Order if present.
+* If missing, use the row number from ApplyList.
+
+Job Identifier:
+
+* Use Company + Role if both exist.
+* If missing, infer a short functional title from the description.
+* Do not invent a company name.
+* Do not use the source URL as the job identifier.
+
+Best Base Resume:
+
+* Use Tailor.Best Base Resume exactly.
+
+Outreach Decision:
+
+* yes
+* maybe
+* no
+
+Outreach Priority:
+
+* high
+* medium
+* low
+* skip
+
+Best Outreach Angle:
+
+* 2–4 short points supported by both the JD and the selected uploaded resume.
+* Example: “SQL validation; ETL-style workflows; APIs/XML/JSON; production troubleshooting”
+
+Risk Check:
+
+* Mention major unsupported gaps to avoid claiming.
+* Example: “Avoid claiming Snowflake, AWS, or healthcare-domain ownership.”
+
+Draft Message:
+
+* If Outreach Decision = yes or maybe, write a short message.
+* If Outreach Decision = no, write: “No outreach recommended.”
+* Message should be ready to send after replacing the contact name if needed.
+* Use “[Name]” as the placeholder for the recipient if no contact name is provided.
+
+Follow Up Timing:
+
+* “No follow-up”
+* “5–7 business days”
+* “Only if they respond”
+* “Skip”
+
+Tracker Category:
+
+* “Post-application recruiter outreach”
+* “Hiring manager outreach”
+* “Warm referral outreach”
+* “No outreach”
+
+CSV file requirements:
+
+* Create a downloadable .csv file.
+* Use UTF-8 encoding.
+* Return one CSV row for every row in ApplyList.
+* Do not drop rows.
+* Do not summarize rows.
+* Do not return only yes rows.
+* Do not return only recommended rows.
+* Escape commas inside CSV fields correctly.
+* Keep each row to one line.
+* After creating the file, provide the download link only with a brief note.

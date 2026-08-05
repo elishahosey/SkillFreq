@@ -1,0 +1,118 @@
+I will provide:
+
+1. CSV files for my job search (v1, v2, v3)
+2. An interview pipeline dataset
+
+Your task is to analyze my job search as a **system**, not just summarize the data.
+
+---
+
+## CONTEXT ABOUT ME
+
+* Backend / data-focused engineer
+* Target roles:
+
+  * Data Engineer (SQL / ETL focused)
+  * Backend Engineer (data-heavy)
+  * Integration / ETL / pipeline roles
+* Early to mid-level (0–4 years)
+
+---
+
+## WHAT I NEED
+
+### 1. Pipeline Breakdown
+
+For each version (v1, v2, v3), calculate:
+
+* Total applications
+* Total “moved” (anything past screening)
+* Movement rate (%)
+* Estimated number of:
+
+  * Early (E)
+  * Mid (M)
+  * Real attempts (R)
+
+---
+
+### 2. Conversion Quality
+
+* How many applications → real attempts (R)?
+* Which version produced the most R per application?
+* Is conversion improving across versions?
+
+---
+
+### 3. System Evaluation (CRITICAL)
+
+* Is my system working or broken?
+* Was v2 inefficient or necessary for calibration?
+* Is v3 actually better, or just stricter?
+
+Be blunt and realistic.
+
+---
+
+### 4. Bottleneck Identification
+
+Identify the TRUE constraint:
+
+* Not enough applications?
+* Poor filtering?
+* Weak conversion?
+* Market factors?
+
+Do NOT guess—base it on data patterns.
+
+---
+
+### 5. Timeline Reality (July Constraint)
+
+* Based on my current rate, estimate:
+
+  * how many additional R-level attempts I can generate
+  * whether I’m on track before July
+
+Use conservative assumptions.
+
+---
+
+### 6. Risk Assessment
+
+* What is the biggest realistic risk?
+* What scenario would actually put me in trouble?
+
+---
+
+### 7. Final Verdict
+
+Give a clear answer:
+
+* On track
+* Slightly behind
+* At risk
+
+Explain WHY.
+
+---
+
+## IMPORTANT RULES
+
+* Treat interviews as probabilistic attempts, not binary outcomes
+* Do NOT overreact to small sample sizes
+* Do NOT give generic job search advice
+* Focus on system performance, not feelings
+* Be direct and critical where needed
+
+---
+
+## GOAL
+
+Tell me:
+
+* if my process is improving
+* if I wasted time (or not)
+* how close I am to conversion
+* what actually matters next
+

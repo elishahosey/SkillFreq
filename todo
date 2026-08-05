@@ -62,3 +62,23 @@ Market analysis=> .venv-skillfreq\Scripts\python.exe -m skillfreq.cli titles C:\
 ##-------------NICE TO HAVES---------------
 [] Quick log error parsing
 
+
+---------------DB
+
+-- You want logs specifically during import to db
+python -m skillfreq.cli excel-load --excel data/test/inputs/jobs-6-9-26.csv --table staging.jobs --log-file logging/jobs_excel_load.log
+
+
+-- used to import all files within a folder
+python -m skillfreq.cli excel-load `
+  --folder ..\JobSpy\import `
+  --table staging.jobs `
+  --mode append `
+  --log-file logging/excel_to_db_log/jobs_folder_load.log
+
+
+python -m skillfreq.cli excel-load `
+  --folder ..\JobSpy\import `
+  --table staging.jobs `
+  --mode append `
+  --log-file logging/excel_to_db_log/jobs_folder_load.log
