@@ -114,6 +114,29 @@ python -m skillfreq.cli run --input data/inputs/links.txt --out data/outputs/res
 
 The `--no-scrape` path reads a cleaned JobSpy CSV from `JOBSPY_DATA_PATH` or `../JobSpy`.
 
+### JobSpy to PostgreSQL intake workflow
+
+For a quick end-to-end test, scrape exactly one real job and move the dated CSV into the JobSpy intake folder:
+
+```powershell
+cd C:\Users\ehose\Development\JobSpy
+python scrape_one_job.py
+.\move_to_import.ps1 -Execute
+```
+
+Then load the CSV files from that intake folder into PostgreSQL:
+
+```powershell
+cd C:\Users\ehose\Development\SkillFreq
+python -m skillfreq.cli excel-load `
+  --folder ..\JobSpy\import `
+  --table staging.jobs `
+  --mode append `
+  --log-file logging/excel_to_db_log/jobs_folder_load.log
+```
+
+The database connection is read from SkillFreq's `.env`. Because `--mode append` processes every CSV in the folder, archive or remove successfully imported files before the next run to avoid loading them again.
+
 Count job titles in a CSV:
 
 ```powershell
