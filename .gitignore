@@ -35,6 +35,8 @@ research_historical/
 logging/
 extracted_logs/
 logging.zip
+logs/
+
 
 # Generated outputs
 extracted_skills_*.txt
