@@ -191,27 +191,43 @@ def parse_table_name(table: str, default_schema: str = "public") -> tuple[str, s
     raise ValueError("Table must be in the form table_name or schema.table_name")
 
 
-def connect():
+def connect(
+    connect_timeout: int = 10,
+    statement_timeout: int = 120,
+    lock_timeout: int = 10,
+):
     load_dotenv()
     database_url = os.getenv("DATABASE_URL")
     if database_url:
         logger.info("Connecting to PostgreSQL using DATABASE_URL")
-        return psycopg2.connect(database_url)
+        connection = psycopg2.connect(database_url, connect_timeout=connect_timeout)
+    else:
+        logger.info(
+            "Connecting to PostgreSQL using DB_NAME/DB_USER/DB_HOST/DB_PORT env vars: host=%s port=%s db=%s user=%s",
+            os.getenv("DB_HOST", "localhost"),
+            os.getenv("DB_PORT", "5432"),
+            os.getenv("DB_NAME"),
+            os.getenv("DB_USER"),
+        )
+        connection = psycopg2.connect(
+            dbname=os.getenv("DB_NAME"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD"),
+            host=os.getenv("DB_HOST", "localhost"),
+            port=os.getenv("DB_PORT", "5432"),
+            connect_timeout=connect_timeout,
+        )
 
-    logger.info(
-        "Connecting to PostgreSQL using DB_NAME/DB_USER/DB_HOST/DB_PORT env vars: host=%s port=%s db=%s user=%s",
-        os.getenv("DB_HOST", "localhost"),
-        os.getenv("DB_PORT", "5432"),
-        os.getenv("DB_NAME"),
-        os.getenv("DB_USER"),
-    )
-    return psycopg2.connect(
-        dbname=os.getenv("DB_NAME"),
-        user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PASSWORD"),
-        host=os.getenv("DB_HOST", "localhost"),
-        port=os.getenv("DB_PORT", "5432"),
-    )
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT set_config('statement_timeout', %s, false)",
+            (f"{statement_timeout}s",),
+        )
+        cursor.execute(
+            "SELECT set_config('lock_timeout', %s, false)",
+            (f"{lock_timeout}s",),
+        )
+    return connection
 
 
 def read_excel(path: Path, sheet_name: str | int | None = 0) -> pd.DataFrame:
@@ -352,6 +368,9 @@ def load_excel_to_postgres(
     schema: str = "public",
     log_file: Path | None = None,
     dataframe: pd.DataFrame | None = None,
+    connect_timeout: int = 10,
+    statement_timeout: int = 120,
+    lock_timeout: int = 10,
 ) -> LoadResult:
     resolved_log_file = configure_excel_load_logging(log_file)
     logger.info(
@@ -375,7 +394,7 @@ def load_excel_to_postgres(
         logger.info("Resolved destination table: %s.%s", resolved_schema, table)
         logger.info("Prepared %s row(s) for insert", len(rows))
 
-        with connect() as conn:
+        with connect(connect_timeout, statement_timeout, lock_timeout) as conn:
             with conn.cursor() as cur:
                 logger.info("Ensuring schema exists: %s", resolved_schema)
                 cur.execute(sql.SQL("CREATE SCHEMA IF NOT EXISTS {}").format(sql.Identifier(resolved_schema)))
@@ -423,6 +442,9 @@ def load_csv_folder_to_postgres(
     primary_key: Sequence[str] | None = None,
     schema: str = "public",
     log_file: Path | None = None,
+    connect_timeout: int = 10,
+    statement_timeout: int = 120,
+    lock_timeout: int = 10,
 ) -> FolderLoadResult:
     """Load every CSV beneath a folder into the same PostgreSQL table."""
     if not folder_path.is_dir():
@@ -468,6 +490,9 @@ def load_csv_folder_to_postgres(
         schema=schema,
         log_file=resolved_log_file,
         dataframe=combined_df,
+        connect_timeout=connect_timeout,
+        statement_timeout=statement_timeout,
+        lock_timeout=lock_timeout,
     )
     total_rows = result.rows
     resolved_table = result.table
@@ -740,6 +765,9 @@ def import_skillfreq_batch(
     run_name: str | None = None,
     run_notes: str | None = None,
     log_file: Path | None = None,
+    connect_timeout: int = 10,
+    statement_timeout: int = 120,
+    lock_timeout: int = 10,
 ) -> BatchImportResult:
     if batch_mode not in {"append", "replace"}:
         raise ValueError("batch_mode must be append or replace")
@@ -762,7 +790,7 @@ def import_skillfreq_batch(
     calibration_count = 0
 
     try:
-        with connect() as conn:
+        with connect(connect_timeout, statement_timeout, lock_timeout) as conn:
             with conn.cursor() as cur:
                 if batch_mode == "replace":
                     replace_batch(cur, batch_id)

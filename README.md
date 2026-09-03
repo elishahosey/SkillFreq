@@ -92,6 +92,39 @@ Show the CLI help:
 python -m skillfreq.cli --help
 ```
 
+All commands show timestamped lifecycle and phase diagnostics by default:
+
+```powershell
+python -m skillfreq.cli refresh-job-skills
+```
+
+By default this processes every row in `public.clean_jobs`. For a recent window
+or a faster development run, scope the refresh explicitly:
+
+```powershell
+# Jobs posted during the last 90 days
+python -m skillfreq.cli refresh-job-skills --since-days 90
+
+# The 1,000 newest jobs in that window
+python -m skillfreq.cli refresh-job-skills --since-days 90 --limit 1000
+```
+
+The selected jobs are persisted in `public.job_skill_scope`. Prevalence uses
+that same scope as its denominator, so jobs skipped by `--since-days` or
+`--limit` are not incorrectly counted as jobs with no skill mentions. A later
+refresh replaces the previous scope.
+
+Database-backed commands also use bounded connection, statement, and lock waits.
+Override their defaults when troubleshooting:
+
+```powershell
+python -m skillfreq.cli `
+  --db-connect-timeout 10 `
+  --db-statement-timeout 120 `
+  --db-lock-timeout 10 `
+  refresh-job-skills
+```
+
 ## CLI Commands
 
 Fetch usable links from a JobSpy-style CSV:
@@ -142,6 +175,125 @@ Count job titles in a CSV:
 ```powershell
 python -m skillfreq.cli titles data/outputs/results.csv --title-col title
 ```
+
+### Job-skill prevalence
+
+Build the normalized `public.job_skills` table from `public.clean_jobs` and create
+the baseline `public.skill_prevalence` view:
+
+```powershell
+python -m skillfreq.cli refresh-job-skills
+```
+
+`configs/market_skills.yml` is the reporting taxonomy. Its keys are canonical
+dashboard labels and its values are spelling/product aliases. Keep related but
+distinct tools separate so, for example, a PySpark mention does not automatically
+count as a Python mention. The refresh is atomic: a failure leaves the previous
+successful result intact.
+
+Query the all-jobs baseline:
+
+```sql
+SELECT canonical_skill, jobs_mentioning_skill, total_jobs, prevalence_pct
+FROM public.skill_prevalence;
+```
+
+#### Interpretation and intended scope
+
+The primary SkillFreq metric is broad-spectrum prevalence across the current
+job scope. This is intentional: the collected jobs represent a realistic range
+of adjacent roles rather than one narrowly targeted title. The baseline helps
+identify portable skills that preserve options across data engineering,
+analytics, backend/integration, cloud, and platform work.
+
+A practical way to read the ranking is:
+
+```text
+broad core       = SQL + Python + a major cloud
+platform support = Docker + Kubernetes + Terraform
+selective depth  = Snowflake / Spark / Databricks / Airflow / dbt
+```
+
+Future role-family prevalence should be treated as a comparison layer, not as a
+replacement for the broad baseline. It can explain where specialized tools are
+concentrated without limiting the primary analysis to one role.
+
+Prevalence percentages overlap and must not be added together. A job mentioning
+both SQL and Python contributes to each skill's individual prevalence. Future
+skill-combination analysis can measure portfolio coverage, co-occurrence,
+support, confidence, and lift across bundles of skills.
+
+#### Connect metrics to decisions
+
+The first version is intended to answer:
+
+> Across the job market I collected, which individual skills appear most often
+> and therefore deserve consideration for what I should learn, strengthen, or
+> keep interview-ready next?
+
+This is a valid market-priority signal, especially while preserving options
+across a spectrum of related roles. It is not yet a complete personalized study
+prescription. A highly prevalent skill may already be a strength, and several
+high-prevalence skills may occur in the same jobs.
+
+Each later metric should be added only to answer a distinct question:
+
+| Analysis layer | Question it answers |
+| --- | --- |
+| Individual prevalence | What does this collected market mention most? |
+| Role-family prevalence | Where is each skill concentrated across adjacent roles? |
+| Required/preferred classification | Is the skill expected, preferred, or merely mentioned? |
+| Skill combinations | Which skills and recognizable stacks occur together? |
+| Portfolio coverage | How many unique jobs mention at least one or several skills I possess? |
+| Incremental coverage | Which additional skill reaches jobs my current portfolio does not? |
+| Personal proficiency | Which market-relevant skills are genuine gaps for me? |
+| Learning cost | Which gap offers the best return for the time required? |
+
+The interpretation should progress without invalidating earlier results:
+
+```text
+Version 1: What does the market mention most?
+    -> combination analysis: Which stacks cover distinct jobs?
+    -> proficiency analysis: Which of those skills am I actually missing?
+    -> learning-cost analysis: Which gap should I address first?
+```
+
+For example, high SQL prevalence could mean “learn SQL” for a beginner, but for
+someone already strong in SQL it may mean “keep SQL sharp, practice interview
+problems, and present the evidence more clearly.” The data is the same; the
+decision depends on the question and personal context.
+
+For dashboards, query `public.job_skill_prevalence_input`. It contains every
+`(clean job, configured skill)` pair, including a `mentions_skill = false` row
+when the job does not mention that skill. Apply relevance filters first, then
+aggregate. This makes the filtered rows the single population for both numerator
+and denominator and keeps configured skills with zero mentions visible:
+
+```sql
+WITH relevant_jobs AS (
+    SELECT *
+    FROM public.job_skill_prevalence_input
+    WHERE date_posted >= CURRENT_DATE - INTERVAL '90 days'
+      -- Optional comparison slice:
+      -- AND title ILIKE '%data engineer%'
+)
+SELECT
+    canonical_skill,
+    COUNT(*) FILTER (WHERE mentions_skill) AS jobs_mentioning_skill,
+    COUNT(*) AS total_jobs,
+    ROUND(
+        100.0 * COUNT(*) FILTER (WHERE mentions_skill)
+        / NULLIF(COUNT(*), 0),
+        1
+    ) AS prevalence_pct
+FROM relevant_jobs
+GROUP BY canonical_skill
+ORDER BY prevalence_pct DESC, canonical_skill;
+```
+
+In a BI tool, map dashboard controls to columns on this view, group by
+`canonical_skill`, and calculate `AVG(mentions_skill::integer) * 100`. Show
+`total_jobs` beside the percentage so changes in the population are visible.
 
 Load an Excel sheet into PostgreSQL:
 

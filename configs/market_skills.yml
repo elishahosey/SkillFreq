@@ -1,0 +1,86 @@
+# Canonical skills used for job-market prevalence reporting.
+#Keep broader scoring concepts in configs/skills.yml.
+SQL:
+  - sql
+  - t-sql
+  - tsql
+  - structured query language
+
+Python:
+  - python
+
+Snowflake:
+  - snowflake
+  - snowflake data cloud
+
+Airflow:
+  - airflow
+  - apache airflow
+
+PostgreSQL:
+  - postgresql
+  - postgres
+
+SQL Server:
+  - sql server
+  - microsoft sql server
+  - mssql
+
+MySQL:
+  - mysql
+
+dbt:
+  - dbt
+  - data build tool
+
+Databricks:
+  - databricks
+  - azure databricks
+
+Spark:
+  - spark
+  - apache spark
+  - pyspark
+
+Kafka:
+  - kafka
+  - apache kafka
+
+AWS:
+  - aws
+  - amazon web services
+
+Azure:
+  - azure
+  - microsoft azure
+
+Google Cloud:
+  - google cloud
+  - google cloud platform
+  - gcp
+
+Redshift:
+  - redshift
+  - amazon redshift
+
+BigQuery:
+  - bigquery
+  - google bigquery
+
+Docker:
+  - docker
+
+Kubernetes:
+  - kubernetes
+  - k8s
+
+Terraform:
+  - terraform
+
+Power BI:
+  - power bi
+  - powerbi
+
+Tableau:
+  - tableau
+
