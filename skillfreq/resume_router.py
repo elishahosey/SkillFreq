@@ -30,10 +30,8 @@ def _normalize(text: Any) -> str:
 
 
 def load_roles_config(path: Path) -> dict[str, Any]:
-    data = yaml.safe_load(path.read_text(encoding="utf-8"))
-    if not isinstance(data, dict):
-        raise ValueError("roles.yml must be a mapping")
-    return data
+    from skillfreq.configuration import load_roles
+    return load_roles(path)
 
 
 def _count_terms(text: str, keywords: list[str]) -> int:
@@ -88,14 +86,15 @@ def _seniority_penalty(title: str, description: str, config: dict[str, Any]) -> 
     return penalty
 
 
-def _resolve_tie_with_content(full_text: str) -> str:
-    if any(term in full_text for term in ["sql", "etl", "elt", "pipeline", "pipelines", "dbt", "airflow", "data warehouse"]):
-        return "Engineer_Data"
-    if any(term in full_text for term in ["dashboard", "reporting", "metrics", "bi", "business intelligence", "analytics"]):
-        return "Engineer_Analytics"
-    if any(term in full_text for term in ["ci/cd", "deployment", "observability", "reliability", "infrastructure", "platform"]):
-        return "Engineer_Platform"
+def _resolve_tie_with_content(full_text: str, config=None) -> str:
+    if config is None:
+        from skillfreq.configuration import default_roles
+        config = default_roles()
+    for resume, terms in config.get('tie_breakers', {}).items():
+        if any(term in full_text for term in terms):
+            return resume
     return "Engineer_Software"
+
 
 
 def suggest_resume_variant(
@@ -145,7 +144,7 @@ def suggest_resume_variant(
 
     # If top two are tied or very close, let content decide
     if runner_up and (top_score - runner_up[1] <= 1):
-        best_resume = _resolve_tie_with_content(full_text)
+        best_resume = _resolve_tie_with_content(full_text, roles_config)
 
     top_keywords = resume_variants.get(best_resume, {}).get("keywords", [])
     matched_keywords = [kw for kw in top_keywords if kw.lower() in full_text][:4]

@@ -22,10 +22,390 @@ weights:
   ai_ml: 0.5
   apis: 3
   integration_workflows: 4
-  
-
 penalties:
   seniority: -1
   data_platforms: -1
   devops: -1
   ai_ml: -2
+fit:
+  lane_caps:
+    target_lane: 100
+    secondary_lane: 85
+    bridge_lane: 65
+    survival_lane: 45
+    wrong_lane: 15
+  required_atomic_penalty: 3
+  # One charge per unsatisfied required any_of/equivalent; all_of stays atomic.
+  required_group_penalty: 3
+  preferred_atomic_penalty: 0.5
+  known_atomic_threshold: 0.5
+  flag_penalties:
+    has_hard_requirement_blockers: 10
+    is_lead_like: 12
+  base_score: 0
+  coverage_scale: 100
+  rules:
+  - id: overlevel_penalty
+    priority: 100
+    when:
+      field: years_required
+      op: gte
+      value: 7
+    actions:
+    - op: subtract_score
+      field: fit_score
+      value: 8
+    stop: false
+  - id: ecosystem_usage_penalty
+    priority: 90
+    when:
+      field: hits.ecosystem_terms
+      op: gte
+      value: 1
+    actions:
+    - op: subtract_score
+      field: fit_score
+      value: 3
+    stop: false
+  - id: ecosystem_dependence
+    priority: 80
+    when:
+      field: flags.ecosystem_ownership_gate
+      op: equals
+      value: true
+    actions:
+    - op: subtract_score
+      field: fit_score
+      value: 30
+    - op: append
+      field: blockers
+      value: ecosystem_ownership_gap
+    stop: false
+  - id: required_core_gate
+    priority: 70
+    when:
+      field: has_hard_requirement_blockers
+      op: equals
+      value: true
+    actions:
+    - op: append
+      field: blockers
+      value: required_core_skill_missing
+    stop: false
+  - id: lead_review_gate
+    priority: 60
+    when:
+      field: is_lead_like
+      op: equals
+      value: true
+    actions:
+    - op: append
+      field: review_flags
+      value: lead_responsibility
+    stop: false
+  - id: overlevel_review_gate
+    priority: 50
+    when:
+      field: years_required
+      op: gte
+      value: 7
+    actions:
+    - op: append
+      field: review_flags
+      value: overlevel_experience
+    stop: false
+  - id: many_required_gaps
+    priority: 40
+    when:
+      field: missing_required_atomic
+      op: count_gte
+      value: 4
+    actions:
+    - op: append
+      field: review_flags
+      value: multiple_required_gaps
+    stop: false
+  - id: wrong_role_gate
+    priority: 30
+    when:
+      field: role_lane
+      op: equals
+      value: wrong_lane
+    actions:
+    - op: append
+      field: blockers
+      value: wrong_role_identity
+    stop: false
+  - id: ecosystem_specific_experience
+    priority: 85
+    when:
+      all:
+      - field: hits.ecosystem_title
+        op: gte
+        value: 1
+      - field: years_required
+        op: gte
+        value: 5
+      - field: hits.ecosystem_ownership
+        op: equals
+        value: 0
+    actions:
+    - op: subtract_score
+      field: fit_score
+      value: 12
+    - op: append
+      field: review_flags
+      value: ecosystem_specific_experience
+  - id: ecosystem_transferable_specialist_fit
+    priority: 84
+    when:
+      all:
+      - field: flags.ecosystem_specialized
+        op: equals
+        value: true
+      - field: flags.transferable_data_strong
+        op: equals
+        value: true
+      - field: flags.ecosystem_ownership_gate
+        op: equals
+        value: false
+    actions:
+    - op: subtract_score
+      field: fit_score
+      value: 8
+    - op: append
+      field: review_flags
+      value: ecosystem_specialization_review
+    stop: false
+  - id: ecosystem_limited_transfer_fit
+    priority: 83
+    when:
+      all:
+      - field: flags.ecosystem_specialized
+        op: equals
+        value: true
+      - field: flags.transferable_data_strong
+        op: equals
+        value: false
+      - field: flags.ecosystem_ownership_gate
+        op: equals
+        value: false
+    actions:
+    - op: subtract_score
+      field: fit_score
+      value: 18
+    - op: append
+      field: review_flags
+      value: ecosystem_specialization_review
+    stop: false
+  - id: ecosystem_admin_fit_gate
+    priority: 82
+    when:
+      field: flags.ecosystem_admin_identity
+      op: equals
+      value: true
+    actions:
+    - op: append
+      field: blockers
+      value: ecosystem_administration_gap
+    stop: false
+learning:
+  eligible_lanes:
+  - target_lane
+  - secondary_lane
+  prevalence_saturation_pct: 30
+  points_per_growth_skill: 35
+  max_score: 100
+confidence:
+  base: 0.3
+  margin_weight: 0.35
+  signal_weight: 0.25
+  signal_saturation: 5
+  contradiction_penalty: 0.22
+  ambiguity_penalty: 0.15
+  weak_description_words: 12
+  weak_description_penalty: 0.2
+  hard_exclusion_confidence: 0.97
+  review_below: 0.65
+  close_margin: 0.15
+  review_on_contradictions: true
+  review_on_requirement_ambiguity: true
+  suppress_review_on_hard_exclusion: true
+alignment_caps:
+  systems: 1.5
+  dev_practices: 1
+  software_engineering: 1
+  operations: 1.5
+  testing: 1
+alignment:
+  # Alignment signals that describe candidate seniority/entry level are scoped
+  # to requirement text, so “mentor junior engineers” is not early-career evidence.
+  section_scopes:
+    early_career: required
+    no_experience: required
+  pipeline_strong_hits: 4
+  pipeline_light_hits: 2
+  integration_hits: 2
+  etl_deep_hits: 3
+  etl_overlap_hits: 2
+  aws_heavy_hits: 8
+  aws_medium_hits: 4
+  modern_heavy_hits: 2
+  ml_hits: 2
+  ai_heavy_hits: 2
+  points:
+    pipeline_sql: 3
+    pipeline_strong: 2
+    pipeline_light: 1
+    integration: 1.5
+    early_career: 1.5
+    no_experience: 5
+    etl_deep: 4
+    analytics: 1
+    aws_heavy: -6
+    aws_medium: -3
+    modern_heavy: -3
+    modern_light: -1.5
+    ml: -3
+    ai_primary: -8
+    ai_terms: -6
+    ai_heavy: -6
+    ai_light: -3
+    etl_overlap: 5
+    mandatory_missing: -2.5
+    modern_required: -3
+    modern_preferred: -1.5
+    lead: -12
+  years_penalties:
+  - - 7
+    - -5
+  - - 5
+    - -3
+  - - 4
+    - -1.5
+  scale: 10
+  unmatched_concepts:
+  - dev_practices
+thresholds:
+  high: 35
+  moderate: 28
+  low: 22
+  lead_low: 18
+  seniority_years: 7
+quality_rules:
+- id: good_fit_score
+  priority: 100
+  when:
+    field: fit_score
+    op: gte
+    value: 80
+  actions:
+  - op: set
+    field: fit_quality
+    value: good_fit
+  stop: true
+- id: possible_fit_score
+  priority: 90
+  when:
+    field: fit_score
+    op: gte
+    value: 55
+  actions:
+  - op: set
+    field: fit_quality
+    value: possible_fit
+  stop: true
+- id: weak_fit_score
+  priority: 0
+  when: &id001
+    field: always
+    op: equals
+    value: true
+  actions:
+  - op: set
+    field: fit_quality
+    value: weak_fit
+  stop: true
+decision_rules:
+- id: configured_hard_blocker
+  priority: 1000
+  when:
+    field: blockers
+    op: not_empty
+    value: true
+  actions:
+  - op: set
+    field: apply_decision
+    value: skip
+  stop: true
+- id: insufficient_fit
+  priority: 950
+  when:
+    field: fit_score
+    op: lt
+    value: 55
+  actions:
+  - op: set
+    field: apply_decision
+    value: skip
+  stop: true
+- id: configured_review_gate
+  priority: 900
+  when:
+    field: review_flags
+    op: not_empty
+    value: true
+  actions:
+  - op: set
+    field: apply_decision
+    value: manual_review
+  stop: true
+- id: ambiguous_role_review
+  priority: 850
+  when:
+    field: ai_review_required
+    op: equals
+    value: true
+  actions:
+  - op: set
+    field: apply_decision
+    value: manual_review
+  stop: true
+- id: fallback_search_context
+  priority: 800
+  when:
+    field: search_lane
+    op: in
+    value:
+    - bridge
+    - contract_bridge
+    - survival
+    - contract_survival
+  actions:
+  - op: set
+    field: apply_decision
+    value: manual_review
+  stop: true
+- id: strong_primary_fit
+  priority: 700
+  when:
+    all:
+    - field: role_lane
+      op: equals
+      value: target_lane
+    - field: fit_score
+      op: gte
+      value: 78
+  actions:
+  - op: set
+    field: apply_decision
+    value: apply_now
+  stop: true
+- id: adjacent_or_moderate_fit
+  priority: 0
+  when: *id001
+  actions:
+  - op: set
+    field: apply_decision
+    value: manual_review
+  stop: true

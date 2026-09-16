@@ -1,3 +1,4 @@
+from skillfreq.configuration import resolve_terms
 import os
 import pdfplumber
 from docx import Document
@@ -62,13 +63,16 @@ def _load_docx(file_path: str) -> str:
 
 
 def load_resume_signal(signal_path: Path)->dict:
-    return load_yaml(signal_path)
+    config = load_yaml(signal_path)
+    for meta in config.values():
+        meta['aliases'] = resolve_terms(meta['aliases'])
+    return config
 
 
 #extract signals from resume document (find which area the resume is strongest)
 def extract_resume_signals(file_path: str):
     text = load_resume(file_path)
-    config = load_yaml("configs/resume_signal.yml")
+    config = load_resume_signal(Path("configs/resume_signal.yml"))
 
     matches = {}
 

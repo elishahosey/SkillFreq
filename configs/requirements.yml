@@ -1,0 +1,80 @@
+section_patterns:
+  required:
+  - required qualifications
+  - minimum qualifications
+  - must have
+  - mandatory skills?
+  - requirements
+  - required skills
+  - basic qualifications
+  - '(?m)^\s*(?:\*\*|#+\s*)?required\s*:'
+  - '\brequired\s*:'
+  preferred:
+  - preferred qualifications
+  - nice to have
+  - preferred
+  - pluses
+  - preferred skills
+  responsibilities:
+  - responsibilities
+  - key responsibilities
+  - what you'll do
+  - job description
+core_blocker_skills:
+- etl
+- python
+- sql
+modern_stack_skills:
+- airflow
+- aws
+- data_platforms
+- kafka
+- spark
+lead_terms:
+- technical lead
+- staff
+- principal
+- lead engineer
+- set technical direction
+- mentor junior engineers
+- mentor junior data engineers
+- evaluate and make decisions
+- evaluate dataset implementations
+- evaluate the use of new or existing software products and tools
+- drive best practices in source teams
+- architecture ownership
+- system design leadership
+seniority_terms:
+- 5+ years
+- 6+ years
+- 7+ years
+- 8+ years
+- staff
+- principal
+- lead engineer
+- architect
+- mentor
+- senior
+- technical leadership
+- manager
+modern_blocker_count: 2
+ambiguity_patterns:
+- \b(?:one of the following|and/or)\b
+- \b(?:tools?|technologies|platforms?)\s+or equivalent\b
+lead_title_terms:
+- lead
+- staff
+- principal
+- architect
+- manager
+- director
+years_fallback_pattern: (?i)[^.!?\n]*(?:\d+\s*(?:\+|-|to)?\s*\d*\s+years?)[^.!?\n]*(?:experience|required)[^.!?\n]*
+skill_alternative_suffix: '\s+or equivalent(?: experience)?'
+explicit_years_patterns:
+- experience\s+required\s*:\s*(\d+)
+# Explicit, candidate-approved equivalents only. Broad ETL experience does not
+# automatically satisfy orchestration or any particular platform requirement.
+equivalences: {}
+# Grammar for headless requirement snippets; not role/career policy.
+unscoped_requirement_patterns:
+- '\b(?:required|must|experience with|one or more of|or equivalent)\b'

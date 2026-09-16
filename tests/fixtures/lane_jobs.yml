@@ -1,0 +1,91 @@
+- name: obvious_target
+  title: Data Engineer
+  description: 'Responsibilities: Build ETL data pipelines and data integration with
+    SQL and Python. Own data quality, validation and reconciliation. Develop data
+    modeling, REST API ingestion, XML and JSON file transfer with SFTP. Troubleshoot
+    production support and root cause issues.
+
+    Required qualifications: SQL, Python and ETL.'
+  expected_lane: target_lane
+  legacy_lane: target_lane
+- name: sql_integration
+  title: SQL Developer
+  description: Build ETL, data integration and stored procedures. SQL query optimization,
+    Python, XML and JSON.
+  expected_lane: target_lane
+  legacy_lane: target_lane
+- name: data_backend
+  title: Backend Engineer
+  description: Develop FastAPI microservices using PostgreSQL, SQLAlchemy, Docker
+    and pytest. Build batch data processing and XML processing.
+  expected_lane: secondary_lane
+  legacy_lane: secondary_lane
+- name: analyst_bridge
+  title: Application Analyst
+  description: SQL queries, stored procedures, data validation, API integration, XML
+    and JSON. Production support, incident tickets, logs and troubleshooting.
+  expected_lane: bridge_lane
+  legacy_lane: bridge_lane
+- name: survival
+  title: Software Developer
+  description: Maintain internal applications and documentation.
+  search_lane: survival
+  expected_lane: survival_lane
+  legacy_lane: survival_lane
+- name: frontend
+  title: Frontend Engineer
+  description: Build React user interfaces and CSS layouts with REST APIs and SQL.
+  expected_lane: wrong_lane
+  legacy_lane: wrong_lane
+- name: ml
+  title: Machine Learning Engineer
+  description: Build machine learning and deep learning models with SQL and Python
+    ETL data pipelines.
+  expected_lane: wrong_lane
+  legacy_lane: wrong_lane
+- name: platform
+  title: Platform Engineer
+  description: Own cloud infrastructure, Kubernetes, Terraform, Helm, Ansible, capacity
+    planning and high availability.
+  expected_lane: wrong_lane
+  legacy_lane: wrong_lane
+- name: erp
+  title: ERP Configuration Consultant
+  description: Configure SAP business workflows, train customers and map business
+    processes. SQL reporting.
+  expected_lane: wrong_lane
+  legacy_lane: wrong_lane
+- name: dashboards
+  title: Business Intelligence Engineer
+  description: Build Tableau and Power BI dashboards and executive reporting. Own
+    semantic layer and OLAP.
+  expected_lane: wrong_lane
+  legacy_lane: wrong_lane
+- name: generic_software_data
+  title: Software Engineer
+  description: Build ETL data pipelines, data integration and data quality. SQL Python
+    API XML JSON and production support.
+  expected_lane: secondary_lane
+  legacy_lane: bridge_lane
+- name: misleading_title
+  title: Data Engineer
+  description: Contact customers and schedule weekly meetings. Maintain office documents
+    and coordinate training sessions.
+  expected_lane: wrong_lane
+  legacy_lane: wrong_lane
+- name: learning_opportunity
+  title: Data Engineer
+  description: 'Responsibilities: Build ETL data pipelines, SQL ingestion, data integration,
+    data modeling and data quality using Python.
+
+    Required qualifications: SQL, Python, Airflow and AWS.
+
+    Preferred qualifications: Snowflake and Spark.'
+  expected_lane: target_lane
+  legacy_lane: target_lane
+- name: ambiguous
+  title: Data Engineer / Backend Engineer
+  description: Build ETL data pipelines and FastAPI microservices using PostgreSQL,
+    SQLAlchemy and Docker.
+  expected_lane: secondary_lane
+  legacy_lane: target_lane

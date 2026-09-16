@@ -1,432 +1,485 @@
-seniority:
-  - "5+ years"
-  - "6+ years"
-  - "7+ years"
-  - "8+ years"
-  - "staff"
-  - "principal"
-  - "lead engineer"
-  - "architect"
-  - "mentor"
-  - "senior"
-  - "technical leadership"
-  - "manager"
-
 data_formats:
-  - "json"
-  - "xml"
-  - "csv"
-  - "txt"
-
+  terms:
+  - json
+  - xml
+  - csv
+  - txt
+  atomic_skills: []
+  term_refs: []
 sql:
-  - "sql"
-  - "tsql"
-  - "t-sql"
-  - "microsoft sql server"
-  - "sql server"
-  - "postgresql"
-  - "postgres"
-  - "mysql"
-  - "relational database"
-  - "rdbms"
-  - "stored procedures"
-  - "stored procedure"
-  - "indexing"
-  - "query tuning"
-  - "advanced sql"
-  - "strong sql"
-  - "sql queries"
-  - "complex queries"
-  - "query optimization"
-  - "sql optimization"
-  - "sql proficiency"
-
+  terms:
+  - relational database
+  - rdbms
+  - stored procedures
+  - stored procedure
+  - indexing
+  - query tuning
+  - advanced sql
+  - strong sql
+  - sql queries
+  - complex queries
+  - query optimization
+  - sql optimization
+  - sql proficiency
+  - pl/sql
+  - plsql
+  - pl sql
+  - database development
+  - schema design
+  - schema development
+  atomic_skills:
+  - SQL
+  - SQL Server
+  - PostgreSQL
+  - MySQL
+  term_refs: []
 etl:
-  - "etl"
-  - "elt"
-  - "data pipeline"
-  - "data pipelines"
-  - "data ingestion"
-  - "data integration"
-  - "data transformation"
-  - "batch processing"
-  - "stream processing"
-  - "data workflow"
-  - "data workflows"
-  - "etl processes"
-  - "etl workflows"
-  - "pipeline"
-  - "pipelines"
-  - "data flow"
-  - "data flows"
-  - "batch workloads"
-  - "batch data processing"
-  - "pipeline definitions"
-  - "pipeline performance"
-  - "pipeline orchestration"
-  - "data processing"
-  - "data extraction"
-  - "data cleaning"
-  - "data cleansing"
-
+  terms:
+  - etl
+  - elt
+  - data pipeline
+  - data pipelines
+  - data ingestion
+  - data integration
+  - data transformation
+  - batch processing
+  - stream processing
+  - data workflow
+  - data workflows
+  - etl processes
+  - etl workflows
+  - pipeline
+  - pipelines
+  - data flow
+  - data flows
+  - batch workloads
+  - batch data processing
+  - pipeline definitions
+  - pipeline performance
+  - pipeline orchestration
+  - data processing
+  - data extraction
+  - data cleaning
+  - data cleansing
+  atomic_skills: []
+  term_refs: []
 apis:
-  - "api"
-  - "apis"
-  - "rest"
-  - "rest apis"
-  - "restful apis"
-  - "api integration"
-  - "api integrations"
-  - "api design"
-  - "api development"
-  - "soap"
-  - "soap services"
-  - "soap ui"
-  - "xml"
-  - "json"
-
+  terms:
+  - api
+  - apis
+  - rest
+  - rest apis
+  - restful apis
+  - api integration
+  - api integrations
+  - api design
+  - api development
+  - soap
+  - soap services
+  - soap ui
+  atomic_skills: []
+  term_refs:
+  - - data_formats
+    - xml
+  - - data_formats
+    - json
 integration_workflows:
-  - "integration"
-  - "integrations"
-  - "data integration"
-  - "systems integration"
-  - "system integration"
-  - "system integrations"
-  - "integration patterns"
-  - "integration testing"
-  - "interfaces"
-  - "interface"
-  - "external systems"
-  - "external vendors"
-  - "data exchange"
-  - "data transfer"
-  - "batch jobs"
-  - "job scheduling"
-  - "workflow automation"
-  - "workflows"
-  - "data workflows"
-  - "operational workflows"
-  - "deployment workflows"
-  - "etl workflows"
-  - "data mapping"
-  - "source-to-target mappings"
-  - "mapping documents"
-  - "data migration"
-  - "data migrations"
-  - "database migrations"
-  - "data extraction"
-  - "enterprise data extraction"
-  - "flat file extracts"
-  - "data integrations"
-  - "system integrations"
-  - "platform integrations"
-  - "enterprise integrations"
-  - "third-party systems"
-  - "third-party vendor systems"
-  - "source systems"
-  - "cross-system"
-  - "cross-system validation"
-  - "business rules"
-  - "transformation rules"
-  - "interface development"
-  - "integration architecture"
-  - "integration solutions"
-  - "middleware"
-  - "web services"
-  - "connectors"
-
+  terms:
+  - integration
+  - integrations
+  - systems integration
+  - system integration
+  - system integrations
+  - integration patterns
+  - integration testing
+  - interfaces
+  - interface
+  - external systems
+  - external vendors
+  - data exchange
+  - data transfer
+  - batch jobs
+  - job scheduling
+  - workflow automation
+  - workflows
+  - operational workflows
+  - deployment workflows
+  - data mapping
+  - source-to-target mappings
+  - mapping documents
+  - data migration
+  - data migrations
+  - database migrations
+  - enterprise data extraction
+  - flat file extracts
+  - data integrations
+  - platform integrations
+  - enterprise integrations
+  - third-party systems
+  - third-party vendor systems
+  - source systems
+  - cross-system
+  - cross-system validation
+  - business rules
+  - transformation rules
+  - interface development
+  - integration architecture
+  - integration solutions
+  - middleware
+  - web services
+  - connectors
+  atomic_skills: []
+  term_refs:
+  - - etl
+    - data integration
+  - - etl
+    - data workflows
+  - - etl
+    - etl workflows
+  - - etl
+    - data extraction
 kafka:
-  - "kafka"
-  - "apache kafka"
-  - "event streaming"
-  - "event-driven"
-  - "event-driven architecture"
-  - "pubsub"
-  - "message broker"
-
+  terms:
+  - event streaming
+  - event-driven
+  - event-driven architecture
+  - pubsub
+  - message broker
+  atomic_skills:
+  - Kafka
+  term_refs: []
 airflow:
-  - "airflow"
-  - "apache airflow"
-  - "dag"
-  - "dags"
-  - "workflow orchestration"
-  - "task scheduling"
-
+  terms:
+  - dag
+  - dags
+  - workflow orchestration
+  - task scheduling
+  atomic_skills:
+  - Airflow
+  term_refs: []
 azure:
-  - "azure"
-  - "azure devops"
-  - "ado"
-  - "azure data factory"
-  - "adf"
-  - "azure functions"
-  - "azure storage"
-  - "azure sql"
-
+  terms:
+  - azure devops
+  - ado
+  - azure data factory
+  - adf
+  - azure functions
+  - azure storage
+  - azure sql
+  atomic_skills:
+  - Azure
+  term_refs: []
 aws:
-  - "aws"
-  - "s3"
-  - "lambda"
-  - "glue"
-  - "redshift"
-  - "athena"
-  - "emr"
-  - "kinesis"
-  - "ec2"
-
+  terms:
+  - s3
+  - lambda
+  - glue
+  - athena
+  - emr
+  - kinesis
+  - ec2
+  atomic_skills:
+  - AWS
+  - Redshift
+  term_refs: []
 python:
-  - "python"
-  - "pandas"
-  - "numpy"
-  - "pyspark"
-  - "sqlalchemy"
-  - "fastapi"
-  - "flask"
-
+  terms:
+  - pandas
+  - numpy
+  - sqlalchemy
+  - fastapi
+  - flask
+  atomic_skills:
+  - Python
+  - Spark
+  term_refs: []
 java:
-  - "java"
-  - "spring"
-  - "spring boot"
-  - "maven"
-  - "gradle"
-  - "junit"
-
+  terms:
+  - java
+  - spring
+  - spring boot
+  - maven
+  - gradle
+  - junit
+  atomic_skills: []
+  term_refs: []
 git:
-  - "git"
-  - "github"
-  - "gitlab"
-  - "version control"
-  - "git version control"
-  - "branching"
-  - "pull request"
-  - "merge request"
-
+  terms:
+  - git
+  - github
+  - gitlab
+  - version control
+  - git version control
+  - branching
+  - pull request
+  - merge request
+  atomic_skills: []
+  term_refs: []
 data_platforms:
-  - "dbt"
-  - "snowflake"
-  - "databricks"
-  - "matillion"
-  - "powerbi"
-  - "power bi"
-  - "power query"
-  - "mongodb"
-  - "nosql databases"
-
+  terms:
+  - matillion
+  - power query
+  - mongodb
+  - nosql databases
+  atomic_skills:
+  - dbt
+  - Snowflake
+  - Databricks
+  - Power BI
+  term_refs: []
 devops:
-  - "docker"
-  - "kubernetes"
-  - "jenkins"
-  - "ci/cd"
-  - "continuous integration"
-  - "continuous delivery"
-
+  terms:
+  - jenkins
+  - ci/cd
+  - continuous integration
+  - continuous delivery
+  atomic_skills:
+  - Docker
+  - Kubernetes
+  term_refs: []
 data_modeling:
-  - "data modeling"
-  - "dimensional modeling"
-  - "star schema"
-  - "normalization"
-  - "denormalization"
-  - "database design"
-
+  terms:
+  - data modeling
+  - dimensional modeling
+  - star schema
+  - normalization
+  - denormalization
+  - database design
+  atomic_skills: []
+  term_refs: []
 data_quality:
-  - "data governance"
-  - "data quality"
-  - "data quality issues"
-  - "data quality rules"
-  - "data quality checks"
-  - "data quality management"
-  - "data quality monitoring"
-  - "data integrity"
-  - "data integrity checks"
-  - "validation"
-  - "data validation"
-  - "validation rules"
-  - "validation tools"
-  - "reconciliation"
-  - "data reconciliation"
-  - "reconciliations"
-  - "data accuracy"
-  - "data standards"
-  - "completeness"
-  - "consistency"
-  - "data discrepancies"
-  - "discrepancies"
-  - "compliance"
-  - "quality documentation"
-  - "quality assurance"
-  - "quality control"
-  - "quality standards"
-  - "data quality standards"
-  - "source data quality"
-  - "reconciliation workflows"
-  - "reconciliation outputs"
-  - "validation checks"
-  - "quantity validation"
-  - "systematic verification"
-  - "verification"
-  - "data accuracy"
-  - "data completeness"
-  - "data consistency"
-  - "discrepancy"
-  - "discrepancies"
-  - "data issue"
-  - "data issues"
-
+  terms:
+  - data governance
+  - data quality
+  - data quality issues
+  - data quality rules
+  - data quality checks
+  - data quality management
+  - data quality monitoring
+  - data integrity
+  - data integrity checks
+  - validation
+  - data validation
+  - validation rules
+  - validation tools
+  - reconciliation
+  - data reconciliation
+  - reconciliations
+  - data accuracy
+  - data standards
+  - completeness
+  - consistency
+  - data discrepancies
+  - discrepancies
+  - compliance
+  - quality documentation
+  - quality assurance
+  - quality control
+  - quality standards
+  - data quality standards
+  - source data quality
+  - reconciliation workflows
+  - reconciliation outputs
+  - validation checks
+  - quantity validation
+  - systematic verification
+  - verification
+  - data completeness
+  - data consistency
+  - discrepancy
+  - data issue
+  - data issues
+  atomic_skills: []
+  term_refs: []
 systems:
-  - "system reliability"
-  - "data reliability"
-  - "disaster recovery"
-  - "failure recovery"
-  - "workflow orchestration"
-  - "dependency"
-  - "integration"
-  - "integrations"
-  - "upstream"
-  - "downstream"
-  - "latency"
-  - "throughput"
-  - "infrastructure"
-  - "production systems"
-  - "production environments"
-  - "application logs"
-  - "system logs"
-  - "logs"
-  - "logging"
-  - "log analysis"
-  - "system stability"
-  - "system performance"
-  - "system maintainability"
-  - "operational reliability"
-  - "platform reliability"
-  - "application performance"
-  - "retries"
-  - "retry mechanisms"
-  - "failure detection"
-  - "failure detection gaps"
-  - "dependency tracking"
-  - "end-to-end visibility"
-  - "operational resilience"
-
+  terms:
+  - system reliability
+  - data reliability
+  - disaster recovery
+  - failure recovery
+  - dependency
+  - upstream
+  - downstream
+  - latency
+  - throughput
+  - infrastructure
+  - production systems
+  - production environments
+  - application logs
+  - system logs
+  - logs
+  - logging
+  - log analysis
+  - system stability
+  - system performance
+  - system maintainability
+  - operational reliability
+  - platform reliability
+  - application performance
+  - retries
+  - retry mechanisms
+  - failure detection
+  - failure detection gaps
+  - dependency tracking
+  - end-to-end visibility
+  - operational resilience
+  atomic_skills: []
+  term_refs:
+  - - airflow
+    - workflow orchestration
+  - - integration_workflows
+    - integration
+  - - integration_workflows
+    - integrations
 software_engineering:
-  - "software development"
-  - "application development"
-  - "software solutions"
-  - "software products"
-
+  terms:
+  - software development
+  - application development
+  - software solutions
+  - software products
+  atomic_skills: []
+  term_refs: []
 system_design:
-  - "system design"
-  - "technical design"
-  - "technical requirements"
-  - "system architecture"
-  - "design specifications"
-
+  terms:
+  - system design
+  - technical design
+  - technical requirements
+  - system architecture
+  - design specifications
+  atomic_skills: []
+  term_refs: []
 testing:
-  - "testing"
-  - "unit testing"
-  - "unit test cases"
-  - "integration testing"
-
-
+  terms:
+  - testing
+  - unit testing
+  - unit test cases
+  atomic_skills: []
+  term_refs:
+  - - integration_workflows
+    - integration testing
 operations:
-  - "support"
-  - "technical support"
-  - "production support"
-  - "operational support"
-  - "application support"
-  - "monitoring"
-  - "incident"
-  - "incidents"
-  - "incident management"
-  - "production issue"
-  - "production issues"
-  - "production incident"
-  - "production incidents"
-  - "troubleshooting"
-  - "troubleshoot"
-  - "troubleshooting support"
-  - "technical troubleshooting"
-  - "root cause analysis"
-  - "root cause"
-  - "root causes"
-  - "risk management"
-  - "production environments"
-  - "production systems"
-  - "logs"
-  - "application logs"
-  - "system logs"
-  - "log analysis"
-  - "logging"
-  - "technical issues"
-  - "complex technical issues"
-  - "failures"
-  - "failure"
-  - "recovery"
-  - "support tickets"
-  - "jira tickets"
-  - "technical documentation"
-  - "support documentation"
-  - "system documentation"
-  - "process documentation"
-  - "issue resolution"
-  - "issue triage"
-  - "escalation"
-  - "escalations"
-  - "runbook"
-  - "runbooks"
-  - "sla"
-  - "slas"
-  - "service level agreements"
-  - "alerting"
-  - "alerts"
-  - "alert quality"
-  - "alert noise"
-  - "monitor failures"
-  - "operational issues"
-  - "technical failures"
-  - "structured troubleshooting"
-  - "strong troubleshooting"
-  - "strong troubleshooting skills"
-  - "l2 support"
-  - "l3 support"
-
+  terms:
+  - support
+  - technical support
+  - production support
+  - operational support
+  - application support
+  - monitoring
+  - incident
+  - incidents
+  - incident management
+  - production issue
+  - production issues
+  - production incident
+  - production incidents
+  - troubleshooting
+  - troubleshoot
+  - troubleshooting support
+  - technical troubleshooting
+  - root cause analysis
+  - root cause
+  - root causes
+  - risk management
+  - technical issues
+  - complex technical issues
+  - failures
+  - failure
+  - recovery
+  - support tickets
+  - jira tickets
+  - technical documentation
+  - support documentation
+  - system documentation
+  - process documentation
+  - issue resolution
+  - issue triage
+  - escalation
+  - escalations
+  - runbook
+  - runbooks
+  - sla
+  - slas
+  - service level agreements
+  - alerting
+  - alerts
+  - alert quality
+  - alert noise
+  - monitor failures
+  - operational issues
+  - technical failures
+  - structured troubleshooting
+  - strong troubleshooting
+  - strong troubleshooting skills
+  - l2 support
+  - l3 support
+  atomic_skills: []
+  term_refs:
+  - - systems
+    - production environments
+  - - systems
+    - production systems
+  - - systems
+    - logs
+  - - systems
+    - application logs
+  - - systems
+    - system logs
+  - - systems
+    - log analysis
+  - - systems
+    - logging
 dev_practices:
-  - "software development lifecycle"
-  - "agile"
-  - "methodologies"
-  - "code standards"
-  - "documentation"
-  - "system documentation"
-  - "project management"
-
+  terms:
+  - software development lifecycle
+  - agile
+  - methodologies
+  - code standards
+  - documentation
+  - project management
+  atomic_skills: []
+  term_refs:
+  - - operations
+    - system documentation
 ai_ml:
-  - "machine learning"
-  - "ml"
-  - "nlp"
-  - "bert"
-  - "transformer"
-  - "hugging face"
-  - "llm"
-  - "generative ai"
-  - "genai"
-  - "predictive modeling"
-  - "classification"
-  - "model evaluation"
-  - "f1"
-  - "precision"
-  - "recall"
-  - "feature engineering"
-  - "experimentation"
-
+  terms:
+  - machine learning
+  - ml
+  - nlp
+  - bert
+  - transformer
+  - hugging face
+  - llm
+  - generative ai
+  - genai
+  - predictive modeling
+  - classification
+  - model evaluation
+  - f1
+  - precision
+  - recall
+  - feature engineering
+  - experimentation
+  atomic_skills: []
+  term_refs: []
 monitoring:
-  - "observability"
-  - "intelligent observability"
-  - "data monitoring"
-  - "database monitoring"
-  - "database observability"
-  - "monitoring platforms"
-  - "monitoring tools"
-  - "performance monitoring"
-  - "performance monitoring tools"
-  - "event correlation"
-  - "traces"
-  - "metrics"
-  - "apm"
+  terms:
+  - observability
+  - intelligent observability
+  - data monitoring
+  - database monitoring
+  - database observability
+  - monitoring platforms
+  - monitoring tools
+  - performance monitoring
+  - performance monitoring tools
+  - event correlation
+  - traces
+  - metrics
+  - apm
+  atomic_skills: []
+  term_refs: []
+spark:
+  terms: []
+  atomic_skills:
+  - Spark
+  term_refs: []

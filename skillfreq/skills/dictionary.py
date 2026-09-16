@@ -8,43 +8,37 @@ import yaml
 SkillDict = Dict[str, List[str]]
 WeightDict = Dict[str, float]
 
-# def load_skill_dictionary(path: Path) -> SkillDict:
-#     data = yaml.safe_load(path.read_text(encoding="utf-8"))
-#     if not isinstance(data, dict):
-#         raise ValueError("skills.yml must be a mapping of skill -> [terms]")
-#     # normalize terms to lowercase
-#     out: SkillDict = {}
-#     for skill, terms in data.items():
-#         if not isinstance(terms, list):
-#             raise ValueError(f"Skill '{skill}' must map to a list of terms")
-#         out[str(skill).lower()] = [str(t).lower() for t in terms]
-#     return out
+def load_skill_dictionary(path: Path, taxonomy=None, requirements=None) -> SkillDict:
+    """Load broad concepts and expand explicit atomic/phrase relations.
 
-
-
-def load_skill_dictionary(path: Path) -> SkillDict:
-    data = yaml.safe_load(path.read_text(encoding="utf-8"))
-
-    if not isinstance(data, dict):
-        raise ValueError("skills.yml must be a mapping of skill -> [terms]")
-
-    out: SkillDict = {}
-
-    for skill, terms in data.items():
-        if not isinstance(skill, str):
-            raise ValueError(f"Skill key must be a string, got {type(skill).__name__}")
-
-        if not isinstance(terms, list):
-            raise ValueError(f"Skill '{skill}' must map to a list of terms")
-
-        normalized_terms = []
-        for t in terms:
-            if not isinstance(t, str):
-                raise ValueError(f"Skill '{skill}' contains non-string term: {t!r}")
-            normalized_terms.append(t.lower())
-
-        out[skill.lower()] = normalized_terms
-
+    The returned mapping is the existing matcher's API. Atomic extraction still
+    runs independently: a PostgreSQL hit can imply sql fit, never a SQL fact.
+    Legacy list-form dictionaries remain supported for external callers.
+    """
+    from skillfreq.configuration import CONFIG_DIR, read_config
+    from .job_market import load_market_taxonomy
+    data = read_config(path)
+    taxonomy = taxonomy if taxonomy is not None else load_market_taxonomy(CONFIG_DIR/'market_skills.yml')
+    out = {}
+    for concept, meta in data.items():
+        if isinstance(meta, list):
+            terms = meta
+        elif isinstance(meta, dict):
+            terms = list(meta.get('terms', []))
+            for atomic in meta.get('atomic_skills', []):
+                terms.extend(taxonomy[atomic])
+            for owner, term in meta.get('term_refs', []):
+                if term not in data[owner]['terms']:
+                    raise ValueError(f'Unknown concept term {owner}:{term}')
+                terms.append(term)
+        else:
+            raise ValueError(f'Invalid capability {concept}')
+        if not all(isinstance(t, str) for t in terms):
+            raise ValueError(f'Non-string term in {concept}')
+        out[concept.lower()] = list(dict.fromkeys(t.lower() for t in terms))
+    # Compatibility scoring channel; evidence is separately exposed as seniority.
+    requirements = requirements if requirements is not None else read_config(CONFIG_DIR/'requirements.yml')
+    out['seniority'] = requirements['seniority_terms']
     return out
 
 def load_weights(path: Path) -> Tuple[WeightDict, WeightDict]:

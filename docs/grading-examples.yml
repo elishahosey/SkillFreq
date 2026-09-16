@@ -1,0 +1,2649 @@
+obvious_target:
+  job_id: ''
+  role_lane: target_lane
+  lane_scores:
+    target_lane: 66.0
+    secondary_lane: 18.0
+    bridge_lane: 0
+    survival_lane: 0
+    wrong_lane: 0.0
+  raw_lane_scores:
+    target_lane: 66.0
+    secondary_lane: 18.0
+    bridge_lane: 22.0
+    survival_lane: 0.0
+    wrong_lane: 0.0
+  fit_score: 98.26
+  learning_score: 0
+  learning_status: eligible
+  blocking_reasons: []
+  review_flags: []
+  input_context:
+    search_lane:
+      value: ''
+      available: false
+    review_priority:
+      value: ''
+      available: false
+  pre_ai_score: 98.26
+  confidence: 0.805
+  confidence_evidence:
+    margin: 0.727
+    signal_count: 6
+    contradictions: []
+    requirement_ambiguity: false
+    weak_description: false
+    heuristic_not_probability: true
+  matched_atomic_skills:
+  - canonical_skill: SQL
+    matched_terms:
+    - sql
+    mention_count: 2
+  - canonical_skill: Python
+    matched_terms:
+    - python
+    mention_count: 2
+  matched_capability_concepts:
+    data_formats:
+    - json
+    - xml
+    sql:
+    - sql
+    etl:
+    - etl
+    - data pipelines
+    - data integration
+    - pipelines
+    apis:
+    - api
+    - rest
+    - xml
+    - json
+    integration_workflows:
+    - integration
+    - data integration
+    python:
+    - python
+    data_modeling:
+    - data modeling
+    data_quality:
+    - data quality
+    - validation
+    - reconciliation
+    systems:
+    - integration
+    operations:
+    - support
+    - production support
+    - troubleshoot
+    - root cause
+  missing_required_skills:
+    atomic_skills: []
+    capability_concepts: []
+  missing_preferred_skills:
+    atomic_skills: []
+    capability_concepts: []
+  growth_skills: []
+  market_relevant_gaps: []
+  matched_role_signals:
+  - rule_id: strong_target_title_terms
+    kind: signal
+    category: strong_target_title_terms
+    scope: title
+    signal_type: title
+    matched_terms:
+    - data engineer
+    lane: target_lane
+    weight: 30
+    contribution: 30
+    hard_exclusion: false
+  - rule_id: core_data_signals
+    kind: signal
+    category: core_data_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - etl
+    - data pipelines
+    - data integration
+    - data quality
+    - validation
+    - reconciliation
+    - data modeling
+    - xml
+    - json
+    - api
+    - rest
+    - sftp
+    - file transfer
+    - production support
+    - root cause
+    lane: target_lane
+    weight: 6
+    contribution: 36
+    hard_exclusion: false
+  - rule_id: support_signals
+    kind: signal
+    category: support_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - sql
+    - python
+    lane: bridge_lane
+    weight: 2
+    contribution: 4
+    hard_exclusion: false
+  - rule_id: bridge_positive_signals
+    kind: signal
+    category: bridge_positive_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - sql
+    - data quality
+    - reconciliation
+    - api
+    - rest
+    - xml
+    - json
+    - sftp
+    - integration
+    - production support
+    - root cause
+    lane: bridge_lane
+    weight: 3
+    contribution: 18
+    hard_exclusion: false
+  - rule_id: secondary_core_overlap
+    kind: signal
+    category: secondary_core_overlap
+    scope: description
+    signal_type: description
+    matched_terms:
+    - etl
+    - data pipelines
+    - data integration
+    - data quality
+    - validation
+    - reconciliation
+    - data modeling
+    - xml
+    - json
+    - api
+    - rest
+    - sftp
+    - file transfer
+    - production support
+    - root cause
+    lane: secondary_lane
+    weight: 3
+    contribution: 18
+    hard_exclusion: false
+  - rule_id: data_title_identity
+    kind: signal
+    category: data_title_identity
+    scope: title
+    signal_type: title
+    matched_terms:
+    - data
+    - engineer
+    lane: target_lane
+    weight: 0
+    contribution: 0
+    hard_exclusion: false
+  seniority_signals:
+    terms: []
+    years_required: null
+  exclusion_signals: []
+  triggered_rules:
+  - rule_id: strong_target_title_terms
+    kind: signal
+    category: strong_target_title_terms
+    scope: title
+    signal_type: title
+    matched_terms:
+    - data engineer
+    lane: target_lane
+    weight: 30
+    contribution: 30
+    hard_exclusion: false
+  - rule_id: core_data_signals
+    kind: signal
+    category: core_data_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - etl
+    - data pipelines
+    - data integration
+    - data quality
+    - validation
+    - reconciliation
+    - data modeling
+    - xml
+    - json
+    - api
+    - rest
+    - sftp
+    - file transfer
+    - production support
+    - root cause
+    lane: target_lane
+    weight: 6
+    contribution: 36
+    hard_exclusion: false
+  - rule_id: support_signals
+    kind: signal
+    category: support_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - sql
+    - python
+    lane: bridge_lane
+    weight: 2
+    contribution: 4
+    hard_exclusion: false
+  - rule_id: bridge_positive_signals
+    kind: signal
+    category: bridge_positive_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - sql
+    - data quality
+    - reconciliation
+    - api
+    - rest
+    - xml
+    - json
+    - sftp
+    - integration
+    - production support
+    - root cause
+    lane: bridge_lane
+    weight: 3
+    contribution: 18
+    hard_exclusion: false
+  - rule_id: secondary_core_overlap
+    kind: signal
+    category: secondary_core_overlap
+    scope: description
+    signal_type: description
+    matched_terms:
+    - etl
+    - data pipelines
+    - data integration
+    - data quality
+    - validation
+    - reconciliation
+    - data modeling
+    - xml
+    - json
+    - api
+    - rest
+    - sftp
+    - file transfer
+    - production support
+    - root cause
+    lane: secondary_lane
+    weight: 3
+    contribution: 18
+    hard_exclusion: false
+  - rule_id: data_title_identity
+    kind: signal
+    category: data_title_identity
+    scope: title
+    signal_type: title
+    matched_terms:
+    - data
+    - engineer
+    lane: target_lane
+    weight: 0
+    contribution: 0
+    hard_exclusion: false
+  - rule_id: data_evidence
+    kind: override
+    condition:
+      any:
+      - field: hits.core_data_signals
+        op: gte
+        value: 2
+      - all:
+        - field: hits.core_data_signals
+          op: gte
+          value: 1
+        - field: hits.support_signals
+          op: gte
+          value: 2
+    action:
+      op: set
+      field: data_ok
+      value: true
+    before: false
+    result: true
+  - rule_id: bridge_evidence
+    kind: override
+    condition:
+      all:
+      - field: hits.bridge_positive_signals
+        op: gte
+        value: 4
+      - field: hits.support_signals
+        op: gte
+        value: 2
+    action:
+      op: set
+      field: bridge_ok
+      value: true
+    before: false
+    result: true
+  - rule_id: transferable_data_identity
+    kind: override
+    condition:
+      all:
+      - field: hits.core_data_signals
+        op: gte
+        value: 3
+      - field: hits.support_signals
+        op: gte
+        value: 2
+      - field: hits.analytics_terms
+        op: equals
+        value: 0
+      - field: hits.platform_heavy_terms
+        op: lte
+        value: 2
+    action:
+      op: set
+      field: data_identity
+      value: true
+    before: false
+    result: true
+  - rule_id: target_eligibility
+    kind: override
+    condition:
+      all:
+      - field: data_ok
+        op: equals
+        value: true
+      - any:
+        - field: hits.strong_target_title_terms
+          op: gte
+          value: 1
+        - all:
+          - field: data_identity
+            op: equals
+            value: true
+          - field: hits.non_target_title_terms
+            op: equals
+            value: 0
+          - field: hits.bridge_title_terms
+            op: equals
+            value: 0
+          - field: hits.consultant_title_terms
+            op: equals
+            value: 0
+          - field: hits.data_title_identity
+            op: gte
+            value: 1
+    action:
+      op: append
+      field: eligible
+      value: target_lane
+    before:
+    - wrong_lane
+    result:
+    - wrong_lane
+    - target_lane
+  - rule_id: secondary_eligibility
+    kind: override
+    condition:
+      all:
+      - field: hits.platform_heavy_terms
+        op: lte
+        value: 3
+      - any:
+        - field: data_ok
+          op: equals
+          value: true
+        - field: backend_ok
+          op: equals
+          value: true
+    action:
+      op: append
+      field: eligible
+      value: secondary_lane
+    before:
+    - wrong_lane
+    - target_lane
+    result:
+    - wrong_lane
+    - target_lane
+    - secondary_lane
+  - rule_id: lane_eligibility:bridge_lane
+    kind: penalty
+    lane: bridge_lane
+    contribution: -22.0
+    reason: configured_eligibility_rules
+  - rule_id: lane_eligibility:survival_lane
+    kind: penalty
+    lane: survival_lane
+    contribution: -0.0
+    reason: configured_eligibility_rules
+  - rule_id: fit_profile_coverage
+    kind: fit
+    contribution: 98.261
+    concepts:
+      data_formats:
+        weight: 4.0
+        profile_strength: 1.0
+      sql:
+        weight: 5.0
+        profile_strength: 1.0
+      etl:
+        weight: 6.0
+        profile_strength: 1.0
+      apis:
+        weight: 3.0
+        profile_strength: 1.0
+      integration_workflows:
+        weight: 4.0
+        profile_strength: 1.0
+      python:
+        weight: 3.0
+        profile_strength: 0.8
+      data_modeling:
+        weight: 3.0
+        profile_strength: 1.0
+      data_quality:
+        weight: 4.0
+        profile_strength: 1.0
+      systems:
+        weight: 1.5
+        profile_strength: 1.25
+      operations:
+        weight: 1.0
+        profile_strength: 1.0
+  - rule_id: fit_base
+    kind: fit
+    contribution: 0
+  - rule_id: fit_lane_cap_and_bounds
+    kind: fit
+    lane: target_lane
+    contribution: 0.0
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 4.0
+    concept: data_formats
+    profile_strength: 1.0
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 5.0
+    concept: sql
+    profile_strength: 1.0
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 6.0
+    concept: etl
+    profile_strength: 1.0
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 3.0
+    concept: apis
+    profile_strength: 1.0
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 4.0
+    concept: integration_workflows
+    profile_strength: 1.0
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 2.4000000000000004
+    concept: python
+    profile_strength: 0.8
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 3.0
+    concept: data_modeling
+    profile_strength: 1.0
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 4.0
+    concept: data_quality
+    profile_strength: 1.0
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 1.5
+    concept: systems
+    profile_strength: 1.25
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 1.0
+    concept: operations
+    profile_strength: 1.0
+  - rule_id: alignment:pipeline_sql
+    kind: alignment
+    contribution: 3
+    hits: 8
+  - rule_id: alignment:integration
+    kind: alignment
+    contribution: 1.5
+  - rule_id: alignment:etl_deep
+    kind: alignment
+    contribution: 4
+  - rule_id: alignment:etl_overlap
+    kind: alignment
+    contribution: 5
+  - rule_id: alignment:normalization
+    kind: alignment
+    contribution: 7.105427357601002e-15
+    denominator: 10
+    scale: 10
+  - rule_id: ai_review_gate
+    kind: decision
+    result: false
+    confidence: 0.805
+    margin: 0.727
+  - rule_id: good_fit_score
+    kind: decision
+    condition:
+      field: fit_score
+      op: gte
+      value: 80
+    action:
+      op: set
+      field: fit_quality
+      value: good_fit
+    before: null
+    result: good_fit
+  - rule_id: strong_primary_fit
+    kind: decision
+    condition:
+      all:
+      - field: role_lane
+        op: equals
+        value: target_lane
+      - field: fit_score
+        op: gte
+        value: 78
+    action:
+      op: set
+      field: apply_decision
+      value: apply_now
+    before: null
+    result: apply_now
+  reason_codes:
+  - data_evidence
+  - bridge_evidence
+  - transferable_data_identity
+  - target_eligibility
+  - secondary_eligibility
+  - ai_review_gate
+  - good_fit_score
+  - strong_primary_fit
+  apply_decision: apply_now
+  fit_quality: good_fit
+  ai_review_required: false
+  ai_review_reasons: []
+  grading_version: 809dc743062dee89
+  taxonomy_version: 31d08964f877
+  market_context:
+    source: supplied
+    prevalence_pct:
+      SQL: null
+      Python: null
+  alignment_score: 47.400000000000006
+  label: High Match
+  matched: 10
+  required_total: 10
+  missing: []
+  counts:
+    data_formats: 2
+    sql: 2
+    etl: 5
+    apis: 4
+    integration_workflows: 2
+    kafka: 0
+    airflow: 0
+    azure: 0
+    aws: 0
+    python: 2
+    java: 0
+    git: 0
+    data_platforms: 0
+    devops: 0
+    data_modeling: 1
+    data_quality: 3
+    systems: 1
+    software_engineering: 0
+    system_design: 0
+    testing: 0
+    operations: 4
+    dev_practices: 0
+    ai_ml: 0
+    monitoring: 0
+    spark: 0
+    seniority: 0
+data_backend:
+  job_id: ''
+  role_lane: secondary_lane
+  lane_scores:
+    target_lane: 0
+    secondary_lane: 69.0
+    bridge_lane: 0
+    survival_lane: 0
+    wrong_lane: 0.0
+  raw_lane_scores:
+    target_lane: 6.0
+    secondary_lane: 69.0
+    bridge_lane: 3.0
+    survival_lane: 0.0
+    wrong_lane: 0.0
+  fit_score: 85
+  learning_score: 0
+  learning_status: eligible
+  blocking_reasons: []
+  review_flags: []
+  input_context:
+    search_lane:
+      value: ''
+      available: false
+    review_priority:
+      value: ''
+      available: false
+  pre_ai_score: 85
+  confidence: 0.9
+  confidence_evidence:
+    margin: 1.0
+    signal_count: 6
+    contradictions: []
+    requirement_ambiguity: false
+    weak_description: false
+    heuristic_not_probability: true
+  matched_atomic_skills:
+  - canonical_skill: PostgreSQL
+    matched_terms:
+    - postgresql
+    mention_count: 1
+  - canonical_skill: Docker
+    matched_terms:
+    - docker
+    mention_count: 1
+  matched_capability_concepts:
+    data_formats:
+    - xml
+    sql:
+    - postgresql
+    etl:
+    - batch data processing
+    - data processing
+    apis:
+    - xml
+    python:
+    - sqlalchemy
+    - fastapi
+    devops:
+    - docker
+  missing_required_skills:
+    atomic_skills: []
+    capability_concepts: []
+  missing_preferred_skills:
+    atomic_skills: []
+    capability_concepts: []
+  growth_skills: []
+  market_relevant_gaps: []
+  matched_role_signals:
+  - rule_id: secondary_title_terms
+    kind: signal
+    category: secondary_title_terms
+    scope: title
+    signal_type: title
+    matched_terms:
+    - backend engineer
+    lane: secondary_lane
+    weight: 30
+    contribution: 30
+    hard_exclusion: false
+  - rule_id: non_target_title_terms
+    kind: signal
+    category: non_target_title_terms
+    scope: title
+    signal_type: title
+    matched_terms:
+    - backend engineer
+    lane: secondary_lane
+    weight: 0
+    contribution: 0
+    hard_exclusion: false
+  - rule_id: core_data_signals
+    kind: signal
+    category: core_data_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - xml
+    lane: target_lane
+    weight: 6
+    contribution: 6
+    hard_exclusion: false
+  - rule_id: backend_data_signals
+    kind: signal
+    category: backend_data_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - fastapi
+    - postgresql
+    - sqlalchemy
+    - microservices
+    - batch data processing
+    - xml processing
+    - pytest
+    - docker
+    lane: secondary_lane
+    weight: 6
+    contribution: 36
+    hard_exclusion: false
+  - rule_id: bridge_positive_signals
+    kind: signal
+    category: bridge_positive_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - xml
+    lane: bridge_lane
+    weight: 3
+    contribution: 3
+    hard_exclusion: false
+  - rule_id: secondary_core_overlap
+    kind: signal
+    category: secondary_core_overlap
+    scope: description
+    signal_type: description
+    matched_terms:
+    - xml
+    lane: secondary_lane
+    weight: 3
+    contribution: 3
+    hard_exclusion: false
+  seniority_signals:
+    terms: []
+    years_required: null
+  exclusion_signals: []
+  triggered_rules:
+  - rule_id: secondary_title_terms
+    kind: signal
+    category: secondary_title_terms
+    scope: title
+    signal_type: title
+    matched_terms:
+    - backend engineer
+    lane: secondary_lane
+    weight: 30
+    contribution: 30
+    hard_exclusion: false
+  - rule_id: non_target_title_terms
+    kind: signal
+    category: non_target_title_terms
+    scope: title
+    signal_type: title
+    matched_terms:
+    - backend engineer
+    lane: secondary_lane
+    weight: 0
+    contribution: 0
+    hard_exclusion: false
+  - rule_id: core_data_signals
+    kind: signal
+    category: core_data_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - xml
+    lane: target_lane
+    weight: 6
+    contribution: 6
+    hard_exclusion: false
+  - rule_id: backend_data_signals
+    kind: signal
+    category: backend_data_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - fastapi
+    - postgresql
+    - sqlalchemy
+    - microservices
+    - batch data processing
+    - xml processing
+    - pytest
+    - docker
+    lane: secondary_lane
+    weight: 6
+    contribution: 36
+    hard_exclusion: false
+  - rule_id: bridge_positive_signals
+    kind: signal
+    category: bridge_positive_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - xml
+    lane: bridge_lane
+    weight: 3
+    contribution: 3
+    hard_exclusion: false
+  - rule_id: secondary_core_overlap
+    kind: signal
+    category: secondary_core_overlap
+    scope: description
+    signal_type: description
+    matched_terms:
+    - xml
+    lane: secondary_lane
+    weight: 3
+    contribution: 3
+    hard_exclusion: false
+  - rule_id: backend_evidence
+    kind: override
+    condition:
+      field: hits.backend_data_signals
+      op: gte
+      value: 2
+    action:
+      op: set
+      field: backend_ok
+      value: true
+    before: false
+    result: true
+  - rule_id: secondary_eligibility
+    kind: override
+    condition:
+      all:
+      - field: hits.platform_heavy_terms
+        op: lte
+        value: 3
+      - any:
+        - field: data_ok
+          op: equals
+          value: true
+        - field: backend_ok
+          op: equals
+          value: true
+    action:
+      op: append
+      field: eligible
+      value: secondary_lane
+    before:
+    - wrong_lane
+    result:
+    - wrong_lane
+    - secondary_lane
+  - rule_id: generic_software_guard
+    kind: override
+    condition:
+      all:
+      - field: hits.non_target_title_terms
+        op: gte
+        value: 1
+      - field: hits.strong_target_title_terms
+        op: equals
+        value: 0
+    action:
+      op: remove
+      field: eligible
+      value: target_lane
+    before:
+    - wrong_lane
+    - secondary_lane
+    result:
+    - wrong_lane
+    - secondary_lane
+  - rule_id: lane_eligibility:target_lane
+    kind: penalty
+    lane: target_lane
+    contribution: -6.0
+    reason: configured_eligibility_rules
+  - rule_id: lane_eligibility:bridge_lane
+    kind: penalty
+    lane: bridge_lane
+    contribution: -3.0
+    reason: configured_eligibility_rules
+  - rule_id: lane_eligibility:survival_lane
+    kind: penalty
+    lane: survival_lane
+    contribution: -0.0
+    reason: configured_eligibility_rules
+  - rule_id: fit_profile_coverage
+    kind: fit
+    contribution: 97.143
+    concepts:
+      data_formats:
+        weight: 4.0
+        profile_strength: 1.0
+      sql:
+        weight: 5.0
+        profile_strength: 1.0
+      etl:
+        weight: 6.0
+        profile_strength: 1.0
+      apis:
+        weight: 3.0
+        profile_strength: 1.0
+      python:
+        weight: 3.0
+        profile_strength: 0.8
+  - rule_id: fit_base
+    kind: fit
+    contribution: 0
+  - rule_id: fit_lane_cap_and_bounds
+    kind: fit
+    lane: secondary_lane
+    contribution: -12.143
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 4.0
+    concept: data_formats
+    profile_strength: 1.0
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 5.0
+    concept: sql
+    profile_strength: 1.0
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 6.0
+    concept: etl
+    profile_strength: 1.0
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 3.0
+    concept: apis
+    profile_strength: 1.0
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 2.4000000000000004
+    concept: python
+    profile_strength: 0.8
+  - rule_id: alignment:concept_penalty
+    kind: alignment
+    contribution: -1.0
+    concept: devops
+    count: 1
+  - rule_id: alignment:integration
+    kind: alignment
+    contribution: 1.5
+  - rule_id: alignment:etl_overlap
+    kind: alignment
+    contribution: 5
+  - rule_id: alignment:normalization
+    kind: alignment
+    contribution: 17.266666666666666
+    denominator: 6
+    scale: 10
+  - rule_id: ai_review_gate
+    kind: decision
+    result: false
+    confidence: 0.9
+    margin: 1.0
+  - rule_id: good_fit_score
+    kind: decision
+    condition:
+      field: fit_score
+      op: gte
+      value: 80
+    action:
+      op: set
+      field: fit_quality
+      value: good_fit
+    before: null
+    result: good_fit
+  - rule_id: adjacent_or_moderate_fit
+    kind: decision
+    condition:
+      field: always
+      op: equals
+      value: true
+    action:
+      op: set
+      field: apply_decision
+      value: manual_review
+    before: null
+    result: manual_review
+  reason_codes:
+  - backend_evidence
+  - secondary_eligibility
+  - generic_software_guard
+  - ai_review_gate
+  - good_fit_score
+  - adjacent_or_moderate_fit
+  apply_decision: manual_review
+  fit_quality: good_fit
+  ai_review_required: false
+  ai_review_reasons: []
+  grading_version: 809dc743062dee89
+  taxonomy_version: 31d08964f877
+  market_context:
+    source: supplied
+    prevalence_pct:
+      PostgreSQL: null
+      Docker: null
+  alignment_score: 43.166666666666664
+  label: High Match
+  matched: 5
+  required_total: 6
+  missing: []
+  counts:
+    data_formats: 1
+    sql: 1
+    etl: 2
+    apis: 1
+    integration_workflows: 0
+    kafka: 0
+    airflow: 0
+    azure: 0
+    aws: 0
+    python: 2
+    java: 0
+    git: 0
+    data_platforms: 0
+    devops: 1
+    data_modeling: 0
+    data_quality: 0
+    systems: 0
+    software_engineering: 0
+    system_design: 0
+    testing: 0
+    operations: 0
+    dev_practices: 0
+    ai_ml: 0
+    monitoring: 0
+    spark: 0
+    seniority: 0
+frontend:
+  job_id: ''
+  role_lane: wrong_lane
+  lane_scores:
+    target_lane: 0
+    secondary_lane: 0
+    bridge_lane: 0
+    survival_lane: 0
+    wrong_lane: 100.0
+  raw_lane_scores:
+    target_lane: 12.0
+    secondary_lane: 6.0
+    bridge_lane: 14.0
+    survival_lane: 0.0
+    wrong_lane: 100.0
+  fit_score: 15
+  learning_score: 0.0
+  learning_status: ineligible
+  blocking_reasons:
+  - wrong_role_identity
+  review_flags: []
+  input_context:
+    search_lane:
+      value: ''
+      available: false
+    review_priority:
+      value: ''
+      available: false
+  pre_ai_score: 15
+  confidence: 0.97
+  confidence_evidence:
+    margin: 1.0
+    signal_count: 5
+    contradictions: []
+    requirement_ambiguity: false
+    weak_description: false
+    heuristic_not_probability: true
+    hard_exclusion_override:
+    - hard_wrong_title_terms
+  matched_atomic_skills:
+  - canonical_skill: SQL
+    matched_terms:
+    - sql
+    mention_count: 1
+  matched_capability_concepts:
+    sql:
+    - sql
+    apis:
+    - apis
+    - rest
+    - rest apis
+    integration_workflows:
+    - interfaces
+  missing_required_skills:
+    atomic_skills: []
+    capability_concepts: []
+  missing_preferred_skills:
+    atomic_skills: []
+    capability_concepts: []
+  growth_skills: []
+  market_relevant_gaps: []
+  matched_role_signals:
+  - rule_id: hard_wrong_title_terms
+    kind: signal
+    category: hard_wrong_title_terms
+    scope: title
+    signal_type: title
+    matched_terms:
+    - frontend engineer
+    lane: wrong_lane
+    weight: 100
+    contribution: 100
+    hard_exclusion: true
+  - rule_id: core_data_signals
+    kind: signal
+    category: core_data_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - apis
+    - rest
+    lane: target_lane
+    weight: 6
+    contribution: 12
+    hard_exclusion: false
+  - rule_id: support_signals
+    kind: signal
+    category: support_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - sql
+    lane: bridge_lane
+    weight: 2
+    contribution: 2
+    hard_exclusion: false
+  - rule_id: bridge_positive_signals
+    kind: signal
+    category: bridge_positive_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - sql
+    - apis
+    - rest
+    - interfaces
+    lane: bridge_lane
+    weight: 3
+    contribution: 12
+    hard_exclusion: false
+  - rule_id: secondary_core_overlap
+    kind: signal
+    category: secondary_core_overlap
+    scope: description
+    signal_type: description
+    matched_terms:
+    - apis
+    - rest
+    lane: secondary_lane
+    weight: 3
+    contribution: 6
+    hard_exclusion: false
+  seniority_signals:
+    terms: []
+    years_required: null
+  exclusion_signals:
+  - rule_id: hard_wrong_title_terms
+    kind: signal
+    category: hard_wrong_title_terms
+    scope: title
+    signal_type: title
+    matched_terms:
+    - frontend engineer
+    lane: wrong_lane
+    weight: 100
+    contribution: 100
+    hard_exclusion: true
+  triggered_rules:
+  - rule_id: hard_wrong_title_terms
+    kind: signal
+    category: hard_wrong_title_terms
+    scope: title
+    signal_type: title
+    matched_terms:
+    - frontend engineer
+    lane: wrong_lane
+    weight: 100
+    contribution: 100
+    hard_exclusion: true
+  - rule_id: core_data_signals
+    kind: signal
+    category: core_data_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - apis
+    - rest
+    lane: target_lane
+    weight: 6
+    contribution: 12
+    hard_exclusion: false
+  - rule_id: support_signals
+    kind: signal
+    category: support_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - sql
+    lane: bridge_lane
+    weight: 2
+    contribution: 2
+    hard_exclusion: false
+  - rule_id: bridge_positive_signals
+    kind: signal
+    category: bridge_positive_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - sql
+    - apis
+    - rest
+    - interfaces
+    lane: bridge_lane
+    weight: 3
+    contribution: 12
+    hard_exclusion: false
+  - rule_id: secondary_core_overlap
+    kind: signal
+    category: secondary_core_overlap
+    scope: description
+    signal_type: description
+    matched_terms:
+    - apis
+    - rest
+    lane: secondary_lane
+    weight: 3
+    contribution: 6
+    hard_exclusion: false
+  - rule_id: data_evidence
+    kind: override
+    condition:
+      any:
+      - field: hits.core_data_signals
+        op: gte
+        value: 2
+      - all:
+        - field: hits.core_data_signals
+          op: gte
+          value: 1
+        - field: hits.support_signals
+          op: gte
+          value: 2
+    action:
+      op: set
+      field: data_ok
+      value: true
+    before: false
+    result: true
+  - rule_id: secondary_eligibility
+    kind: override
+    condition:
+      all:
+      - field: hits.platform_heavy_terms
+        op: lte
+        value: 3
+      - any:
+        - field: data_ok
+          op: equals
+          value: true
+        - field: backend_ok
+          op: equals
+          value: true
+    action:
+      op: append
+      field: eligible
+      value: secondary_lane
+    before:
+    - wrong_lane
+    result:
+    - wrong_lane
+    - secondary_lane
+  - rule_id: hard_exclusion_override
+    kind: override
+    condition:
+      field: hard_exclusions
+      op: not_empty
+      value: true
+    action:
+      op: set
+      field: eligible
+      value:
+      - wrong_lane
+    before:
+    - wrong_lane
+    - secondary_lane
+    result:
+    - wrong_lane
+  - rule_id: lane_eligibility:target_lane
+    kind: penalty
+    lane: target_lane
+    contribution: -12.0
+    reason: configured_eligibility_rules
+  - rule_id: lane_eligibility:secondary_lane
+    kind: penalty
+    lane: secondary_lane
+    contribution: -6.0
+    reason: configured_eligibility_rules
+  - rule_id: lane_eligibility:bridge_lane
+    kind: penalty
+    lane: bridge_lane
+    contribution: -14.0
+    reason: configured_eligibility_rules
+  - rule_id: lane_eligibility:survival_lane
+    kind: penalty
+    lane: survival_lane
+    contribution: -0.0
+    reason: configured_eligibility_rules
+  - rule_id: fit_profile_coverage
+    kind: fit
+    contribution: 100.0
+    concepts:
+      sql:
+        weight: 5.0
+        profile_strength: 1.0
+      apis:
+        weight: 3.0
+        profile_strength: 1.0
+      integration_workflows:
+        weight: 4.0
+        profile_strength: 1.0
+  - rule_id: fit_base
+    kind: fit
+    contribution: 0
+  - rule_id: wrong_role_gate
+    kind: fit
+    condition:
+      field: role_lane
+      op: equals
+      value: wrong_lane
+    action:
+      op: append
+      field: blockers
+      value: wrong_role_identity
+    before: []
+    result:
+    - wrong_role_identity
+    contribution: 0
+  - rule_id: fit_lane_cap_and_bounds
+    kind: fit
+    lane: wrong_lane
+    contribution: -85.0
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 5.0
+    concept: sql
+    profile_strength: 1.0
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 3.0
+    concept: apis
+    profile_strength: 1.0
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 4.0
+    concept: integration_workflows
+    profile_strength: 1.0
+  - rule_id: alignment:integration
+    kind: alignment
+    contribution: 1.5
+  - rule_id: alignment:normalization
+    kind: alignment
+    contribution: 31.5
+    denominator: 3
+    scale: 10
+  - rule_id: ai_review_gate
+    kind: decision
+    result: false
+    confidence: 0.97
+    margin: 1.0
+  - rule_id: weak_fit_score
+    kind: decision
+    condition:
+      field: always
+      op: equals
+      value: true
+    action:
+      op: set
+      field: fit_quality
+      value: weak_fit
+    before: null
+    result: weak_fit
+  - rule_id: configured_hard_blocker
+    kind: decision
+    condition:
+      field: blockers
+      op: not_empty
+      value: true
+    action:
+      op: set
+      field: apply_decision
+      value: skip
+    before: null
+    result: skip
+  reason_codes:
+  - hard_wrong_title_terms
+  - wrong_role_identity
+  - data_evidence
+  - secondary_eligibility
+  - hard_exclusion_override
+  - ai_review_gate
+  - weak_fit_score
+  - configured_hard_blocker
+  apply_decision: skip
+  fit_quality: weak_fit
+  ai_review_required: false
+  ai_review_reasons: []
+  grading_version: 809dc743062dee89
+  taxonomy_version: 31d08964f877
+  market_context:
+    source: supplied
+    prevalence_pct:
+      SQL: null
+  alignment_score: 45.0
+  label: High Match
+  matched: 3
+  required_total: 3
+  missing: []
+  counts:
+    data_formats: 0
+    sql: 1
+    etl: 0
+    apis: 3
+    integration_workflows: 1
+    kafka: 0
+    airflow: 0
+    azure: 0
+    aws: 0
+    python: 0
+    java: 0
+    git: 0
+    data_platforms: 0
+    devops: 0
+    data_modeling: 0
+    data_quality: 0
+    systems: 0
+    software_engineering: 0
+    system_design: 0
+    testing: 0
+    operations: 0
+    dev_practices: 0
+    ai_ml: 0
+    monitoring: 0
+    spark: 0
+    seniority: 0
+learning_opportunity:
+  job_id: ''
+  role_lane: target_lane
+  lane_scores:
+    target_lane: 60.0
+    secondary_lane: 15.0
+    bridge_lane: 0
+    survival_lane: 0
+    wrong_lane: 0.0
+  raw_lane_scores:
+    target_lane: 60.0
+    secondary_lane: 15.0
+    bridge_lane: 15.0
+    survival_lane: 0.0
+    wrong_lane: 0.0
+  fit_score: 83.0
+  learning_score: 94.03
+  learning_status: eligible
+  blocking_reasons: []
+  review_flags: []
+  input_context:
+    search_lane:
+      value: ''
+      available: false
+    review_priority:
+      value: ''
+      available: false
+  pre_ai_score: 83.0
+  confidence: 0.812
+  confidence_evidence:
+    margin: 0.75
+    signal_count: 7
+    contradictions: []
+    requirement_ambiguity: false
+    weak_description: false
+    heuristic_not_probability: true
+  matched_atomic_skills:
+  - canonical_skill: SQL
+    matched_terms:
+    - sql
+    mention_count: 2
+  - canonical_skill: Python
+    matched_terms:
+    - python
+    mention_count: 2
+  - canonical_skill: Snowflake
+    matched_terms:
+    - snowflake
+    mention_count: 1
+  - canonical_skill: Airflow
+    matched_terms:
+    - airflow
+    mention_count: 1
+  - canonical_skill: Spark
+    matched_terms:
+    - spark
+    mention_count: 1
+  - canonical_skill: AWS
+    matched_terms:
+    - aws
+    mention_count: 1
+  matched_capability_concepts:
+    sql:
+    - sql
+    etl:
+    - etl
+    - data pipelines
+    - data integration
+    - pipelines
+    integration_workflows:
+    - integration
+    - data integration
+    airflow:
+    - airflow
+    aws:
+    - aws
+    python:
+    - python
+    - spark
+    data_platforms:
+    - snowflake
+    data_modeling:
+    - data modeling
+    data_quality:
+    - data quality
+    systems:
+    - integration
+    spark:
+    - spark
+  missing_required_skills:
+    atomic_skills:
+    - Airflow
+    - AWS
+    capability_concepts:
+    - aws
+  missing_preferred_skills:
+    atomic_skills:
+    - Snowflake
+    - Spark
+    capability_concepts:
+    - spark
+  growth_skills:
+  - skill: Snowflake
+    prevalence_pct: 20.0
+    adjacent_concepts:
+      sql: 1.0
+      data_modeling: 1.0
+    priority: 0.8
+    novelty: 1
+    contribution: 18.667
+  - skill: Airflow
+    prevalence_pct: 27.0
+    adjacent_concepts:
+      etl: 1.0
+      python: 0.8
+    priority: 1
+    novelty: 0.8
+    contribution: 25.2
+  - skill: Spark
+    prevalence_pct: 20.0
+    adjacent_concepts:
+      etl: 1.0
+      python: 0.8
+    priority: 0.8
+    novelty: 1
+    contribution: 18.667
+  - skill: AWS
+    prevalence_pct: 30.0
+    adjacent_concepts:
+      etl: 1.0
+      python: 0.8
+    priority: 0.9
+    novelty: 1
+    contribution: 31.5
+  market_relevant_gaps:
+  - skill: Snowflake
+    prevalence_pct: 20.0
+    adjacent_concepts:
+      sql: 1.0
+      data_modeling: 1.0
+    priority: 0.8
+    novelty: 1
+    contribution: 18.667
+  - skill: Airflow
+    prevalence_pct: 27.0
+    adjacent_concepts:
+      etl: 1.0
+      python: 0.8
+    priority: 1
+    novelty: 0.8
+    contribution: 25.2
+  - skill: Spark
+    prevalence_pct: 20.0
+    adjacent_concepts:
+      etl: 1.0
+      python: 0.8
+    priority: 0.8
+    novelty: 1
+    contribution: 18.667
+  - skill: AWS
+    prevalence_pct: 30.0
+    adjacent_concepts:
+      etl: 1.0
+      python: 0.8
+    priority: 0.9
+    novelty: 1
+    contribution: 31.5
+  matched_role_signals:
+  - rule_id: strong_target_title_terms
+    kind: signal
+    category: strong_target_title_terms
+    scope: title
+    signal_type: title
+    matched_terms:
+    - data engineer
+    lane: target_lane
+    weight: 30
+    contribution: 30
+    hard_exclusion: false
+  - rule_id: core_data_signals
+    kind: signal
+    category: core_data_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - etl
+    - data pipelines
+    - data integration
+    - data quality
+    - data modeling
+    lane: target_lane
+    weight: 6
+    contribution: 30
+    hard_exclusion: false
+  - rule_id: support_signals
+    kind: signal
+    category: support_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - sql
+    - python
+    lane: bridge_lane
+    weight: 2
+    contribution: 4
+    hard_exclusion: false
+  - rule_id: bridge_positive_signals
+    kind: signal
+    category: bridge_positive_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - sql
+    - data quality
+    - integration
+    lane: bridge_lane
+    weight: 3
+    contribution: 9
+    hard_exclusion: false
+  - rule_id: analytics_terms
+    kind: signal
+    category: analytics_terms
+    scope: description
+    signal_type: description
+    matched_terms:
+    - snowflake
+    lane: bridge_lane
+    weight: 2
+    contribution: 2
+    hard_exclusion: false
+  - rule_id: secondary_core_overlap
+    kind: signal
+    category: secondary_core_overlap
+    scope: description
+    signal_type: description
+    matched_terms:
+    - etl
+    - data pipelines
+    - data integration
+    - data quality
+    - data modeling
+    lane: secondary_lane
+    weight: 3
+    contribution: 15
+    hard_exclusion: false
+  - rule_id: data_title_identity
+    kind: signal
+    category: data_title_identity
+    scope: title
+    signal_type: title
+    matched_terms:
+    - data
+    - engineer
+    lane: target_lane
+    weight: 0
+    contribution: 0
+    hard_exclusion: false
+  seniority_signals:
+    terms: []
+    years_required: null
+  exclusion_signals: []
+  triggered_rules:
+  - rule_id: strong_target_title_terms
+    kind: signal
+    category: strong_target_title_terms
+    scope: title
+    signal_type: title
+    matched_terms:
+    - data engineer
+    lane: target_lane
+    weight: 30
+    contribution: 30
+    hard_exclusion: false
+  - rule_id: core_data_signals
+    kind: signal
+    category: core_data_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - etl
+    - data pipelines
+    - data integration
+    - data quality
+    - data modeling
+    lane: target_lane
+    weight: 6
+    contribution: 30
+    hard_exclusion: false
+  - rule_id: support_signals
+    kind: signal
+    category: support_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - sql
+    - python
+    lane: bridge_lane
+    weight: 2
+    contribution: 4
+    hard_exclusion: false
+  - rule_id: bridge_positive_signals
+    kind: signal
+    category: bridge_positive_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - sql
+    - data quality
+    - integration
+    lane: bridge_lane
+    weight: 3
+    contribution: 9
+    hard_exclusion: false
+  - rule_id: analytics_terms
+    kind: signal
+    category: analytics_terms
+    scope: description
+    signal_type: description
+    matched_terms:
+    - snowflake
+    lane: bridge_lane
+    weight: 2
+    contribution: 2
+    hard_exclusion: false
+  - rule_id: secondary_core_overlap
+    kind: signal
+    category: secondary_core_overlap
+    scope: description
+    signal_type: description
+    matched_terms:
+    - etl
+    - data pipelines
+    - data integration
+    - data quality
+    - data modeling
+    lane: secondary_lane
+    weight: 3
+    contribution: 15
+    hard_exclusion: false
+  - rule_id: data_title_identity
+    kind: signal
+    category: data_title_identity
+    scope: title
+    signal_type: title
+    matched_terms:
+    - data
+    - engineer
+    lane: target_lane
+    weight: 0
+    contribution: 0
+    hard_exclusion: false
+  - rule_id: data_evidence
+    kind: override
+    condition:
+      any:
+      - field: hits.core_data_signals
+        op: gte
+        value: 2
+      - all:
+        - field: hits.core_data_signals
+          op: gte
+          value: 1
+        - field: hits.support_signals
+          op: gte
+          value: 2
+    action:
+      op: set
+      field: data_ok
+      value: true
+    before: false
+    result: true
+  - rule_id: target_eligibility
+    kind: override
+    condition:
+      all:
+      - field: data_ok
+        op: equals
+        value: true
+      - any:
+        - field: hits.strong_target_title_terms
+          op: gte
+          value: 1
+        - all:
+          - field: data_identity
+            op: equals
+            value: true
+          - field: hits.non_target_title_terms
+            op: equals
+            value: 0
+          - field: hits.bridge_title_terms
+            op: equals
+            value: 0
+          - field: hits.consultant_title_terms
+            op: equals
+            value: 0
+          - field: hits.data_title_identity
+            op: gte
+            value: 1
+    action:
+      op: append
+      field: eligible
+      value: target_lane
+    before:
+    - wrong_lane
+    result:
+    - wrong_lane
+    - target_lane
+  - rule_id: secondary_eligibility
+    kind: override
+    condition:
+      all:
+      - field: hits.platform_heavy_terms
+        op: lte
+        value: 3
+      - any:
+        - field: data_ok
+          op: equals
+          value: true
+        - field: backend_ok
+          op: equals
+          value: true
+    action:
+      op: append
+      field: eligible
+      value: secondary_lane
+    before:
+    - wrong_lane
+    - target_lane
+    result:
+    - wrong_lane
+    - target_lane
+    - secondary_lane
+  - rule_id: lane_eligibility:bridge_lane
+    kind: penalty
+    lane: bridge_lane
+    contribution: -15.0
+    reason: configured_eligibility_rules
+  - rule_id: lane_eligibility:survival_lane
+    kind: penalty
+    lane: survival_lane
+    contribution: -0.0
+    reason: configured_eligibility_rules
+  - rule_id: fit_profile_coverage
+    kind: fit
+    contribution: 90.0
+    concepts:
+      sql:
+        weight: 5.0
+        profile_strength: 1.0
+      etl:
+        weight: 6.0
+        profile_strength: 1.0
+      integration_workflows:
+        weight: 4.0
+        profile_strength: 1.0
+      airflow:
+        weight: 1.0
+        profile_strength: 0.2
+      aws:
+        weight: 0.5
+        profile_strength: 0.0
+      python:
+        weight: 3.0
+        profile_strength: 0.8
+      data_modeling:
+        weight: 3.0
+        profile_strength: 1.0
+      data_quality:
+        weight: 4.0
+        profile_strength: 1.0
+      systems:
+        weight: 1.5
+        profile_strength: 1.25
+      spark:
+        weight: 1
+        profile_strength: 0
+  - rule_id: fit_base
+    kind: fit
+    contribution: 0
+  - rule_id: fit_missing_required_atomic
+    kind: fit
+    skill: Airflow
+    contribution: -3
+  - rule_id: fit_missing_required_atomic
+    kind: fit
+    skill: AWS
+    contribution: -3
+  - rule_id: fit_missing_preferred_atomic
+    kind: fit
+    skill: Snowflake
+    contribution: -0.5
+  - rule_id: fit_missing_preferred_atomic
+    kind: fit
+    skill: Spark
+    contribution: -0.5
+  - rule_id: fit_lane_cap_and_bounds
+    kind: fit
+    lane: target_lane
+    contribution: 0.0
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 5.0
+    concept: sql
+    profile_strength: 1.0
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 6.0
+    concept: etl
+    profile_strength: 1.0
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 4.0
+    concept: integration_workflows
+    profile_strength: 1.0
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 0.2
+    concept: airflow
+    profile_strength: 0.2
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 0.0
+    concept: aws
+    profile_strength: 0.0
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 2.4000000000000004
+    concept: python
+    profile_strength: 0.8
+  - rule_id: alignment:concept_penalty
+    kind: alignment
+    contribution: -1.0
+    concept: data_platforms
+    count: 1
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 3.0
+    concept: data_modeling
+    profile_strength: 1.0
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 4.0
+    concept: data_quality
+    profile_strength: 1.0
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 1.5
+    concept: systems
+    profile_strength: 1.25
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 0
+    concept: spark
+    profile_strength: 0
+  - rule_id: alignment:pipeline_sql
+    kind: alignment
+    contribution: 3
+    hits: 6
+  - rule_id: alignment:etl_deep
+    kind: alignment
+    contribution: 4
+  - rule_id: alignment:modern_light
+    kind: alignment
+    contribution: -1.5
+  - rule_id: alignment:etl_overlap
+    kind: alignment
+    contribution: 5
+  - rule_id: alignment:modern_required
+    kind: alignment
+    contribution: -3
+    skills:
+    - aws
+  - rule_id: alignment:modern_preferred
+    kind: alignment
+    contribution: -1.5
+    skills:
+    - spark
+  - rule_id: alignment:normalization
+    kind: alignment
+    contribution: -2.8272727272727245
+    denominator: 11
+    scale: 10
+  - rule_id: ai_review_gate
+    kind: decision
+    result: false
+    confidence: 0.812
+    margin: 0.75
+  - rule_id: good_fit_score
+    kind: decision
+    condition:
+      field: fit_score
+      op: gte
+      value: 80
+    action:
+      op: set
+      field: fit_quality
+      value: good_fit
+    before: null
+    result: good_fit
+  - rule_id: strong_primary_fit
+    kind: decision
+    condition:
+      all:
+      - field: role_lane
+        op: equals
+        value: target_lane
+      - field: fit_score
+        op: gte
+        value: 78
+    action:
+      op: set
+      field: apply_decision
+      value: apply_now
+    before: null
+    result: apply_now
+  reason_codes:
+  - modern_required_missing
+  - modern_preferred_missing
+  - data_evidence
+  - target_eligibility
+  - secondary_eligibility
+  - ai_review_gate
+  - good_fit_score
+  - strong_primary_fit
+  apply_decision: apply_now
+  fit_quality: good_fit
+  ai_review_required: false
+  ai_review_reasons: []
+  grading_version: 809dc743062dee89
+  taxonomy_version: 31d08964f877
+  market_context:
+    source: supplied
+    prevalence_pct:
+      SQL: null
+      Python: null
+      Snowflake: 20
+      Airflow: 27
+      Spark: 20
+      AWS: 30
+  alignment_score: 28.272727272727277
+  label: Moderate Match
+  matched: 8
+  required_total: 11
+  missing:
+  - aws
+  - spark
+  counts:
+    data_formats: 0
+    sql: 2
+    etl: 4
+    apis: 0
+    integration_workflows: 2
+    kafka: 0
+    airflow: 1
+    azure: 0
+    aws: 1
+    python: 3
+    java: 0
+    git: 0
+    data_platforms: 1
+    devops: 0
+    data_modeling: 1
+    data_quality: 1
+    systems: 1
+    software_engineering: 0
+    system_design: 0
+    testing: 0
+    operations: 0
+    dev_practices: 0
+    ai_ml: 0
+    monitoring: 0
+    spark: 1
+    seniority: 0
+ambiguous:
+  job_id: ''
+  role_lane: secondary_lane
+  lane_scores:
+    target_lane: 42.0
+    secondary_lane: 66.0
+    bridge_lane: 0
+    survival_lane: 0
+    wrong_lane: 0.0
+  raw_lane_scores:
+    target_lane: 42.0
+    secondary_lane: 66.0
+    bridge_lane: 0.0
+    survival_lane: 0.0
+    wrong_lane: 0.0
+  fit_score: 85
+  learning_score: 0
+  learning_status: eligible
+  blocking_reasons: []
+  review_flags: []
+  input_context:
+    search_lane:
+      value: ''
+      available: false
+    review_priority:
+      value: ''
+      available: false
+  pre_ai_score: 85
+  confidence: 0.457
+  confidence_evidence:
+    margin: 0.364
+    signal_count: 7
+    contradictions:
+    - target_secondary_title_conflict
+    requirement_ambiguity: false
+    weak_description: false
+    heuristic_not_probability: true
+  matched_atomic_skills:
+  - canonical_skill: PostgreSQL
+    matched_terms:
+    - postgresql
+    mention_count: 1
+  - canonical_skill: Docker
+    matched_terms:
+    - docker
+    mention_count: 1
+  matched_capability_concepts:
+    sql:
+    - postgresql
+    etl:
+    - etl
+    - data pipelines
+    - pipelines
+    python:
+    - sqlalchemy
+    - fastapi
+    devops:
+    - docker
+  missing_required_skills:
+    atomic_skills: []
+    capability_concepts: []
+  missing_preferred_skills:
+    atomic_skills: []
+    capability_concepts: []
+  growth_skills: []
+  market_relevant_gaps: []
+  matched_role_signals:
+  - rule_id: strong_target_title_terms
+    kind: signal
+    category: strong_target_title_terms
+    scope: title
+    signal_type: title
+    matched_terms:
+    - data engineer
+    lane: target_lane
+    weight: 30
+    contribution: 30
+    hard_exclusion: false
+  - rule_id: secondary_title_terms
+    kind: signal
+    category: secondary_title_terms
+    scope: title
+    signal_type: title
+    matched_terms:
+    - backend engineer
+    lane: secondary_lane
+    weight: 30
+    contribution: 30
+    hard_exclusion: false
+  - rule_id: non_target_title_terms
+    kind: signal
+    category: non_target_title_terms
+    scope: title
+    signal_type: title
+    matched_terms:
+    - backend engineer
+    lane: secondary_lane
+    weight: 0
+    contribution: 0
+    hard_exclusion: false
+  - rule_id: core_data_signals
+    kind: signal
+    category: core_data_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - etl
+    - data pipelines
+    lane: target_lane
+    weight: 6
+    contribution: 12
+    hard_exclusion: false
+  - rule_id: backend_data_signals
+    kind: signal
+    category: backend_data_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - fastapi
+    - postgresql
+    - sqlalchemy
+    - microservices
+    - docker
+    lane: secondary_lane
+    weight: 6
+    contribution: 30
+    hard_exclusion: false
+  - rule_id: secondary_core_overlap
+    kind: signal
+    category: secondary_core_overlap
+    scope: description
+    signal_type: description
+    matched_terms:
+    - etl
+    - data pipelines
+    lane: secondary_lane
+    weight: 3
+    contribution: 6
+    hard_exclusion: false
+  - rule_id: data_title_identity
+    kind: signal
+    category: data_title_identity
+    scope: title
+    signal_type: title
+    matched_terms:
+    - data
+    - engineer
+    lane: target_lane
+    weight: 0
+    contribution: 0
+    hard_exclusion: false
+  seniority_signals:
+    terms: []
+    years_required: null
+  exclusion_signals: []
+  triggered_rules:
+  - rule_id: strong_target_title_terms
+    kind: signal
+    category: strong_target_title_terms
+    scope: title
+    signal_type: title
+    matched_terms:
+    - data engineer
+    lane: target_lane
+    weight: 30
+    contribution: 30
+    hard_exclusion: false
+  - rule_id: secondary_title_terms
+    kind: signal
+    category: secondary_title_terms
+    scope: title
+    signal_type: title
+    matched_terms:
+    - backend engineer
+    lane: secondary_lane
+    weight: 30
+    contribution: 30
+    hard_exclusion: false
+  - rule_id: non_target_title_terms
+    kind: signal
+    category: non_target_title_terms
+    scope: title
+    signal_type: title
+    matched_terms:
+    - backend engineer
+    lane: secondary_lane
+    weight: 0
+    contribution: 0
+    hard_exclusion: false
+  - rule_id: core_data_signals
+    kind: signal
+    category: core_data_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - etl
+    - data pipelines
+    lane: target_lane
+    weight: 6
+    contribution: 12
+    hard_exclusion: false
+  - rule_id: backend_data_signals
+    kind: signal
+    category: backend_data_signals
+    scope: description
+    signal_type: description
+    matched_terms:
+    - fastapi
+    - postgresql
+    - sqlalchemy
+    - microservices
+    - docker
+    lane: secondary_lane
+    weight: 6
+    contribution: 30
+    hard_exclusion: false
+  - rule_id: secondary_core_overlap
+    kind: signal
+    category: secondary_core_overlap
+    scope: description
+    signal_type: description
+    matched_terms:
+    - etl
+    - data pipelines
+    lane: secondary_lane
+    weight: 3
+    contribution: 6
+    hard_exclusion: false
+  - rule_id: data_title_identity
+    kind: signal
+    category: data_title_identity
+    scope: title
+    signal_type: title
+    matched_terms:
+    - data
+    - engineer
+    lane: target_lane
+    weight: 0
+    contribution: 0
+    hard_exclusion: false
+  - rule_id: data_evidence
+    kind: override
+    condition:
+      any:
+      - field: hits.core_data_signals
+        op: gte
+        value: 2
+      - all:
+        - field: hits.core_data_signals
+          op: gte
+          value: 1
+        - field: hits.support_signals
+          op: gte
+          value: 2
+    action:
+      op: set
+      field: data_ok
+      value: true
+    before: false
+    result: true
+  - rule_id: backend_evidence
+    kind: override
+    condition:
+      field: hits.backend_data_signals
+      op: gte
+      value: 2
+    action:
+      op: set
+      field: backend_ok
+      value: true
+    before: false
+    result: true
+  - rule_id: target_eligibility
+    kind: override
+    condition:
+      all:
+      - field: data_ok
+        op: equals
+        value: true
+      - any:
+        - field: hits.strong_target_title_terms
+          op: gte
+          value: 1
+        - all:
+          - field: data_identity
+            op: equals
+            value: true
+          - field: hits.non_target_title_terms
+            op: equals
+            value: 0
+          - field: hits.bridge_title_terms
+            op: equals
+            value: 0
+          - field: hits.consultant_title_terms
+            op: equals
+            value: 0
+          - field: hits.data_title_identity
+            op: gte
+            value: 1
+    action:
+      op: append
+      field: eligible
+      value: target_lane
+    before:
+    - wrong_lane
+    result:
+    - wrong_lane
+    - target_lane
+  - rule_id: secondary_eligibility
+    kind: override
+    condition:
+      all:
+      - field: hits.platform_heavy_terms
+        op: lte
+        value: 3
+      - any:
+        - field: data_ok
+          op: equals
+          value: true
+        - field: backend_ok
+          op: equals
+          value: true
+    action:
+      op: append
+      field: eligible
+      value: secondary_lane
+    before:
+    - wrong_lane
+    - target_lane
+    result:
+    - wrong_lane
+    - target_lane
+    - secondary_lane
+  - rule_id: target_secondary_title_conflict
+    kind: override
+    condition:
+      all:
+      - field: hits.strong_target_title_terms
+        op: gte
+        value: 1
+      - field: hits.secondary_title_terms
+        op: gte
+        value: 1
+    action:
+      op: append
+      field: contradictions
+      value: target_secondary_title_conflict
+    before: []
+    result:
+    - target_secondary_title_conflict
+  - rule_id: lane_eligibility:bridge_lane
+    kind: penalty
+    lane: bridge_lane
+    contribution: -0.0
+    reason: configured_eligibility_rules
+  - rule_id: lane_eligibility:survival_lane
+    kind: penalty
+    lane: survival_lane
+    contribution: -0.0
+    reason: configured_eligibility_rules
+  - rule_id: fit_profile_coverage
+    kind: fit
+    contribution: 95.714
+    concepts:
+      sql:
+        weight: 5.0
+        profile_strength: 1.0
+      etl:
+        weight: 6.0
+        profile_strength: 1.0
+      python:
+        weight: 3.0
+        profile_strength: 0.8
+  - rule_id: fit_base
+    kind: fit
+    contribution: 0
+  - rule_id: fit_lane_cap_and_bounds
+    kind: fit
+    lane: secondary_lane
+    contribution: -10.714
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 5.0
+    concept: sql
+    profile_strength: 1.0
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 6.0
+    concept: etl
+    profile_strength: 1.0
+  - rule_id: alignment:profile_overlap
+    kind: alignment
+    contribution: 2.4000000000000004
+    concept: python
+    profile_strength: 0.8
+  - rule_id: alignment:concept_penalty
+    kind: alignment
+    contribution: -1.0
+    concept: devops
+    count: 1
+  - rule_id: alignment:pipeline_light
+    kind: alignment
+    contribution: 1
+    hits: 3
+  - rule_id: alignment:etl_deep
+    kind: alignment
+    contribution: 4
+  - rule_id: alignment:etl_overlap
+    kind: alignment
+    contribution: 5
+  - rule_id: alignment:normalization
+    kind: alignment
+    contribution: 33.6
+    denominator: 4
+    scale: 10
+  - rule_id: ai_review_gate
+    kind: decision
+    result: true
+    confidence: 0.457
+    margin: 0.364
+  - rule_id: good_fit_score
+    kind: decision
+    condition:
+      field: fit_score
+      op: gte
+      value: 80
+    action:
+      op: set
+      field: fit_quality
+      value: good_fit
+    before: null
+    result: good_fit
+  - rule_id: ambiguous_role_review
+    kind: decision
+    condition:
+      field: ai_review_required
+      op: equals
+      value: true
+    action:
+      op: set
+      field: apply_decision
+      value: manual_review
+    before: null
+    result: manual_review
+  reason_codes:
+  - target_secondary_title_conflict
+  - data_evidence
+  - backend_evidence
+  - target_eligibility
+  - secondary_eligibility
+  - ai_review_gate
+  - good_fit_score
+  - ambiguous_role_review
+  apply_decision: manual_review
+  fit_quality: good_fit
+  ai_review_required: true
+  ai_review_reasons:
+  - target_secondary_title_conflict
+  - low_heuristic_confidence
+  grading_version: 809dc743062dee89
+  taxonomy_version: 31d08964f877
+  market_context:
+    source: supplied
+    prevalence_pct:
+      PostgreSQL: null
+      Docker: null
+  alignment_score: 56.0
+  label: High Match
+  matched: 3
+  required_total: 4
+  missing: []
+  counts:
+    data_formats: 0
+    sql: 1
+    etl: 3
+    apis: 0
+    integration_workflows: 0
+    kafka: 0
+    airflow: 0
+    azure: 0
+    aws: 0
+    python: 2
+    java: 0
+    git: 0
+    data_platforms: 0
+    devops: 1
+    data_modeling: 0
+    data_quality: 0
+    systems: 0
+    software_engineering: 0
+    system_design: 0
+    testing: 0
+    operations: 0
+    dev_practices: 0
+    ai_ml: 0
+    monitoring: 0
+    spark: 0
+    seniority: 0

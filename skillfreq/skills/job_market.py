@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Iterable, Mapping, Sequence
 
 import yaml
+from .text import normalize_text, term_counts
 
 
 Taxonomy = dict[str, list[str]]
@@ -59,26 +60,21 @@ def extract_market_skills(
     text: str | None, taxonomy: Mapping[str, Sequence[str]]
 ) -> list[SkillMatch]:
     """Return one normalized result per skill, with aliases retained as evidence."""
-    normalized_text = " ".join((text or "").casefold().split())
+    normalized_text = normalize_text(text)
     if not normalized_text:
         return []
 
     matches: list[SkillMatch] = []
     for skill, aliases in taxonomy.items():
-        term_counts: dict[str, int] = {}
         # Longest aliases first is useful when inspecting evidence; counts remain
         # mention counts rather than mutually exclusive phrase classifications.
-        for alias in sorted(aliases, key=len, reverse=True):
-            pattern = rf"(?<!\w){re.escape(alias)}(?!\w)"
-            count = len(re.findall(pattern, normalized_text))
-            if count:
-                term_counts[alias] = count
-        if term_counts:
+        counts = term_counts(normalized_text, sorted(aliases, key=len, reverse=True))
+        if counts:
             matches.append(
                 SkillMatch(
                     canonical_skill=skill,
-                    matched_terms=tuple(term_counts),
-                    mention_count=sum(term_counts.values()),
+                    matched_terms=tuple(counts),
+                    mention_count=sum(counts.values()),
                 )
             )
     return matches

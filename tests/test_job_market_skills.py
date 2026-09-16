@@ -47,6 +47,13 @@ class JobMarketSkillsTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "assigned to both"):
                 load_market_taxonomy(path)
 
+    def test_alias_uniqueness_is_case_and_whitespace_normalized(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'taxonomy.yml'
+            path.write_text('One:\n  - " Shared   Term "\nTwo:\n  - shared term\n', encoding='utf-8')
+            with self.assertRaisesRegex(ValueError, 'assigned to both'):
+                load_market_taxonomy(path)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,48 @@
+- name: boomi_specialist
+  title: Senior Integration Boomi Engineer
+  description: Boomi AtomSphere, platform deployment, proprietary connectors, Molecules, Boomi administration, API integrations.
+  not_target: true
+- name: transferable_integration
+  title: Integration Engineer
+  description: SQL Server, ETL, REST APIs, XML, JSON, SFTP, source-to-target mappings.
+  lane: target_lane
+- name: transferable_informatica
+  title: Informatica Developer
+  description: SQL, stored procedures, mappings, ETL, data warehouse, source-to-target work, Informatica.
+  lane: secondary_lane
+- name: vendor_administrator
+  title: Senior Informatica Administrator
+  description: Informatica platform admin, system upgrades, platform security, servers, environment ownership.
+  lane: wrong_lane
+- name: palantir_data
+  title: Data Engineer (Palantir)
+  description: Python, SQL, ETL, data modeling, APIs, pipelines. Palantir Foundry Ontology, Code Repositories and Pipeline Builder. Prior Foundry experience is a plus; transferable data experience is accepted.
+  lane: target_lane
+- name: workday_specialist
+  title: Workday Integration Engineer
+  description: Workday-specific platform configuration, Workday Studio, EIB, Workday business processes and tenant configuration.
+  not_target: true
+- name: incidental_vendor
+  title: Data Integration Engineer
+  description: SQL, APIs, source-to-target mapping, ETL, XML/JSON, data quality and Python. Informatica is one implementation tool.
+  lane: target_lane
+- name: no_vendor_title_concentration
+  title: Data Integration Engineer
+  description: SQL ETL API integrations. Workday Studio, EIB, Core Connectors, PECI, tenant configuration, tenant refresh, Workday Extend and integration system users.
+  not_target: true
+- name: transferable_specialist
+  title: Boomi Data Integration Engineer
+  description: SQL Python ETL ELT data pipelines data modeling APIs REST SOAP XML JSON SFTP data warehouse and stored procedures. Boomi AtomSphere and Molecules.
+  lane: secondary_lane
+- name: modern_stack
+  title: Data Engineer
+  description: SQL Python ETL data pipelines using Snowflake Databricks Redshift BigQuery AWS and Palantir. Build data models and APIs.
+  lane: target_lane
+- name: mixed_database_administration
+  title: Database Administrator/ETL & Data Integration Engineer
+  description: SQL Server ETL ELT data integration data ingestion stored procedures query optimization APIs REST SOAP SFTP data warehouse. Salesforce data model objects, calculated insights and platform performance are part of the data operations work.
+  lane: target_lane
+- name: vendor_only_in_title
+  title: Boomi Data Integration Engineer
+  description: SQL Python ETL data pipelines APIs XML JSON SFTP. AtomSphere, Molecules, platform configuration and proprietary connectors.
+  not_target: true

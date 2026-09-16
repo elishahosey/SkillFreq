@@ -1,103 +1,119 @@
+# Resume evidence domains. Aliases reference controlled atomic, capability or role owners.
 sql:
-  domains: [data, backend, integration]
+  domains:
+  - data
+  - backend
+  - integration
   aliases:
-    - sql
-    - sql server
-    - microsoft sql server
-    - postgresql
-    - mysql
-
+  - {atomic: SQL}
+  - {atomic: SQL Server}
+  - {atomic: SQL Server}
+  - {atomic: PostgreSQL}
+  - {atomic: MySQL}
 python:
-  domains: [data, automation, backend]
+  domains:
+  - data
+  - automation
+  - backend
   aliases:
-    - python
-    - pandas
-    - numpy
-    - sqlalchemy
-    - flask
-    - fastapi
-
+  - {atomic: Python}
+  - {concept_term: [python, pandas]}
+  - {concept_term: [python, numpy]}
+  - {concept_term: [python, sqlalchemy]}
+  - {concept_term: [python, flask]}
+  - {concept_term: [python, fastapi]}
 languages:
-  domains: [backend, software]
+  domains:
+  - backend
+  - software
   aliases:
-    - java
-    - vb.net
-    - javascript
-    - typescript
-
+  - {concept_term: [java, java]}
+  - {role_term: vb.net}
+  - {role_term: javascript}
+  - {role_term: typescript}
 frontend:
-  domains: [software]
+  domains:
+  - software
   aliases:
-    - html
-    - css
-    - scss
-
+  - {role_term: html}
+  - {role_term: css}
+  - {role_term: scss}
 etl:
-  domains: [data, integration]
+  domains:
+  - data
+  - integration
   aliases:
-    - etl
-    - elt
-    - data pipeline
-    - data pipelines
-    - data ingestion
-    - data transformation
-
+  - {concept_term: [etl, etl]}
+  - {concept_term: [etl, elt]}
+  - {concept_term: [etl, data pipeline]}
+  - {concept_term: [etl, data pipelines]}
+  - {concept_term: [etl, data ingestion]}
+  - {concept_term: [etl, data transformation]}
 data_quality:
-  domains: [data, integration]
+  domains:
+  - data
+  - integration
   aliases:
-    - data validation
-    - reconciliation
-    - data quality
-
+  - {concept_term: [data_quality, data validation]}
+  - {concept_term: [data_quality, reconciliation]}
+  - {concept_term: [data_quality, data quality]}
 data_formats:
-  domains: [integration, data]
+  domains:
+  - integration
+  - data
   aliases:
-    - xml
-    - json
-
+  - {concept_term: [data_formats, xml]}
+  - {concept_term: [data_formats, json]}
 apis:
-  domains: [integration, backend]
+  domains:
+  - integration
+  - backend
   aliases:
-    - rest api
-    - rest apis
-    - soap
-
+  - {role_term: rest api}
+  - {concept_term: [apis, rest apis]}
+  - {concept_term: [apis, soap]}
 devops:
-  domains: [platform, devops]
+  domains:
+  - platform
+  - devops
   aliases:
-    - azure devops
-    - ci/cd
-    - git
-    - github
-
+  - {concept_term: [azure, azure devops]}
+  - {concept_term: [devops, ci/cd]}
+  - {concept_term: [git, git]}
+  - {concept_term: [git, github]}
 monitoring:
-  domains: [platform]
+  domains:
+  - platform
   aliases:
-    - opensearch
-    - logging
-    - log analysis
-
+  - {role_term: opensearch}
+  - {concept_term: [systems, logging]}
+  - {concept_term: [systems, log analysis]}
 testing:
-  domains: [software, qa]
+  domains:
+  - software
+  - qa
   aliases:
-    - selenium
-    - regression testing
-
+  - {role_term: selenium}
+  - {role_term: regression testing}
 orchestration:
-  domains: [data, platform]
+  domains:
+  - data
+  - platform
   aliases:
-    - airflow
-    - workflow orchestration
-
+  - {atomic: Airflow}
+  - {concept_term: [airflow, workflow orchestration]}
 streaming:
-  domains: [data, platform]
+  domains:
+  - data
+  - platform
   aliases:
-    - kafka
-    - spark
-
+  - {atomic: Kafka}
+  - {atomic: Spark}
 concepts:
-  domains: [data, backend]
+  domains:
+  - data
+  - backend
   aliases:
-    - data modeling
-    - query optimization
-    - distributed systems
+  - {concept_term: [data_modeling, data modeling]}
+  - {concept_term: [sql, query optimization]}
+  - {role_term: distributed systems}

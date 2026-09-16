@@ -3,7 +3,6 @@ from string import punctuation
 import re
 from typing import Any, Dict, List
 
-import spacy
 
 BAD_PHRASES = {
     "key responsibilities",
@@ -23,37 +22,26 @@ BAD_SINGLE_WORDS = {
     "sc",
 }
 
-SECTION_PATTERNS = {
-    "required": [
-        r"required qualifications",
-        r"minimum qualifications",
-        r"must have",
-        r"mandatory skills?",
-        r"requirements",
-    ],
-    "preferred": [
-        r"preferred qualifications",
-        r"nice to have",
-        r"preferred",
-        r"pluses",
-    ],
-    "responsibilities": [
-        r"responsibilities",
-        r"key responsibilities",
-        r"what you'll do",
-        r"job description",
-    ],
-}
+from skillfreq.configuration import CONFIG_DIR, read_config
+from skillfreq.skills.text import term_counts
 
-CORE_BLOCKER_SKILLS = {"sql", "etl", "python"}
-MODERN_STACK_SKILLS = {"spark", "airflow", "kafka", "aws", "data_platforms"}
 
-nlp = spacy.load("en_core_web_sm")
+def _nlp():
+    # Free-form diagnostics only; deterministic grading needs no spaCy model.
+    global nlp
+    if nlp is None:
+        import spacy
+        nlp = spacy.load("en_core_web_sm")
+    return nlp
+
+
+nlp = None
 
 
 def get_hotwords(text):
     result = []
     pos_tag = ["PROPN", "ADJ", "NOUN"]
+    nlp = _nlp()
     doc = nlp(text.lower())
 
     for token in doc:
@@ -68,6 +56,7 @@ def get_hotwords(text):
 
 def get_nounChunks(text):
     results = []
+    nlp = _nlp()
     doc = nlp(text.lower())
 
     for chunk in doc.noun_chunks:
@@ -123,20 +112,33 @@ def extract_jd_skills(jdParsedObject):
     return extracted_skills
 
 
-def extract_sections(description: str) -> Dict[str, str]:
+def extract_sections(description: str, config=None) -> Dict[str, str]:
+    config = config or read_config(CONFIG_DIR/"requirements.yml")
     text = description.lower()
 
     matches = []
 
-    for section_name, patterns in SECTION_PATTERNS.items():
+    for section_name, patterns in config["section_patterns"].items():
         for pattern in patterns:
             for m in re.finditer(pattern, text):
+                # An inline modality ("Power BI preferred") is not a heading.
+                if m.group() == 'preferred':
+                    prefix = text[text.rfind('\n', 0, m.start()) + 1:m.start()].strip(' -*#\t')
+                    if prefix and not text[m.end():].lstrip().startswith(':'):
+                        continue
                 matches.append((m.start(), m.end(), section_name))
 
     if not matches:
         return {"full_text": text}
 
-    matches.sort(key=lambda x: x[0])
+    # Longest heading wins at overlapping offsets ("preferred qualifications"
+    # also matches "preferred"). Keep every repeated section, not just one.
+    matches.sort(key=lambda x: (x[0], -x[1]))
+    non_overlapping = []
+    for match in matches:
+        if not non_overlapping or match[0] >= non_overlapping[-1][1]:
+            non_overlapping.append(match)
+    matches = non_overlapping
 
     sections: Dict[str, str] = {}
 
@@ -144,9 +146,7 @@ def extract_sections(description: str) -> Dict[str, str]:
         next_start = matches[i + 1][0] if i + 1 < len(matches) else len(text)
         section_text = text[end:next_start].strip()
 
-        # keep the longest occurrence if duplicate headings appear
-        if section_name not in sections or len(section_text) > len(sections[section_name]):
-            sections[section_name] = section_text
+        sections[section_name] = (sections.get(section_name, '') + '\n' + section_text).strip()
 
     sections["full_text"] = text
 
@@ -157,8 +157,13 @@ def extract_requirement_flags(
     description: str,
     skills: Dict[str, List[str]],
     profile: Dict[str, float],
+    config=None,
+    atomic_terms=(),
+    atomic_profile=None,
+    known_atomic_threshold=0.5,
 ) -> Dict[str, object]:
-    sections = extract_sections(description)
+    config = config or read_config(CONFIG_DIR/"requirements.yml")
+    sections = extract_sections(description, config)
     required_text = sections.get("required", "")
     preferred_text = sections.get("preferred", "")
     full_text = sections.get("full_text", description.lower())
@@ -173,11 +178,19 @@ def extract_requirement_flags(
         "has_hard_requirement_blockers": False,
         "has_modern_stack_blockers": False,
         "reason_codes": [],
+        "requirement_groups": [],
+        "requirement_evidence": [],
+        "requirement_interpretation": [],
     }
 
     # years parsing
     # Normalize escaped plus signs from scraped/CSV text, e.g. "4\\+ years" -> "4+ years"
-    normalized_full_text = full_text.replace("\\+", "+")
+    years_text = required_text
+    if not years_text:
+        # Use configured experience sentences, excluding any explicitly preferred section.
+        candidates = full_text.replace(preferred_text, '') if preferred_text else full_text
+        years_text = ' '.join(re.findall(config['years_fallback_pattern'], candidates.replace('\\+', '+')))
+    normalized_full_text = years_text.replace("\\+", "+")
 
     years_range_match = re.search(
         r"(\d+)\s*(?:-|to)\s*(\d+)\s*\+?\s+years",
@@ -198,23 +211,75 @@ def extract_requirement_flags(
         if single_years:
             flags["years_required"] = max(int(y) for y in single_years)
 
-    lead_terms = [
-        "technical lead",
-        "staff",
-        "principal",
-        "lead engineer",
-        "set technical direction",
-        "mentor junior engineers",
-        "mentor junior data engineers",
-        "evaluate and make decisions",
-        "evaluate dataset implementations",
-        "evaluate the use of new or existing software products and tools",
-        "drive best practices in source teams",
-        "architecture ownership",
-        "system design leadership",
-    ]
+    explicit_years = [int(m.group(1)) for pattern in config['explicit_years_patterns']
+                      for m in re.finditer(pattern, full_text)]
+    if explicit_years:
+        existing = flags['years_required']
+        previous = min(existing) if isinstance(existing, tuple) else (existing or 0)
+        flags['years_required'] = max([previous] + explicit_years)
+    flags["seniority_signals"] = list(term_counts(full_text, config["lead_terms"]))
+    flags["is_lead_like"] = bool(flags["seniority_signals"])
+    flags["requirement_ambiguity"] = any(re.search(p, full_text) for p in config["ambiguity_patterns"])
+    flags['requirement_ambiguity'] |= any(
+        re.search(r'(?<!\w)' + re.escape(term) + config['skill_alternative_suffix'], full_text)
+        for term in atomic_terms)
+    flags["sections"] = sections
 
-    flags["is_lead_like"] = any(term in full_text for term in lead_terms)
+    # Resolve sentence semantics once. Both atomic gaps and legacy capability
+    # flags consume this interpretation; alternatives never leak into fallback.
+    taxonomy = config.get('_taxonomy')
+    if taxonomy:
+        known = atomic_profile or {}
+        semantic_text = {'required': [], 'preferred': []}
+        for section_name, source_section, source in _requirement_sources(sections, config):
+            mentions = _atomic_mentions(source, taxonomy)
+            skills_found = list(dict.fromkeys(skill for _, _, skill in mentions))
+            if not skills_found:
+                semantic_text[section_name].append(source)
+                flags['requirement_interpretation'].append(dict(
+                    section=section_name, source=source, mode='legacy_mention_fallback'))
+                continue
+            group_type, grammar = _requirement_grammar(source, mentions)
+            satisfied_skills = [s for s in skills_found if known.get(s, 0) >= known_atomic_threshold]
+            equivalent_evidence = []
+            if group_type == 'equivalent':
+                for skill in skills_found:
+                    accepted = config.get('equivalences', {}).get(skill, {})
+                    for name in accepted.get('atomic_skills', []):
+                        if known.get(name, 0) >= known_atomic_threshold:
+                            equivalent_evidence.append(dict(kind='atomic_skill', name=name, for_skill=skill))
+                    for name in accepted.get('capability_concepts', []):
+                        if profile.get(name, 0) >= known_atomic_threshold:
+                            equivalent_evidence.append(dict(kind='capability_concept', name=name, for_skill=skill))
+            satisfied = (len(satisfied_skills) == len(skills_found) if group_type == 'all_of'
+                         else bool(satisfied_skills or equivalent_evidence))
+            if group_type == 'ambiguous':
+                satisfied = None
+                flags['requirement_ambiguity'] = True
+            group_id = f'{section_name}_group_{len(flags["requirement_groups"]) + 1}'
+            group = dict(group_id=group_id, section=section_name, source_section=source_section,
+                         type=group_type, grammar=grammar, skills=skills_found, source=source,
+                         source_span=source, candidate_satisfied_skills=satisfied_skills,
+                         equivalent_evidence=equivalent_evidence, satisfied=satisfied)
+            flags['requirement_groups'].append(group)
+            flags['requirement_interpretation'].append(dict(
+                section=section_name, source=source, mode='structured', group_id=group_id))
+            for skill in skills_found:
+                flags['requirement_evidence'].append(dict(
+                    skill=skill, section=section_name, source_section=source_section, source=source,
+                    requirement_type=group_type, group_id=group_id,
+                    candidate_satisfies=skill in satisfied_skills, group_satisfied=satisfied))
+            if group_type == 'all_of':
+                # Known atomic evidence also satisfies its legacy alias mention.
+                # Do not suppress independent non-atomic concepts in this sentence.
+                chars = list(source)
+                for start, end, skill in mentions:
+                    if skill in satisfied_skills:
+                        chars[start:end] = ' ' * (end-start)
+                semantic_text[section_name].append(''.join(chars))
+        required_text = '\n'.join(semantic_text['required'])
+        preferred_text = '\n'.join(semantic_text['preferred'])
+    flags['semantic_requirement_text'] = dict(required=required_text, preferred=preferred_text)
 
     # hard blockers only from required section
     if required_text:
@@ -226,9 +291,9 @@ def extract_requirement_flags(
                 pattern = r"(?<!\w)" + re.escape(term.lower()) + r"(?!\w)"
 
                 if re.search(pattern, required_text):
-                    if skill in CORE_BLOCKER_SKILLS:
+                    if skill in config["core_blocker_skills"]:
                         flags["mandatory_missing_skills"].append(skill)
-                    elif skill in MODERN_STACK_SKILLS:
+                    elif skill in config["modern_stack_skills"]:
                         flags["modern_required_missing_skills"].append(skill)
 
                     break
@@ -243,7 +308,7 @@ def extract_requirement_flags(
                 pattern = r"(?<!\w)" + re.escape(term.lower()) + r"(?!\w)"
 
                 if re.search(pattern, preferred_text):
-                    if skill in MODERN_STACK_SKILLS:
+                    if skill in config["modern_stack_skills"]:
                         flags["modern_preferred_missing_skills"].append(skill)
                     else:
                         flags["preferred_missing_skills"].append(skill)
@@ -258,7 +323,7 @@ def extract_requirement_flags(
     flags["has_hard_requirement_blockers"] = len(flags["mandatory_missing_skills"]) > 0
 
     # Modern stack is a blocker only if multiple required missing modern skills show up
-    flags["has_modern_stack_blockers"] = len(flags["modern_required_missing_skills"]) >= 2
+    flags["has_modern_stack_blockers"] = len(flags["modern_required_missing_skills"]) >= config["modern_blocker_count"]
 
     # Reason codes
     if flags["mandatory_missing_skills"]:
@@ -270,6 +335,12 @@ def extract_requirement_flags(
     if flags["modern_preferred_missing_skills"]:
         flags["reason_codes"].append("modern_preferred_missing")
 
+    if any(g['section'] == 'required' and g['type'] in ('any_of', 'equivalent')
+           and g['satisfied'] is False for g in flags['requirement_groups']):
+        flags['reason_codes'].append('unsatisfied_required_group')
+    if any(g['type'] == 'ambiguous' for g in flags['requirement_groups']):
+        flags['reason_codes'].append('ambiguous_requirement_grammar')
+
     if flags["is_lead_like"]:
         flags["reason_codes"].append("lead_like")
 
@@ -277,3 +348,65 @@ def extract_requirement_flags(
         flags["reason_codes"].append("years_present")
 
     return flags
+
+
+def _requirement_sentences(text: str) -> list[str]:
+    """Split bullets/short prose while retaining deterministic source text."""
+    return [part.strip(' -*\t') for part in re.split(r'(?<=[.!?])\s+|\n+', text) if part.strip(' -*\t')]
+
+
+def _requirement_sources(sections, config):
+    """Retain section context, with explicit sentence modality taking precedence."""
+    covered = []
+    for section in ('required', 'preferred'):
+        for source in _requirement_sentences(sections.get(section, '')):
+            modality = 'preferred' if re.search(r'\bpreferred\b', source) else section
+            covered.append(source)
+            yield modality, section, source
+    # Headless explicit requirements are common in pasted snippets. Other prose
+    # remains unclassified instead of turning every technology mention mandatory.
+    if any(sections.get(section) for section in ('required', 'preferred', 'responsibilities')):
+        return
+    for source in _requirement_sentences(sections['full_text']):
+        if any(source in part or part in source for part in covered):
+            continue
+        if re.search(r'\bpreferred\b', source):
+            yield 'preferred', 'unknown', source
+        elif any(re.search(pattern, source) for pattern in config.get('unscoped_requirement_patterns', [])):
+            yield 'required', 'unknown', source
+
+
+def _atomic_mentions(source, taxonomy):
+    """Longest controlled alias owns its span (SQL Server is not an SQL option).
+
+    Market extraction remains unchanged: this disambiguation is for requirement
+    operands only. Preserve offsets into the original sentence.
+    """
+    mentions = []
+    for skill, aliases in taxonomy.items():
+        for alias in aliases:
+            if alias not in source:
+                continue
+            for match in re.finditer(r'(?<!\w)' + re.escape(alias) + r'(?!\w)', source):
+                mentions.append((match.start(), match.end(), skill))
+    return sorted(set(m for m in mentions if not any(
+        n[0] <= m[0] and n[1] >= m[1] and n[1]-n[0] > m[1]-m[0] for n in mentions)))
+
+
+def _requirement_grammar(source, mentions):
+    equivalent = bool(re.search(r'\bor equivalent(?: experience)?\b', source))
+    alternative = bool(re.search(r'\b(?:one of|one or more|and/or)\b|\bor\b', source))
+    examples = bool(re.search(r'\b(?:such as|including|for example)\b|\be\.g\.', source))
+    between = source[mentions[0][0]:mentions[-1][1]]
+    # Only conjunctions between atomic operands count; "design and develop"
+    # before the list is not mixed Boolean grammar. and/or is one connective.
+    mixed = (alternative or equivalent) and bool(re.search(r'\band\b', between.replace('and/or', 'or')))
+    if mixed:
+        return 'ambiguous', 'mixed_conjunction_alternative'
+    if equivalent:
+        return 'equivalent', 'or_equivalent'
+    if examples:
+        return 'any_of', 'examples'
+    if alternative:
+        return 'any_of', 'alternatives'
+    return 'all_of', 'conjunction_or_enumeration'

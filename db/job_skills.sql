@@ -82,24 +82,24 @@ COMMENT ON VIEW public.job_skill_prevalence_input IS
 
 -- Broad baseline prevalence across every job in the current extraction scope.
 CREATE OR REPLACE VIEW public.skill_prevalence AS
-WITH prevalence AS (
-    SELECT
-        canonical_skill,
-        COUNT(*) FILTER (WHERE mentions_skill)::bigint AS jobs_mentioning_skill,
-        COUNT(*)::bigint AS relevant_jobs
-    FROM public.job_skill_prevalence_input
-    GROUP BY canonical_skill
+WITH denominator AS (
+    SELECT COUNT(*)::bigint AS total_jobs FROM public.job_skill_scope
+), mentions AS (
+    SELECT js.canonical_skill, COUNT(*)::bigint AS jobs_mentioning_skill
+    FROM public.job_skills js
+    JOIN public.job_skill_scope scope
+      ON scope.job_key = js.job_key AND scope.extraction_run_id = js.extraction_run_id
+    GROUP BY js.canonical_skill
 )
-SELECT
-    canonical_skill,
-    jobs_mentioning_skill,
-    relevant_jobs AS total_jobs,
-    ROUND(
-        100.0 * jobs_mentioning_skill / NULLIF(relevant_jobs, 0),
-        1
-    ) AS prevalence_pct
-FROM prevalence
+SELECT taxonomy.canonical_skill,
+       COALESCE(mentions.jobs_mentioning_skill, 0)::bigint AS jobs_mentioning_skill,
+       denominator.total_jobs,
+       ROUND(100.0 * COALESCE(mentions.jobs_mentioning_skill, 0) /
+             NULLIF(denominator.total_jobs, 0), 1) AS prevalence_pct
+FROM public.market_skill_taxonomy taxonomy
+CROSS JOIN denominator
+LEFT JOIN mentions USING (canonical_skill)
 ORDER BY prevalence_pct DESC, canonical_skill;
 
 COMMENT ON VIEW public.skill_prevalence IS
-    'Broad skill prevalence: in-scope jobs mentioning a skill divided by all jobs in the same extraction scope. Skill percentages overlap and are not additive.';
+    'Extraction-snapshot prevalence: jobs mentioning a canonical skill / all jobs in job_skill_scope. Includes zero-mention jobs and skills; independent of later clean_jobs changes. Filtered dashboard slices use job_skill_prevalence_input.';

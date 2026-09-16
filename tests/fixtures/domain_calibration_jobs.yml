@@ -1,0 +1,68 @@
+- name: integration_data
+  title: Integration Engineer
+  description: ETL, SQL, REST APIs, XML/JSON, source-to-target mappings, SFTP.
+  expected_lane: target_lane
+- name: integration_security
+  title: Application Security Integration Engineer
+  description: Security controls, IAM, security tooling, integration, APIs.
+  expected_lane: wrong_lane
+- name: integration_controls
+  title: Flight Controls Integration Engineer
+  description: Flight systems, embedded/control systems, hardware integration.
+  expected_lane: wrong_lane
+- name: explicit_data_integration
+  title: Data Integration Engineer
+  description: SQL, ETL, APIs, XML, data mapping.
+  expected_lane: target_lane
+- name: incidental_ecosystem
+  title: Informatica Data Engineer
+  description: Build SQL ETL data pipelines. Informatica is the implementation tool.
+  expected_lane: target_lane
+- name: ecosystem_identity
+  title: Informatica MDM Specialist
+  description: Match/merge, golden record, survivorship, MDM platform ownership.
+  expected_lane: wrong_lane
+- name: database_development
+  title: Data Engineer - Oracle PL/SQL
+  description: Stored procedures, database development, ETL, PL/SQL.
+  expected_lane: target_lane
+- name: testing
+  title: Sr Test Automation Engineer
+  description: SQL, data validation, Selenium/testing.
+  expected_lane: wrong_lane
+- name: modern_data
+  title: Modern Data Engineer
+  description: AWS, Snowflake, Airflow, SQL, Python.
+  expected_lane: target_lane
+- name: unqualified_integration
+  title: Integration Engineer
+  description: Build APIs and troubleshoot integrations. API troubleshooting.
+  expected_lane: secondary_lane
+- name: security_with_incidental_data
+  title: Security Integration Engineer
+  description: Security controls and IAM. SQL ETL data pipelines and API integration.
+  expected_lane: wrong_lane
+- name: database_developer
+  title: Database Developer
+  description: Required SQL Server and PostgreSQL. Build stored procedures and schema design.
+  expected_lane: target_lane
+- name: plsql_orthography
+  title: Data Engineer - Oracle PL/SQL
+  description: Strong Oracle SQL and PLSQL development. Informatica PowerCenter ETL development.
+  expected_lane: target_lane
+- name: ecosystem_with_data
+  title: Informatica MDM Data Engineer
+  description: Build SQL ETL data pipelines. Own golden record survivorship and platform administration.
+  expected_lane: secondary_lane
+- name: hardware_domain_despite_data
+  title: Integration Engineer
+  description: Semiconductor wafer fabrication integration. SQL ETL data pipelines and API validation.
+  expected_lane: wrong_lane
+- name: hardware_title_despite_data
+  title: Hardware Integration Engineer
+  description: Build SQL ETL data pipelines to support hardware integration.
+  expected_lane: wrong_lane
+- name: ecosystem_platform_owner_wording
+  title: SAP Integration Engineer
+  description: Build SQL ETL data integration. Act as the platform owner and own the platform roadmap.
+  expected_lane: secondary_lane

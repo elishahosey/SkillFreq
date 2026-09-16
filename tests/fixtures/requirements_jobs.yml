@@ -1,0 +1,24 @@
+- name: all_of
+  title: Data Engineer
+  description: "Required qualifications:\nExperience with AWS and Spark required."
+- name: cloud_alternatives
+  title: Data Engineer
+  description: "Required qualifications:\nExperience with AWS, Azure, or GCP."
+- name: cloud_examples
+  title: Data Engineer
+  description: "Required qualifications:\nExperience with cloud platforms such as AWS, Azure, or GCP."
+- name: platform_alternative
+  title: Data Engineer
+  description: "Required qualifications:\nDatabricks or Snowflake required."
+- name: equivalent
+  title: Data Engineer
+  description: "Required qualifications:\nAirflow or equivalent orchestration tool."
+- name: preferred
+  title: Data Engineer
+  description: "Preferred qualifications:\nPower BI preferred."
+- name: both_databases
+  title: Data Engineer
+  description: "Required qualifications:\nExperience with SQL Server and PostgreSQL."
+- name: one_database
+  title: Data Engineer
+  description: "Required qualifications:\nExperience with one or more of SQL Server, PostgreSQL, MySQL."

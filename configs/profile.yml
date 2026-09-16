@@ -11,7 +11,7 @@ skills:
   data_platforms: 0.1
   devops: 0.4
   data_formats: 1.0
-  concepts: 0.7 
+  concepts: 0.7
   data_modeling: 1
   systems: 1.25
   data_quality: 1
@@ -21,5 +21,62 @@ skills:
   operations: 1.0
   apis: 1.0
   integration_workflows: 1.0
-
-
+atomic_skills:
+  SQL: 1
+  Python: 0.8
+  Azure: 0.8
+  Airflow: 0.2
+  AWS: 0
+  SQL Server: 1
+  PostgreSQL: 0.7
+  Docker: 0
+  Terraform: 0
+  Snowflake: 0
+growth_paths:
+  Airflow:
+    adjacent_concepts:
+    - etl
+    - python
+    priority: 1
+  AWS:
+    adjacent_concepts:
+    - etl
+    - python
+    priority: 0.9
+  Snowflake:
+    adjacent_concepts:
+    - sql
+    - data_modeling
+    priority: 0.8
+  Spark:
+    adjacent_concepts:
+    - etl
+    - python
+    priority: 0.8
+  PostgreSQL:
+    adjacent_concepts:
+    - sql
+    priority: 0.7
+  Databricks:
+    priority: 0.8
+    adjacent_concepts:
+    - etl
+    - python
+  Docker:
+    priority: 0.6
+    adjacent_concepts:
+    - python
+    - systems
+  Terraform:
+    priority: 0.35
+    adjacent_concepts:
+    - azure
+    - systems
+  Redshift:
+    priority: 0.6
+    adjacent_concepts:
+    - sql
+    - etl
+atomic_skill_notes:
+  SQL Server: Candidate-confirmed strong direct experience.
+  PostgreSQL: Candidate-confirmed intermediate direct project experience (0.7).

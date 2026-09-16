@@ -2,7 +2,7 @@ import argparse
 import csv
 from datetime import datetime
 from pathlib import Path
-from .pipeline import run_links,fetch_links,create_file,extract_links
+from .pipeline import run_links,fetch_links,create_file,extract_links,grade_csv,grade_database
 from .skills.jds.extract import process_all_jobs
 from .skills.extract import extract_jd_skills
 from collections import Counter
@@ -157,6 +157,35 @@ def main() -> None:
     run.add_argument("--min-score", type=float, default=0.0, help="Filter out jobs below score (0..1)")
     run.add_argument("--no-scrape", action="store_true", help="Treat input lines as raw text instead of URLs")
     run.add_argument("--profile", default="configs/profile.yml", help="Path to profile.yml")
+    run.add_argument('--nlp-diagnostics', action='store_true', help='Write supplemental noun-phrase diagnostics; never alters taxonomy')
+    run.add_argument('--offline-grading', action='store_true', help='Grade without PostgreSQL market data')
+    run.add_argument('--persist-grades', action='store_true', help='Append grades and configuration to PostgreSQL skill_scores')
+    grade_parser = sub.add_parser('grade-csv', help='Deterministically grade an existing job CSV')
+    grade_parser.add_argument('--input', required=True)
+    grade_parser.add_argument('--out', default='data/outputs/grades.csv')
+    grade_parser.add_argument('--profile', default='configs/profile.yml')
+    grade_parser.add_argument('--offline-grading', action='store_true')
+    grade_parser.add_argument('--persist-grades', action='store_true')
+    grade_db_parser = sub.add_parser('grade-db', help='Grade stored jobs from PostgreSQL public.clean_jobs')
+    grade_db_parser.add_argument('--since-days', type=int, default=90, help='Posting-date lookback (default: 90 days)')
+    grade_db_parser.add_argument('--limit', type=int, help='Grade at most this many newest jobs')
+    grade_db_parser.add_argument('--out', default='data/outputs/results-db-90-days.csv')
+    grade_db_parser.add_argument('--profile', default='configs/profile.yml')
+    grade_db_parser.add_argument('--offline-grading', action='store_true', help='Skip market data; still read jobs from PostgreSQL')
+    grade_db_parser.add_argument('--persist-grades', action='store_true', help='Append grading history to PostgreSQL skill_scores')
+    policy_report = sub.add_parser('policy-report', help='Inspect policy dependencies and static quality findings')
+    policy_report.add_argument('--out', default='docs/generated/policy-observability.md')
+    policy_report.add_argument('--input-context', choices=['db', 'csv', 'unknown'], default='db',
+                               help='Input contract used for reachability notes (default: db)')
+    impact_parser = sub.add_parser('policy-impact', help='Show possible downstream effects of a policy rule')
+    impact_parser.add_argument('--rule', default=None, help='Rule id; omit to list all rules')
+    impact_parser.add_argument('--out', default='docs/generated/policy-impact.md')
+    trace_parser = sub.add_parser('trace-job', help='Render one job using the production grader event ledger')
+    trace_parser.add_argument('--input', required=True, help='CSV containing the job')
+    trace_parser.add_argument('--id', required=True, help='Job id to trace')
+    trace_parser.add_argument('--out', default='docs/generated/job-trace.md')
+    trace_parser.add_argument('--profile', default='configs/profile.yml')
+    trace_parser.add_argument('--offline-grading', action='store_true')
     args = parser.parse_args()
 
     for timeout_name in (
@@ -185,7 +214,43 @@ def main() -> None:
     import_batch.set_defaults(command="import-batch")
     refresh_skills.set_defaults(command="refresh-job-skills")
     
-    if args.cmd == "fetch":
+    if args.cmd == 'grade-csv':
+        from .score.grading import GradingContext
+        results = grade_csv(Path(args.input), Path(args.out),
+                            context=GradingContext.load(profile_path=Path(args.profile)),
+                            use_market_data=not args.offline_grading, persist_grades=args.persist_grades)
+        print(f'Graded {len(results)} jobs: {args.out}')
+    elif args.cmd == 'grade-db':
+        from .score.grading import GradingContext
+        results = grade_database(Path(args.out), since_days=args.since_days, limit=args.limit,
+                                 context=GradingContext.load(profile_path=Path(args.profile)),
+                                 use_market_data=not args.offline_grading, persist_grades=args.persist_grades,
+                                 on_progress=diagnostics.phase, connect_timeout=args.db_connect_timeout,
+                                 statement_timeout=args.db_statement_timeout, lock_timeout=args.db_lock_timeout)
+        print(f'Graded {len(results)} PostgreSQL jobs: {args.out}')
+        if not results:
+            print(f'No jobs posted within {args.since_days} days in public.clean_jobs; output contains headers only.')
+    elif args.cmd == 'policy-report':
+        from .policy_diagnostics import write_policy_report
+        report = write_policy_report(Path(args.out), input_context=args.input_context)
+        print(f"Wrote policy report ({len(report['issues'])} findings): {args.out}")
+    elif args.cmd == 'policy-impact':
+        from .policy_diagnostics import render_impact
+        from .score.grading import GradingContext
+        output = Path(args.out)
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(render_impact(GradingContext.load(), args.rule), encoding='utf-8')
+        print(f"Wrote policy impact report: {args.out}")
+    elif args.cmd == 'trace-job':
+        from .policy_diagnostics import trace_csv
+        from .score.grading import GradingContext
+        context = GradingContext.load(profile_path=Path(args.profile))
+        from .pipeline import grading_market
+        prevalence, market = grading_market(context, use_market_data=not args.offline_grading)
+        trace_csv(Path(args.input), args.id, Path(args.out), context=context,
+                  prevalence=prevalence, market_context=market)
+        print(f"Wrote deterministic trace: {args.out}")
+    elif args.cmd == "fetch":
         diagnostics.phase("Reading job links")
         fetch_links(
             input_path=Path(args.input),
@@ -204,16 +269,18 @@ def main() -> None:
                         out_csv_path=out_path,
                         min_score=args.min_score,
                         no_scrape=args.no_scrape,
-                        profile_path=Path(args.profile)
+                        profile_path=Path(args.profile),
+                        use_market_data=not args.offline_grading, persist_grades=args.persist_grades
                     )
         
-        #TODO:extract skills with NLP and add to yaml of skills; uncomment below when ready to extract skills from job descriptions and save to file for future analysis
-        extracted_skills = extract_jd_skills(jdParsedObject)
-        #flatten before creating file
-        flatten_skills = [item for sublist in extracted_skills for item in sublist]
-        counts_skills = Counter(flatten_skills)
-        output = "\n".join(f"{skill},{count}" for skill, count in counts_skills.most_common())
-        create_file(skills_filename, output)
+        if args.nlp_diagnostics:
+            # Supplemental phrases are not canonical skills or grading evidence.
+            extracted_skills = extract_jd_skills(jdParsedObject)
+            #flatten before creating file
+            flatten_skills = [item for sublist in extracted_skills for item in sublist]
+            counts_skills = Counter(flatten_skills)
+            output = "\n".join(f"{skill},{count}" for skill, count in counts_skills.most_common())
+            create_file(skills_filename, output)
     
     elif args.cmd == "extract":
         diagnostics.phase("Extracting resume signals")

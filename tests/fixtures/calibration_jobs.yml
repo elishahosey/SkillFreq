@@ -1,0 +1,101 @@
+- name: transferable_growth
+  title: Data Engineer
+  description: 'Responsibilities: Build SQL ETL data pipelines, data integration,
+    Python API ingestion, data modeling and data quality. Required: SQL, Python and
+    Airflow. Preferred: AWS.'
+  expected_lane: target_lane
+  expected_decision: apply_now
+  learning: true
+- name: qa_sql
+  title: Security QA Analyst, Senior
+  description: Test SQL ETL data pipelines and data integration using Python. Execute
+    regression testing.
+  expected_lane: wrong_lane
+  expected_decision: skip
+- name: automation_sql
+  title: Sr Test Automation Engineer
+  description: SQL ETL data integration and Python API automation with Selenium regression
+    testing.
+  expected_lane: wrong_lane
+  expected_decision: skip
+- name: infrastructure_sql
+  title: Infrastructure Automation Engineer
+  description: Own cloud infrastructure and infrastructure-as-code using Terraform.
+    SQL Python ETL data pipelines.
+  expected_lane: wrong_lane
+  expected_decision: skip
+- name: informatica_transferable
+  title: ETL Developer
+  description: Build SQL ETL data pipelines and data integration using Informatica.
+    Python API ingestion, data modeling and data quality validation.
+  expected_lane: target_lane
+  expected_decision: apply_now
+- name: informatica_owner
+  title: Informatica MDM Engineer
+  description: Own MDM architecture and golden record survivorship rules. Platform
+    ownership with Informatica and IICS. SQL ETL data integration and Python.
+  expected_lane: wrong_lane
+  expected_decision: skip
+  blocker: ecosystem_ownership_gap
+- name: modern_data
+  title: Data Engineer
+  description: Build SQL ETL data pipelines, data integration and Python API ingestion
+    with AWS, Snowflake, Airflow and Databricks. Maintain data quality and validation.
+  expected_lane: target_lane
+  expected_decision: apply_now
+  learning: true
+  no_platform_evidence: true
+- name: infrastructure_owner
+  title: Platform Engineer
+  description: Own cloud infrastructure with Terraform and Kubernetes. Cluster administration
+    and capacity planning for platform ownership. Python SQL ETL.
+  expected_lane: wrong_lane
+  expected_decision: skip
+- name: irrelevant_missing
+  title: Data Engineer
+  description: Build SQL ETL data pipelines and data integration. Tableau dashboards
+    and Kubernetes mentioned by adjacent teams.
+  expected_lane: target_lane
+- name: ambiguous
+  title: Data Engineer / Backend Engineer
+  description: Build ETL data pipelines and FastAPI microservices using PostgreSQL,
+    SQLAlchemy and Docker.
+  expected_lane: secondary_lane
+  expected_decision: manual_review
+  ai: true
+- name: support_identity
+  title: Senior Support Analyst
+  description: SQL queries, stored procedures, data validation, API integration, XML
+    and JSON. Production support, incident tickets, logs and troubleshooting.
+  expected_lane: bridge_lane
+- name: network_automation
+  title: Network Automation Engineer (Python / Network APIs)
+  description: Build automation pipelines for network configuration. ETL data integration
+    and validation using Python and APIs. Ansible Terraform network operations.
+  expected_lane: wrong_lane
+  expected_decision: skip
+- name: mdm_support
+  title: Senior Informatica MDM Support Engineer
+  description: Monitor MDM batch jobs and data pipeline failures. SQL ETL data integration
+    and data quality. Strong experience with Informatica MDM Hub Console, SIF, Match/Merge
+    rules and provisioning tool.
+  expected_lane: secondary_lane
+  expected_decision: skip
+  blocker: ecosystem_ownership_gap
+- name: unrelated_title
+  title: Labor Engineering PM III
+  description: SQL ETL data pipelines, data integration, data quality and validation.
+    Python APIs and production support.
+  expected_lane: bridge_lane
+  expected_decision: manual_review
+- name: tester
+  title: Senior Tester
+  description: SQL data integration and API validation using ETL pipelines.
+  expected_lane: wrong_lane
+  expected_decision: skip
+- name: hardware_integration
+  title: Systems Integration Engineer (UAV or robotics)
+  description: SQL ETL data integration and API validation using Python. Integrate
+    UAV subsystems.
+  expected_lane: wrong_lane
+  expected_decision: skip

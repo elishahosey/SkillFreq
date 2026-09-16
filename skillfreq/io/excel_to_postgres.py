@@ -135,6 +135,11 @@ def jsonish_value(value: object) -> object:
         stripped = value.strip()
         if not stripped:
             return {}
+        import json
+        try:
+            return json.loads(stripped)
+        except (ValueError, TypeError):
+            pass
         try:
             return ast.literal_eval(stripped)
         except (ValueError, SyntaxError):
@@ -585,6 +590,8 @@ def insert_skill_scores(
 ) -> int:
     raw_by_job_id = raw_lookup.set_index("id", drop=False) if "id" in raw_lookup.columns else pd.DataFrame()
     rows = []
+    grades = []
+    has_grades = "grade_json" in scores_df.columns
 
     for _, row in scores_df.iterrows():
         job_id = text_value(row, "id")
@@ -592,6 +599,16 @@ def insert_skill_scores(
         raw_row = raw_by_job_id.loc[job_id] if job_id in raw_by_job_id.index else None
         company = clean_value(raw_row.get("company")) if raw_row is not None else None
         score_breakdown = jsonish_value(row.get("matches"))
+        grade = jsonish_value(row.get('grade_json')) if has_grades else None
+        if has_grades and (not isinstance(grade, dict) or not grade.get('grading_version')):
+            raise ValueError('Every grade_json row must contain a versioned deterministic grade')
+        if has_grades:
+            from skillfreq.skills.job_market import make_job_key
+            source_site = text_value(row, 'source_site') or (clean_value(raw_row.get('site')) if raw_row is not None else None)
+            grades.append((make_job_key(source_site, job_id, text_value(row,'source')),
+                           grade['grading_version'], grade['taxonomy_version'], grade['role_lane'],
+                           Json(grade['lane_scores']), grade['fit_score'], grade['learning_score'],
+                           grade['pre_ai_score'], grade['confidence'], grade['ai_review_required'], Json(grade)))
         flags = {
             "raw_match": text_value(row, "raw_match"),
             "role_lane": text_value(row, "role_lane"),
@@ -618,7 +635,7 @@ def insert_skill_scores(
                 Json(score_breakdown),
                 Json({k: v for k, v in flags.items() if v is not None}),
                 text_value(row, "reason_codes"),
-                scoring_version,
+                grade["grading_version"] if has_grades else scoring_version,
                 "skillfreq_csv",
             )
         )
@@ -626,17 +643,21 @@ def insert_skill_scores(
     if not rows:
         return 0
 
+    values = [row[:-2] + (datetime.now(), row[-2], row[-1]) for row in rows]
+    if has_grades:
+        values = [row + grade for row, grade in zip(values, grades)]
+    columns = ', job_key, grading_version, taxonomy_version, role_lane, lane_scores, fit_score, learning_score, pre_ai_score, confidence, ai_review_required, deterministic_grade' if has_grades else ''
     execute_values(
         cur,
-        """
+        f"""
         INSERT INTO skill_scores (
             batch_id, job_id, raw_job_id, company, role, link, total_score,
             fit_band, matched_skills, missing_skills, score_breakdown, flags,
-            score_reason, created_at, scoring_version, score_source
+            score_reason, created_at, scoring_version, score_source{columns}
         )
         VALUES %s
         """,
-        [row[:-2] + (datetime.now(), row[-2], row[-1]) for row in rows],
+        values,
     )
     return len(rows)
 
@@ -781,8 +802,8 @@ def import_skillfreq_batch(
         review_xlsx,
     )
 
-    jobs_df = pd.read_csv(jobs_csv)
-    scores_df = pd.read_csv(scores_csv)
+    jobs_df = pd.read_csv(jobs_csv, dtype={'id': str})
+    scores_df = pd.read_csv(scores_csv, dtype={'id': str})
     review_df = read_review_sheet(review_xlsx, review_sheet) if review_xlsx else None
     logger.info("Loaded source files: raw_jobs=%s skill_scores=%s", len(jobs_df), len(scores_df))
 
@@ -794,6 +815,24 @@ def import_skillfreq_batch(
             with conn.cursor() as cur:
                 if batch_mode == "replace":
                     replace_batch(cur, batch_id)
+
+                if 'grade_json' in scores_df.columns:
+                    import yaml
+                    from .grading_to_postgres import SCHEMA_PATH
+                    snapshot_path = scores_csv.with_suffix('.grading.yml')
+                    snapshot = yaml.safe_load(snapshot_path.read_text(encoding='utf-8'))
+                    from skillfreq.configuration import configuration_version
+                    if configuration_version(snapshot['configuration']) != snapshot['grading_version']:
+                        raise ValueError('Exported grading snapshot hash does not match its version')
+                    cur.execute(SCHEMA_PATH.read_text(encoding='utf-8'))
+                    cur.execute("INSERT INTO public.grading_config_versions (grading_version,taxonomy_version,configuration) VALUES (%s,%s,%s) ON CONFLICT (grading_version) DO NOTHING",
+                                (snapshot['grading_version'], snapshot['taxonomy_version'], Json(snapshot['configuration'])))
+                    versions = {jsonish_value(value)['grading_version'] for value in scores_df['grade_json']}
+                    if versions != {snapshot['grading_version']}:
+                        raise ValueError('CSV grades do not match the exported configuration snapshot')
+                    taxonomy_versions = {jsonish_value(value)['taxonomy_version'] for value in scores_df['grade_json']}
+                    if taxonomy_versions != {snapshot['taxonomy_version']}:
+                        raise ValueError('CSV taxonomy versions do not match the exported configuration snapshot')
 
                 raw_job_ids = insert_raw_jobs(cur, jobs_df, batch_id, jobs_csv.name)
                 logger.info("Inserted %s raw job row(s)", len(raw_job_ids))

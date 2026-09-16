@@ -1,376 +1,3064 @@
 resume_variants:
   Engineer_Data:
     keywords:
-      - data engineer
+    - role_term: data engineer
+    - concept_term:
+      - etl
+      - etl
+    - concept_term:
       - etl
       - elt
+    - concept_term:
+      - etl
       - pipeline
+    - concept_term:
+      - etl
       - pipelines
+    - concept_term:
+      - etl
       - data pipeline
+    - concept_term:
+      - etl
       - data pipelines
-      - ingestion
-      - transformation
-      - data warehouse
-      - warehousing
-      - warehouse
-      - schema
+    - role_term: ingestion
+    - role_term: transformation
+    - role_term: data warehouse
+    - role_term: warehousing
+    - role_term: warehouse
+    - role_term: schema
+    - concept_term:
+      - data_modeling
       - data modeling
+    - concept_term:
+      - data_quality
       - data quality
+    - concept_term:
+      - data_quality
       - validation
+    - concept_term:
+      - data_quality
       - reconciliation
+    - concept_term:
+      - etl
       - batch processing
-      - sql
-      - python
+    - atomic: SQL
+    - atomic: Python
+    - concept_term:
+      - apis
       - api
+    - concept_term:
+      - apis
       - rest
+    - concept_term:
+      - data_formats
       - xml
+    - concept_term:
+      - data_formats
       - json
-      - sftp
+    - role_term: sftp
+    - concept_term:
+      - operations
       - production support
+    - concept_term:
+      - operations
       - root cause
     weight: 1.0
-
   Engineer_Secondary:
     keywords:
-      - backend engineer
-      - software engineer data
-      - backend data engineer
-      - data platform engineer
-      - data systems engineer
-      - data infrastructure engineer
-      - data reliability engineer
-      - application engineer
-      - integration engineer
-      - integration developer
-      - api engineer
-      - api developer
-      - backend
+    - role_term: backend engineer
+    - role_term: software engineer data
+    - role_term: backend data engineer
+    - role_term: data platform engineer
+    - role_term: data systems engineer
+    - role_term: data infrastructure engineer
+    - role_term: data reliability engineer
+    - role_term: application engineer
+    - role_term: integration engineer
+    - role_term: integration developer
+    - role_term: api engineer
+    - role_term: api developer
+    - role_term: backend
+    - concept_term:
+      - apis
       - api
+    - concept_term:
+      - apis
+      - apis
+    - concept_term:
       - apis
       - rest
-      - microservices
-      - services
-      - object oriented
-      - client-server
+    - role_term: microservices
+    - role_term: services
+    - role_term: object oriented
+    - role_term: client-server
+    - concept_term:
+      - integration_workflows
       - integrations
+    - concept_term:
+      - integration_workflows
       - systems integration
-      - interface engineer
+    - role_term: interface engineer
+    - concept_term:
+      - integration_workflows
       - middleware
+    - concept_term:
+      - integration_workflows
       - data exchange
+    - concept_term:
+      - software_engineering
       - application development
+    - concept_term:
+      - etl
       - batch data processing
-      - postgresql
-      - sql server
-      - python
+    - atomic: PostgreSQL
+    - atomic: SQL Server
+    - atomic: Python
+    - concept_term:
+      - git
       - git
     weight: 0.85
-
   Engineer_Bridge:
     keywords:
-      - systems analyst
-      - system analyst
-      - application analyst
-      - business systems analyst
-      - technical systems analyst
-      - application support analyst
-      - application support engineer
-      - production support analyst
-      - production support engineer
-      - software support analyst
-      - software support engineer
-      - technical support analyst
-      - technical support engineer
-      - sql analyst
-      - data analyst
-      - data quality analyst
-      - data operations analyst
-      - data integrity analyst
-      - reporting analyst
-      - integration analyst
-      - interface analyst
-      - api support engineer
-      - etl support analyst
-      - database analyst
+    - role_term: systems analyst
+    - role_term: system analyst
+    - role_term: application analyst
+    - role_term: business systems analyst
+    - role_term: technical systems analyst
+    - role_term: application support analyst
+    - role_term: application support engineer
+    - role_term: production support analyst
+    - role_term: production support engineer
+    - role_term: software support analyst
+    - role_term: software support engineer
+    - role_term: technical support analyst
+    - role_term: technical support engineer
+    - role_term: sql analyst
+    - role_term: data analyst
+    - role_term: data quality analyst
+    - role_term: data operations analyst
+    - role_term: data integrity analyst
+    - role_term: reporting analyst
+    - role_term: integration analyst
+    - role_term: interface analyst
+    - role_term: api support engineer
+    - role_term: etl support analyst
+    - role_term: database analyst
+    - atomic: SQL
+    - role_term: queries
+    - concept_term:
       - sql
-      - queries
       - stored procedures
+    - concept_term:
+      - data_quality
       - data validation
+    - concept_term:
+      - data_quality
       - data quality
+    - concept_term:
+      - data_quality
       - reconciliation
-      - reporting
-      - reports
-      - power bi
-      - tableau
+    - role_term: reporting
+    - role_term: reports
+    - atomic: Power BI
+    - atomic: Tableau
+    - concept_term:
+      - apis
       - api
+    - concept_term:
+      - apis
+      - apis
+    - concept_term:
       - apis
       - rest
+    - concept_term:
+      - data_formats
       - xml
+    - concept_term:
+      - data_formats
       - json
-      - sftp
+    - role_term: sftp
+    - concept_term:
+      - integration_workflows
       - integration
+    - concept_term:
+      - integration_workflows
       - integrations
+    - concept_term:
+      - integration_workflows
       - interface
+    - concept_term:
+      - integration_workflows
       - interfaces
+    - concept_term:
+      - operations
       - production support
+    - concept_term:
+      - operations
       - application support
+    - concept_term:
+      - operations
       - troubleshooting
+    - concept_term:
+      - operations
       - root cause
+    - concept_term:
+      - operations
       - incident
+    - concept_term:
+      - systems
       - logs
+    - concept_term:
+      - systems
       - log analysis
+    - concept_term:
+      - integration_workflows
       - operational workflows
     weight: 0.65
-
   Engineer_Analytics:
     keywords:
-      - analytics
-      - business intelligence
-      - bi
-      - dashboard
-      - dashboards
-      - reporting
-      - reports
+    - role_term: analytics
+    - role_term: business intelligence
+    - role_term: bi
+    - role_term: dashboard
+    - role_term: dashboards
+    - role_term: reporting
+    - role_term: reports
+    - concept_term:
+      - monitoring
       - metrics
-      - kpi
-      - looker
-      - tableau
-      - power bi
-      - semantic layer
-      - ad hoc
-      - stakeholder reporting
-      - sql
-      - transformation
-      - modeling
+    - role_term: kpi
+    - role_term: looker
+    - atomic: Tableau
+    - atomic: Power BI
+    - role_term: semantic layer
+    - role_term: ad hoc
+    - role_term: stakeholder reporting
+    - atomic: SQL
+    - role_term: transformation
+    - role_term: modeling
     weight: 0.65
-
   Engineer_Platform:
     keywords:
-      - platform engineer
-      - platform
+    - role_term: platform engineer
+    - role_term: platform
+    - concept_term:
+      - systems
       - infrastructure
-      - reliability
-      - sre
-      - observability
+    - role_term: reliability
+    - role_term: sre
+    - concept_term:
       - monitoring
+      - observability
+    - concept_term:
+      - operations
+      - monitoring
+    - concept_term:
+      - systems
       - logging
+    - role_term: devops
+    - concept_term:
       - devops
       - ci/cd
-      - deployment
-      - release
-      - kubernetes
-      - terraform
-      - linux
+    - role_term: deployment
+    - role_term: release
+    - atomic: Kubernetes
+    - atomic: Terraform
+    - role_term: linux
+    - concept_term:
+      - operations
       - production support
+    - concept_term:
+      - operations
       - root cause
-      - distributed systems
+    - role_term: distributed systems
+    - concept_term:
+      - airflow
       - workflow orchestration
-      - automation pipelines
+    - role_term: automation pipelines
     weight: 0.45
-
   Engineer_Software:
     keywords:
-      - backend engineer
-      - software engineer
-      - backend
+    - role_term: backend engineer
+    - role_term: software engineer
+    - role_term: backend
+    - concept_term:
+      - apis
       - api
+    - concept_term:
+      - apis
+      - apis
+    - concept_term:
       - apis
       - rest
-      - microservices
-      - services
-      - object oriented
-      - client-server
-      - integration engineer
+    - role_term: microservices
+    - role_term: services
+    - role_term: object oriented
+    - role_term: client-server
+    - role_term: integration engineer
+    - concept_term:
+      - integration_workflows
       - integrations
+    - concept_term:
+      - integration_workflows
       - systems integration
-      - interface engineer
+    - role_term: interface engineer
+    - concept_term:
+      - integration_workflows
       - middleware
+    - concept_term:
+      - integration_workflows
       - data exchange
-      - application engineer
+    - role_term: application engineer
+    - concept_term:
+      - integration_workflows
       - system integration
     weight: 0.75
-
 title_overrides:
   Engineer_Data:
-    - data engineer
-    - etl engineer
-    - elt engineer
-    - data warehouse engineer
-    - data integration engineer
-    - data pipeline engineer
-    - data ingestion engineer
-    - data quality engineer
-    - sql developer
-    - database developer
-
+  - role_term: data engineer
+  - role_term: etl engineer
+  - role_term: elt engineer
+  - role_term: data warehouse engineer
+  - role_term: data integration engineer
+  - role_term: data pipeline engineer
+  - role_term: data ingestion engineer
+  - role_term: data quality engineer
+  - role_term: sql developer
+  - role_term: database developer
   Engineer_Secondary:
-    - data platform engineer
-    - data systems engineer
-    - data infrastructure engineer
-    - software engineer data
-    - backend engineer data
-    - backend data engineer
-    - api engineer
-    - api developer
-    - application engineer integration
-    - integration developer
-    - pl/sql developer
-    - database engineer
-
+  - role_term: data platform engineer
+  - role_term: data systems engineer
+  - role_term: data infrastructure engineer
+  - role_term: software engineer data
+  - role_term: backend engineer data
+  - role_term: backend data engineer
+  - role_term: api engineer
+  - role_term: api developer
+  - role_term: application engineer integration
+  - role_term: integration developer
+  - role_term: pl/sql developer
+  - role_term: database engineer
   Engineer_Bridge:
-    - systems analyst
-    - system analyst
-    - application analyst
-    - business systems analyst
-    - technical systems analyst
-    - application support analyst
-    - application support engineer
-    - production support analyst
-    - production support engineer
-    - software support analyst
-    - software support engineer
-    - technical support engineer
-    - technical support analyst
-    - sql analyst
-    - data analyst
-    - data quality analyst
-    - data operations analyst
-    - data integrity analyst
-    - reporting analyst
-    - integration analyst
-    - interface analyst
-    - api support engineer
-    - etl support analyst
-    - database analyst
-
+  - role_term: systems analyst
+  - role_term: system analyst
+  - role_term: application analyst
+  - role_term: business systems analyst
+  - role_term: technical systems analyst
+  - role_term: application support analyst
+  - role_term: application support engineer
+  - role_term: production support analyst
+  - role_term: production support engineer
+  - role_term: software support analyst
+  - role_term: software support engineer
+  - role_term: technical support engineer
+  - role_term: technical support analyst
+  - role_term: sql analyst
+  - role_term: data analyst
+  - role_term: data quality analyst
+  - role_term: data operations analyst
+  - role_term: data integrity analyst
+  - role_term: reporting analyst
+  - role_term: integration analyst
+  - role_term: interface analyst
+  - role_term: api support engineer
+  - role_term: etl support analyst
+  - role_term: database analyst
   Engineer_Software:
-    - interface engineer
+  - role_term: interface engineer
+  - concept_term:
+    - integration_workflows
     - systems integration
+  - concept_term:
+    - integration_workflows
     - system integration
+  - concept_term:
+    - apis
     - api integration
-    - client integration
-    - client integrations
+  - role_term: client integration
+  - role_term: client integrations
+  - concept_term:
+    - integration_workflows
     - middleware
-    - integration engineer
-    - interface developer
-
+  - role_term: integration engineer
+  - role_term: interface developer
   Engineer_Platform:
-    - sre
-    - site reliability engineer
-    - devops engineer
-    - platform engineer
-    - infrastructure engineer
-
+  - role_term: sre
+  - role_term: site reliability engineer
+  - role_term: devops engineer
+  - role_term: platform engineer
+  - role_term: infrastructure engineer
 negative_keywords:
   Engineer_Data:
-    - dashboard-only
-    - dashboard only
-    - front end
-    - frontend
-    - implementation consultant
-    - configuration consultant
-
+  - role_term: dashboard-only
+  - role_term: dashboard only
+  - role_term: front end
+  - role_term: frontend
+  - role_term: implementation consultant
+  - role_term: configuration consultant
   Engineer_Secondary:
-    - kubernetes ownership
-    - terraform ownership
-    - cloud infrastructure ownership
-    - implementation consultant
-    - configuration consultant
+  - role_term: kubernetes ownership
+  - role_term: terraform ownership
+  - role_term: cloud infrastructure ownership
+  - role_term: implementation consultant
+  - role_term: configuration consultant
+  - concept_term:
+    - ai_ml
     - machine learning
-    - ai agents
-
+  - role_term: ai agents
   Engineer_Bridge:
-    - call center
-    - help desk only
-    - password reset
-    - desktop support
-    - hardware support
-    - field technician
-    - implementation consultant
-    - configuration consultant
-    - salesforce admin
-    - servicenow admin
-    - erp consultant
-    - workday consultant
-    - sap consultant
-    - peoplesoft consultant
-    - clinical technician
-    - scada
-    - gis
-    - arcgis
-
+  - role_term: call center
+  - role_term: help desk only
+  - role_term: password reset
+  - role_term: desktop support
+  - role_term: hardware support
+  - role_term: field technician
+  - role_term: implementation consultant
+  - role_term: configuration consultant
+  - role_term: salesforce admin
+  - role_term: servicenow admin
+  - role_term: erp consultant
+  - role_term: workday consultant
+  - role_term: sap consultant
+  - role_term: peoplesoft consultant
+  - role_term: clinical technician
+  - role_term: scada
+  - role_term: gis
+  - role_term: arcgis
   Engineer_Analytics:
-    - dashboard-only
-    - dashboard only
-    - no sql
-    - kubernetes
-    - terraform
+  - role_term: dashboard-only
+  - role_term: dashboard only
+  - role_term: no sql
+  - atomic: Kubernetes
+  - atomic: Terraform
+  - concept_term:
+    - ai_ml
     - machine learning
+  - concept_term:
+    - ai_ml
     - predictive modeling
-
   Engineer_Platform:
-    - tableau
-    - power bi
-    - dashboard-only
-    - database administration
-    - dba
-
+  - atomic: Tableau
+  - atomic: Power BI
+  - role_term: dashboard-only
+  - role_term: database administration
+  - role_term: dba
   Engineer_Software:
-    - tableau
-    - power bi
-    - frontend
-    - front end
-    - react-only
-    - react only
-
+  - atomic: Tableau
+  - atomic: Power BI
+  - role_term: frontend
+  - role_term: front end
+  - role_term: react-only
+  - role_term: react only
 seniority_penalties:
   hard_titles:
-    - senior
-    - sr
-    - lead
-    - principal
-    - staff
-    - architect
-    - manager
-    - director
+  - seniority: senior
+  - role_term: sr
+  - role_term: lead
+  - seniority: principal
+  - seniority: staff
+  - seniority: architect
+  - seniority: manager
+  - role_term: director
   medium_requirements:
-    - 5+ years
-    - 6+ years
-    - 7+ years
-    - 8+ years
-    - 10+ years
-    - five years
-    - six years
-    - seven years
-    - eight years
-    - ten years
-
+  - seniority: 5+ years
+  - seniority: 6+ years
+  - seniority: 7+ years
+  - seniority: 8+ years
+  - role_term: 10+ years
+  - role_term: five years
+  - role_term: six years
+  - role_term: seven years
+  - role_term: eight years
+  - role_term: ten years
 ai_stack_penalty:
   keywords:
-    - rag
-    - retrieval augmented generation
-    - langchain
-    - langgraph
-    - llamaindex
-    - crewai
-    - autogen
-    - agentops
-    - llmops
-    - mlops
-    - model monitoring
-    - experiment tracking
-    - model versioning
-    - fine tuning
-    - fine-tune
-    - lora
-    - peft
-    - transformers
-    - tensorflow
-    - pytorch
-    - scikit-learn
-    - sklearn
-    - hallucination
-    - grounding
-    - prompt management
-    - offline evaluation
-    - online evaluation
+  - role_term: rag
+  - role_term: retrieval augmented generation
+  - role_term: langchain
+  - role_term: langgraph
+  - role_term: llamaindex
+  - role_term: crewai
+  - role_term: autogen
+  - role_term: agentops
+  - role_term: llmops
+  - role_term: mlops
+  - role_term: model monitoring
+  - role_term: experiment tracking
+  - role_term: model versioning
+  - role_term: fine tuning
+  - role_term: fine-tune
+  - role_term: lora
+  - role_term: peft
+  - role_term: transformers
+  - role_term: tensorflow
+  - role_term: pytorch
+  - role_term: scikit-learn
+  - role_term: sklearn
+  - role_term: hallucination
+  - role_term: grounding
+  - role_term: prompt management
+  - role_term: offline evaluation
+  - role_term: online evaluation
   penalty_score: 1
+lane_rules:
+- id: hard_wrong_title_terms
+  category: hard_wrong_title_terms
+  signal_type: title
+  group: lane.hard_wrong_title_terms
+  lane: wrong_lane
+  weight: 100
+  scope: title
+  hard_exclusion: true
+  active: true
+  max_hits: 1
+- id: strong_target_title_terms
+  category: strong_target_title_terms
+  signal_type: title
+  group: lane.strong_target_title_terms
+  lane: target_lane
+  weight: 30
+  scope: title
+  hard_exclusion: false
+  active: true
+  max_hits: 1
+- id: secondary_title_terms
+  category: secondary_title_terms
+  signal_type: title
+  group: lane.secondary_title_terms
+  lane: secondary_lane
+  weight: 30
+  scope: title
+  hard_exclusion: false
+  active: true
+  max_hits: 1
+- id: bridge_title_terms
+  category: bridge_title_terms
+  signal_type: title
+  group: lane.bridge_title_terms
+  lane: bridge_lane
+  weight: 30
+  scope: title
+  hard_exclusion: false
+  active: true
+  max_hits: 1
+- id: consultant_title_terms
+  category: consultant_title_terms
+  signal_type: title
+  group: lane.consultant_title_terms
+  lane: bridge_lane
+  weight: 20
+  scope: title
+  hard_exclusion: false
+  active: true
+  max_hits: 1
+- id: bad_consultant_title_terms
+  category: bad_consultant_title_terms
+  signal_type: title
+  group: lane.bad_consultant_title_terms
+  lane: wrong_lane
+  weight: 30
+  scope: title
+  hard_exclusion: false
+  active: true
+  max_hits: 1
+- id: non_target_title_terms
+  category: non_target_title_terms
+  signal_type: title
+  group: lane.non_target_title_terms
+  lane: secondary_lane
+  weight: 0
+  scope: title
+  hard_exclusion: false
+  active: true
+  max_hits: 1
+- id: core_data_signals
+  category: core_data_signals
+  signal_type: description
+  group: lane.core_data_signals
+  lane: target_lane
+  weight: 6
+  scope: description
+  hard_exclusion: false
+  active: true
+  max_hits: 6
+- id: backend_data_signals
+  category: backend_data_signals
+  signal_type: description
+  group: lane.backend_data_signals
+  lane: secondary_lane
+  weight: 6
+  scope: description
+  hard_exclusion: false
+  active: true
+  max_hits: 6
+- id: support_signals
+  category: support_signals
+  signal_type: description
+  group: lane.support_signals
+  lane: bridge_lane
+  weight: 2
+  scope: description
+  hard_exclusion: false
+  active: true
+  max_hits: 6
+- id: bridge_positive_signals
+  category: bridge_positive_signals
+  signal_type: description
+  group: lane.bridge_positive_signals
+  lane: bridge_lane
+  weight: 3
+  scope: description
+  hard_exclusion: false
+  active: true
+  max_hits: 6
+- id: analytics_terms
+  category: analytics_terms
+  signal_type: description
+  group: lane.analytics_terms
+  lane: bridge_lane
+  weight: 2
+  scope: description
+  hard_exclusion: false
+  active: true
+  max_hits: 6
+- id: wrong_desc_terms
+  category: wrong_desc_terms
+  signal_type: description
+  group: lane.wrong_desc_terms
+  lane: wrong_lane
+  weight: 12
+  scope: description
+  hard_exclusion: false
+  active: true
+  max_hits: 6
+- id: platform_heavy_terms
+  category: platform_heavy_terms
+  signal_type: description
+  group: lane.platform_heavy_terms
+  lane: wrong_lane
+  weight: 8
+  scope: description
+  hard_exclusion: false
+  active: true
+  max_hits: 6
+- id: platform_admin_title_terms
+  category: platform_admin_title_terms
+  signal_type: title
+  group: lane.platform_admin_title_terms
+  lane: wrong_lane
+  weight: 25
+  scope: title
+  hard_exclusion: false
+  active: true
+  max_hits: 1
+- id: low_signal_terms
+  category: low_signal_terms
+  signal_type: description
+  group: lane.low_signal_terms
+  lane: wrong_lane
+  weight: 5
+  scope: both
+  hard_exclusion: false
+  active: true
+  max_hits: 6
+- id: analytics_title_terms
+  category: analytics_title_terms
+  signal_type: title
+  group: lane.analytics_title_terms
+  lane: bridge_lane
+  weight: 20
+  scope: title
+  hard_exclusion: false
+  active: true
+  max_hits: 1
+- id: explicit_unrelated_ownership
+  category: ownership_exclusion
+  signal_type: exclusion
+  pattern: \b(?:help[- ]desk[- ]only|dashboard[- ]only|cloud infrastructure ownership|kubernetes
+    ownership|terraform ownership)\b
+  lane: wrong_lane
+  weight: 100
+  scope: both
+  hard_exclusion: true
+  active: true
+  max_hits: 1
+- id: secondary_core_overlap
+  category: secondary_core_overlap
+  signal_type: description
+  group: lane.core_data_signals
+  lane: secondary_lane
+  weight: 3
+  scope: description
+  hard_exclusion: false
+  active: true
+  max_hits: 6
+- id: ecosystem_terms
+  category: ecosystem_terms
+  signal_type: ecosystem
+  group: ecosystem.products
+  lane: wrong_lane
+  weight: 0
+  scope: description
+  hard_exclusion: false
+  active: true
+  max_hits: 10
+- id: ecosystem_ownership
+  category: ecosystem_ownership
+  signal_type: ecosystem
+  group: ecosystem.ownership
+  lane: wrong_lane
+  weight: 0
+  scope: description
+  hard_exclusion: false
+  active: true
+  max_hits: 10
+- id: ecosystem_title
+  category: ecosystem_title
+  signal_type: ecosystem
+  group: ecosystem.title
+  lane: wrong_lane
+  weight: 0
+  scope: title
+  hard_exclusion: false
+  active: true
+  max_hits: 10
+- id: qa_title_identity
+  category: qa_title_identity
+  signal_type: title
+  title_pattern:
+    any:
+    - qa
+    - quality assurance
+    with:
+    - engineer
+    - analyst
+    - automation
+    - consultant
+  lane: wrong_lane
+  weight: 40
+  scope: title
+  hard_exclusion: true
+  active: true
+  max_hits: 1
+- id: test_title_identity
+  category: test_title_identity
+  signal_type: title
+  title_pattern:
+    any:
+    - test
+    - testing
+    with:
+    - engineer
+    - automation
+    - analyst
+  lane: wrong_lane
+  weight: 40
+  scope: title
+  hard_exclusion: true
+  active: true
+  max_hits: 1
+- id: infrastructure_title_identity
+  category: infrastructure_title_identity
+  signal_type: title
+  title_pattern:
+    any:
+    - infrastructure
+    - platform
+    with:
+    - engineer
+    - administrator
+    - architect
+  lane: wrong_lane
+  weight: 10
+  scope: title
+  hard_exclusion: false
+  active: true
+  max_hits: 1
+- id: support_title_identity
+  category: support_title_identity
+  signal_type: title
+  title_pattern:
+    any:
+    - support
+    with:
+    - analyst
+  lane: wrong_lane
+  weight: 10
+  scope: title
+  hard_exclusion: false
+  active: true
+  max_hits: 1
+- id: operational_title_identity
+  category: operational_title_identity
+  signal_type: title
+  title_pattern:
+    any:
+    - network
+    - vmware
+    - devops
+    - site reliability
+    with:
+    - engineer
+    - developer
+    - architect
+    - administrator
+  lane: wrong_lane
+  weight: 60
+  scope: title
+  hard_exclusion: true
+  active: true
+  max_hits: 1
+- id: data_title_identity
+  category: data_title_identity
+  signal_type: title
+  title_pattern:
+    any:
+    - data
+    - database
+    - etl
+    - elt
+    - ingestion
+    with:
+    - engineer
+    - developer
+    - specialist
+  lane: target_lane
+  weight: 0
+  scope: title
+  hard_exclusion: false
+  active: true
+  max_hits: 1
+- id: hardware_title_identity
+  category: hardware_title_identity
+  signal_type: title
+  title_pattern:
+    any:
+    - mechanical
+    - electrical
+    - robotics
+    - uav
+    - flight controls
+    - flight control
+    - embedded
+    - control systems
+    - aerospace
+    - hardware
+    - controls
+    - aircraft
+    - robotic
+    - semiconductor
+    - electronics
+    with:
+    - engineer
+    - engineering
+  lane: wrong_lane
+  weight: 60
+  scope: title
+  hard_exclusion: true
+  active: true
+  max_hits: 1
+- id: database_development
+  category: database_development
+  signal_type: capability
+  lane: target_lane
+  weight: 6
+  scope: description
+  hard_exclusion: false
+  active: true
+  max_hits: 1
+  group: identity.database_development
+- id: integration_data
+  category: integration_data
+  signal_type: capability
+  lane: target_lane
+  weight: 0
+  scope: description
+  hard_exclusion: false
+  active: true
+  max_hits: 1
+  group: identity.integration_data
+- id: database_usage
+  category: database_usage
+  signal_type: capability
+  lane: target_lane
+  weight: 0
+  scope: description
+  hard_exclusion: false
+  active: true
+  max_hits: 1
+  group: identity.database_usage
+- id: integration_title_identity
+  category: integration_title_identity
+  signal_type: title
+  lane: secondary_lane
+  weight: 8
+  scope: title
+  hard_exclusion: false
+  active: true
+  max_hits: 1
+  title_pattern:
+    any:
+    - integration
+    - interface
+    with:
+    - engineer
+    - developer
+    - specialist
+- id: security_title_identity
+  category: security_title_identity
+  signal_type: title
+  lane: wrong_lane
+  weight: 30
+  scope: title
+  hard_exclusion: false
+  active: true
+  max_hits: 1
+  title_pattern:
+    any:
+    - security
+    - cybersecurity
+    - iam
+    with:
+    - engineer
+    - developer
+    - architect
+    - analyst
+- id: data_stack_usage
+  category: data_stack_usage
+  signal_type: capability
+  group: identity.data_stack
+  lane: target_lane
+  weight: 4
+  scope: description
+  hard_exclusion: false
+  active: true
+  max_hits: 2
+- id: hardware_responsibilities
+  category: hardware_responsibilities
+  signal_type: exclusion
+  group: identity.hardware_responsibilities
+  lane: wrong_lane
+  weight: 0
+  scope: description
+  hard_exclusion: false
+  active: true
+  max_hits: 10
+- id: ecosystem_specialization
+  category: ecosystem_specialization
+  signal_type: ecosystem
+  group: ecosystem.specialization
+  lane: wrong_lane
+  weight: 0
+  scope: description
+  hard_exclusion: false
+  active: true
+  max_hits: 20
+- id: ecosystem_administration
+  category: ecosystem_administration
+  signal_type: ecosystem
+  group: ecosystem.administration
+  lane: wrong_lane
+  weight: 0
+  scope: description
+  hard_exclusion: false
+  active: true
+  max_hits: 20
+- id: ecosystem_admin_title
+  category: ecosystem_admin_title
+  signal_type: ecosystem
+  group: ecosystem.admin_titles
+  lane: wrong_lane
+  weight: 0
+  scope: title
+  hard_exclusion: false
+  active: true
+  max_hits: 20
+- id: data_platform_terms
+  category: data_platform_terms
+  signal_type: ecosystem
+  group: ecosystem.data_platforms
+  lane: target_lane
+  weight: 0
+  scope: description
+  hard_exclusion: false
+  active: true
+  max_hits: 20
+- id: data_platform_title
+  category: data_platform_title
+  signal_type: ecosystem
+  group: ecosystem.data_platforms
+  lane: target_lane
+  weight: 0
+  scope: title
+  hard_exclusion: false
+  active: true
+  max_hits: 20
+- id: data_platform_specialization
+  category: data_platform_specialization
+  signal_type: ecosystem
+  group: ecosystem.data_specialization
+  lane: target_lane
+  weight: 0
+  scope: description
+  hard_exclusion: false
+  active: true
+  max_hits: 20
+- id: transferable_data
+  category: transferable_data
+  signal_type: capability
+  group: ecosystem.transferable
+  lane: target_lane
+  weight: 0
+  scope: description
+  hard_exclusion: false
+  active: true
+  max_hits: 20
+lane_policy:
+  fallback_lane: wrong_lane
+  fallback_score: 8
+vocabulary:
+  qa engineer: qa engineer
+  automation tester: automation tester
+  test engineer: test engineer
+  test analyst: test analyst
+  etl tester: etl tester
+  frontend engineer: frontend engineer
+  frontend developer: frontend developer
+  ui engineer: ui engineer
+  ui developer: ui developer
+  full stack engineer: full stack engineer
+  full stack developer: full stack developer
+  .net full stack: .net full stack
+  data scientist: data scientist
+  applied scientist: applied scientist
+  ml engineer: ml engineer
+  machine learning engineer: machine learning engineer
+  ai engineer: ai engineer
+  ai automation analyst: ai automation analyst
+  cloud infrastructure engineer: cloud infrastructure engineer
+  security engineer: security engineer
+  detection engineer: detection engineer
+  detection engineering: detection engineering
+  customer engineer: customer engineer
+  solutions engineer: solutions engineer
+  solution engineer: solution engineer
+  sales engineer: sales engineer
+  forward deployed engineer: forward deployed engineer
+  data center technician: data center technician
+  hardware engineer: hardware engineer
+  iam engineer: iam engineer
+  identity access: identity access
+  identity and access: identity and access
+  quality engineer: quality engineer
+  validation engineer: validation engineer
+  data engineer: data engineer
+  etl engineer: etl engineer
+  elt engineer: elt engineer
+  data integration engineer: data integration engineer
+  integration engineer: integration engineer
+  data warehouse engineer: data warehouse engineer
+  data systems engineer: data systems engineer
+  sql developer: sql developer
+  data developer: data developer
+  data pipeline engineer: data pipeline engineer
+  data ingestion engineer: data ingestion engineer
+  data quality engineer: data quality engineer
+  backend engineer: backend engineer
+  backend developer: backend developer
+  software engineer: software engineer
+  software developer: software developer
+  python engineer: python engineer
+  python developer: python developer
+  java engineer: java engineer
+  java developer: java developer
+  data platform engineer: data platform engineer
+  platform engineer: platform engineer
+  application engineer: application engineer
+  analytics engineer: analytics engineer
+  bi engineer: bi engineer
+  business intelligence engineer: business intelligence engineer
+  cloud data engineer: cloud data engineer
+  pl/sql developer: pl/sql developer
+  database engineer: database engineer
+  systems engineer: systems engineer
+  enterprise systems engineer: enterprise systems engineer
+  site reliability engineer: site reliability engineer
+  sre: sre
+  devops engineer: devops engineer
+  systems analyst: systems analyst
+  system analyst: system analyst
+  application analyst: application analyst
+  business systems analyst: business systems analyst
+  technical systems analyst: technical systems analyst
+  production support analyst: production support analyst
+  production support engineer: production support engineer
+  application support analyst: application support analyst
+  application support engineer: application support engineer
+  software support analyst: software support analyst
+  software support engineer: software support engineer
+  technical support engineer: technical support engineer
+  technical support analyst: technical support analyst
+  sql analyst: sql analyst
+  data analyst: data analyst
+  data quality analyst: data quality analyst
+  data operations analyst: data operations analyst
+  data integrity analyst: data integrity analyst
+  reporting analyst: reporting analyst
+  integration analyst: integration analyst
+  interface analyst: interface analyst
+  api support engineer: api support engineer
+  etl support analyst: etl support analyst
+  database analyst: database analyst
+  consultant: consultant
+  technical consultant: technical consultant
+  data consultant: data consultant
+  sql consultant: sql consultant
+  integration consultant: integration consultant
+  interface consultant: interface consultant
+  api consultant: api consultant
+  application consultant: application consultant
+  reporting consultant: reporting consultant
+  data quality consultant: data quality consultant
+  data integration consultant: data integration consultant
+  business intelligence consultant: business intelligence consultant
+  bi consultant: bi consultant
+  implementation consultant: implementation consultant
+  configuration consultant: configuration consultant
+  functional consultant: functional consultant
+  business process consultant: business process consultant
+  customer success consultant: customer success consultant
+  training consultant: training consultant
+  erp consultant: erp consultant
+  salesforce consultant: salesforce consultant
+  workday consultant: workday consultant
+  sap consultant: sap consultant
+  peoplesoft consultant: peoplesoft consultant
+  servicenow consultant: servicenow consultant
+  backend programmer: backend programmer
+  atlassian developer: atlassian developer
+  jira developer: jira developer
+  .net developer: .net developer
+  c# developer: c# developer
+  cloud engineer: cloud engineer
+  administrator: administrator
+  admin: admin
+  developer: developer
+  programmer: programmer
+  technician: technician
+  data warehouse: data warehouse
+  source to target: source to target
+  sftp: sftp
+  file transfer: file transfer
+  oracle pl/sql: oracle pl/sql
+  pl/sql: pl/sql
+  microservices: microservices
+  real-time and batch data processing: real-time and batch data processing
+  csv parsing: csv parsing
+  xml processing: xml processing
+  message brokers: message brokers
+  distributed task processing: distributed task processing
+  pytest: pytest
+  ticket: ticket
+  tickets: tickets
+  queries: queries
+  reporting: reporting
+  reports: reports
+  dashboard: dashboard
+  dashboards: dashboards
+  data operations: data operations
+  client data: client data
+  client systems: client systems
+  client integrations: client integrations
+  requirements gathering: requirements gathering
+  technical configuration: technical configuration
+  quicksight: quicksight
+  looker: looker
+  business intelligence: business intelligence
+  obiee: obiee
+  olap: olap
+  semantic layer: semantic layer
+  ad hoc reporting: ad hoc reporting
+  reporting and analysis: reporting and analysis
+  executive reporting: executive reporting
+  facts: facts
+  dimensions: dimensions
+  scd: scd
+  snapshots: snapshots
+  selenium: selenium
+  robot framework: robot framework
+  bdd frameworks: bdd frameworks
+  functional testing: functional testing
+  regression testing: regression testing
+  prompt engineering: prompt engineering
+  langchain: langchain
+  openai api: openai api
+  anthropic api: anthropic api
+  ai agents: ai agents
+  forecasting models: forecasting models
+  predictive analytics: predictive analytics
+  statistical modeling: statistical modeling
+  deep learning: deep learning
+  scada: scada
+  wastewater: wastewater
+  sewer: sewer
+  gis: gis
+  arcgis: arcgis
+  aveva pi: aveva pi
+  pi system: pi system
+  dataflow: dataflow
+  dataproc: dataproc
+  cloud infrastructure: cloud infrastructure
+  infrastructure-as-code: infrastructure-as-code
+  cloudwatch: cloudwatch
+  ansible: ansible
+  helm: helm
+  serverless: serverless
+  monitoring and alerting: monitoring and alerting
+  high availability: high availability
+  capacity planning: capacity planning
+  database administration: database administration
+  dba: dba
+  database administrator: database administrator
+  sql server administrator: sql server administrator
+  cloud support engineer: cloud support engineer
+  infrastructure engineer: infrastructure engineer
+  systems administrator: systems administrator
+  network administrator: network administrator
+  mft administrator: mft administrator
+  managed file transfer: managed file transfer
+  no prior experience required: no prior experience required
+  training provided: training provided
+  willing to relocate: willing to relocate
+  fresh graduates: fresh graduates
+  associate data engineer program: associate data engineer program
+  passion for data: passion for data
+  eager to learn: eager to learn
+  entry level: entry level
+  recent graduates: recent graduates
+  technical recruiter: technical recruiter
+  someone in your network: someone in your network
+  ingestion: ingestion
+  transformation: transformation
+  reporting layer: reporting layer
+  trusted, business-ready datasets: trusted, business-ready datasets
+  student outcomes: student outcomes
+  silver and gold: silver and gold
+  dbt models: dbt models
+  dbt tests: dbt tests
+  facts, dimensions: facts, dimensions
+  facts and dimensions: facts and dimensions
+  lakehouse: lakehouse
+  mentor junior: mentor junior
+  mentor other engineers: mentor other engineers
+  evaluate and make decisions: evaluate and make decisions
+  drive best practices in source teams: drive best practices in source teams
+  set technical direction: set technical direction
+  architecture ownership: architecture ownership
+  architectural decisions: architectural decisions
+  system design leadership: system design leadership
+  staff-level: staff-level
+  associate data engineer role: associate data engineer role
+  http: http
+  https: https
+  winscp: winscp
+  postman: postman
+  soapui: soapui
+  opensearch: opensearch
+  jira: jira
+  salesforce: salesforce
+  workday: workday
+  sap: sap
+  peoplesoft: peoplesoft
+  servicenow: servicenow
+  palantir: palantir
+  cerner: cerner
+  epic: epic
+  mulesoft: mulesoft
+  boomi: boomi
+  informatica: informatica
+  iics: iics
+  talend: talend
+  aws glue: aws glue
+  dashboard ownership: dashboard ownership
+  dashboard development: dashboard development
+  rag: rag
+  etl developer: etl developer
+  database developer: database developer
+  analyst: analyst
+  multiple source systems: multiple source systems
+  semi-structured: semi-structured
+  structured and semi-structured: structured and semi-structured
+  hadoop: hadoop
+  flink: flink
+  model: model
+  training: training
+  regression: regression
+  warehousing: warehousing
+  warehouse: warehouse
+  schema: schema
+  software engineer data: software engineer data
+  backend data engineer: backend data engineer
+  data infrastructure engineer: data infrastructure engineer
+  data reliability engineer: data reliability engineer
+  integration developer: integration developer
+  api engineer: api engineer
+  api developer: api developer
+  backend: backend
+  services: services
+  object oriented: object oriented
+  client-server: client-server
+  interface engineer: interface engineer
+  analytics: analytics
+  bi: bi
+  kpi: kpi
+  ad hoc: ad hoc
+  stakeholder reporting: stakeholder reporting
+  modeling: modeling
+  platform: platform
+  reliability: reliability
+  devops: devops
+  deployment: deployment
+  release: release
+  linux: linux
+  distributed systems: distributed systems
+  automation pipelines: automation pipelines
+  backend engineer data: backend engineer data
+  application engineer integration: application engineer integration
+  client integration: client integration
+  interface developer: interface developer
+  dashboard-only: dashboard-only
+  dashboard only: dashboard only
+  front end: front end
+  frontend: frontend
+  kubernetes ownership: kubernetes ownership
+  terraform ownership: terraform ownership
+  cloud infrastructure ownership: cloud infrastructure ownership
+  call center: call center
+  help desk only: help desk only
+  password reset: password reset
+  desktop support: desktop support
+  hardware support: hardware support
+  field technician: field technician
+  salesforce admin: salesforce admin
+  servicenow admin: servicenow admin
+  clinical technician: clinical technician
+  no sql: no sql
+  react-only: react-only
+  react only: react only
+  sr: sr
+  lead: lead
+  director: director
+  10+ years: 10+ years
+  five years: five years
+  six years: six years
+  seven years: seven years
+  eight years: eight years
+  ten years: ten years
+  retrieval augmented generation: retrieval augmented generation
+  langgraph: langgraph
+  llamaindex: llamaindex
+  crewai: crewai
+  autogen: autogen
+  agentops: agentops
+  llmops: llmops
+  mlops: mlops
+  model monitoring: model monitoring
+  experiment tracking: experiment tracking
+  model versioning: model versioning
+  fine tuning: fine tuning
+  fine-tune: fine-tune
+  lora: lora
+  peft: peft
+  transformers: transformers
+  tensorflow: tensorflow
+  pytorch: pytorch
+  scikit-learn: scikit-learn
+  sklearn: sklearn
+  hallucination: hallucination
+  grounding: grounding
+  prompt management: prompt management
+  offline evaluation: offline evaluation
+  online evaluation: online evaluation
+  vb.net: vb.net
+  javascript: javascript
+  typescript: typescript
+  html: html
+  css: css
+  scss: scss
+  rest api: rest api
+  no prior experience: no prior experience
+  0-2 years: 0-2 years
+  1-3 years: 1-3 years
+  junior: junior
+  early career: early career
+  datasets for analytics: datasets for analytics
+  business insights: business insights
+  support analytics: support analytics
+  analytics platform: analytics platform
+  agent: agent
+  oracle: oracle
+term_groups:
+  lane.hard_wrong_title_terms:
+  - role_term: qa engineer
+  - concept_term:
+    - data_quality
+    - quality assurance
+  - role_term: automation tester
+  - role_term: test engineer
+  - role_term: test analyst
+  - role_term: etl tester
+  - role_term: frontend engineer
+  - role_term: frontend developer
+  - role_term: ui engineer
+  - role_term: ui developer
+  - role_term: full stack engineer
+  - role_term: full stack developer
+  - role_term: .net full stack
+  - role_term: data scientist
+  - role_term: applied scientist
+  - role_term: ml engineer
+  - role_term: machine learning engineer
+  - role_term: ai engineer
+  - role_term: ai automation analyst
+  - role_term: cloud infrastructure engineer
+  - role_term: security engineer
+  - role_term: detection engineer
+  - role_term: detection engineering
+  - role_term: customer engineer
+  - role_term: solutions engineer
+  - role_term: solution engineer
+  - role_term: sales engineer
+  - role_term: forward deployed engineer
+  - role_term: data center technician
+  - role_term: hardware engineer
+  - role_term: iam engineer
+  - role_term: identity access
+  - role_term: identity and access
+  - role_term: quality engineer
+  - role_term: validation engineer
+  - tester
+  - sdet
+  lane.strong_target_title_terms:
+  - role_term: data engineer
+  - role_term: etl engineer
+  - role_term: elt engineer
+  - role_term: data integration engineer
+  - role_term: data warehouse engineer
+  - role_term: data systems engineer
+  - role_term: sql developer
+  - role_term: data developer
+  - role_term: data pipeline engineer
+  - role_term: data ingestion engineer
+  - role_term: data quality engineer
+  - role_term: etl developer
+  - role_term: database developer
+  lane.secondary_title_terms:
+  - role_term: backend engineer
+  - role_term: backend developer
+  - role_term: software engineer
+  - role_term: software developer
+  - role_term: python engineer
+  - role_term: python developer
+  - role_term: java engineer
+  - role_term: java developer
+  - role_term: data platform engineer
+  - role_term: platform engineer
+  - role_term: application engineer
+  - role_term: analytics engineer
+  - role_term: bi engineer
+  - role_term: business intelligence engineer
+  - role_term: cloud data engineer
+  - role_term: pl/sql developer
+  - role_term: database engineer
+  - role_term: systems engineer
+  - role_term: enterprise systems engineer
+  - role_term: site reliability engineer
+  - role_term: sre
+  - role_term: devops engineer
+  lane.bridge_title_terms:
+  - role_term: systems analyst
+  - role_term: system analyst
+  - role_term: application analyst
+  - role_term: business systems analyst
+  - role_term: technical systems analyst
+  - role_term: production support analyst
+  - role_term: production support engineer
+  - role_term: application support analyst
+  - role_term: application support engineer
+  - role_term: software support analyst
+  - role_term: software support engineer
+  - role_term: technical support engineer
+  - role_term: technical support analyst
+  - role_term: sql analyst
+  - role_term: data analyst
+  - role_term: data quality analyst
+  - role_term: data operations analyst
+  - role_term: data integrity analyst
+  - role_term: reporting analyst
+  - role_term: integration analyst
+  - role_term: interface analyst
+  - role_term: api support engineer
+  - role_term: etl support analyst
+  - role_term: database analyst
+  lane.consultant_title_terms:
+  - role_term: consultant
+  - role_term: technical consultant
+  - role_term: data consultant
+  - role_term: sql consultant
+  - role_term: integration consultant
+  - role_term: interface consultant
+  - role_term: api consultant
+  - role_term: application consultant
+  - role_term: reporting consultant
+  - role_term: data quality consultant
+  - role_term: data integration consultant
+  - role_term: business intelligence consultant
+  - role_term: bi consultant
+  - role_term: implementation consultant
+  lane.bad_consultant_title_terms:
+  - role_term: configuration consultant
+  - role_term: functional consultant
+  - role_term: business process consultant
+  - role_term: customer success consultant
+  - role_term: training consultant
+  - role_term: erp consultant
+  - role_term: salesforce consultant
+  - role_term: workday consultant
+  - role_term: sap consultant
+  - role_term: peoplesoft consultant
+  - role_term: servicenow consultant
+  lane.non_target_title_terms:
+  - role_term: software engineer
+  - role_term: software developer
+  - role_term: python developer
+  - role_term: python engineer
+  - role_term: java developer
+  - role_term: java engineer
+  - role_term: backend engineer
+  - role_term: backend developer
+  - role_term: backend programmer
+  - role_term: application engineer
+  - role_term: systems engineer
+  - role_term: enterprise systems engineer
+  - role_term: atlassian developer
+  - role_term: jira developer
+  - role_term: .net developer
+  - role_term: c# developer
+  - role_term: devops engineer
+  - role_term: site reliability engineer
+  - role_term: sre
+  - role_term: platform engineer
+  - role_term: cloud engineer
+  - role_term: administrator
+  - role_term: admin
+  - role_term: developer
+  - role_term: programmer
+  - role_term: technician
+  lane.core_data_signals:
+  - concept_term:
+    - etl
+    - etl
+  - concept_term:
+    - etl
+    - elt
+  - concept_term:
+    - etl
+    - data pipeline
+  - concept_term:
+    - etl
+    - data pipelines
+  - concept_term:
+    - etl
+    - data ingestion
+  - concept_term:
+    - etl
+    - data integration
+  - concept_term:
+    - data_quality
+    - data quality
+  - concept_term:
+    - data_quality
+    - validation
+  - concept_term:
+    - data_quality
+    - reconciliation
+  - concept_term:
+    - etl
+    - data transformation
+  - role_term: data warehouse
+  - concept_term:
+    - data_modeling
+    - data modeling
+  - role_term: source to target
+  - concept_term:
+    - sql
+    - stored procedures
+  - concept_term:
+    - data_formats
+    - xml
+  - concept_term:
+    - data_formats
+    - json
+  - concept_term:
+    - apis
+    - api
+  - concept_term:
+    - apis
+    - apis
+  - concept_term:
+    - apis
+    - rest
+  - concept_term:
+    - apis
+    - soap
+  - role_term: sftp
+  - role_term: file transfer
+  - role_term: oracle pl/sql
+  - role_term: pl/sql
+  - concept_term:
+    - operations
+    - production support
+  - concept_term:
+    - operations
+    - root cause
+  - concept_term:
+    - operations
+    - troubleshooting
+  lane.backend_data_signals:
+  - concept_term:
+    - python
+    - fastapi
+  - concept_term:
+    - python
+    - flask
+  - atomic: PostgreSQL
+  - concept_term:
+    - python
+    - sqlalchemy
+  - role_term: microservices
+  - concept_term:
+    - etl
+    - batch data processing
+  - role_term: real-time and batch data processing
+  - role_term: csv parsing
+  - role_term: xml processing
+  - role_term: message brokers
+  - role_term: distributed task processing
+  - role_term: pytest
+  - atomic: Docker
+  lane.support_signals:
+  - atomic: SQL
+  - atomic: Python
+  - concept_term:
+    - git
+    - git
+  - concept_term:
+    - sql
+    - query optimization
+  - role_term: pl/sql
+  - concept_term:
+    - sql
+    - stored procedure
+  - concept_term:
+    - sql
+    - stored procedures
+  - concept_term:
+    - systems
+    - logs
+  - concept_term:
+    - systems
+    - logging
+  - concept_term:
+    - operations
+    - incident
+  - concept_term:
+    - operations
+    - root cause analysis
+  - concept_term:
+    - operations
+    - production issue
+  - role_term: ticket
+  - role_term: tickets
+  lane.bridge_positive_signals:
+  - atomic: SQL
+  - role_term: queries
+  - concept_term:
+    - sql
+    - stored procedures
+  - concept_term:
+    - data_quality
+    - data validation
+  - concept_term:
+    - data_quality
+    - data quality
+  - concept_term:
+    - data_quality
+    - reconciliation
+  - &id003
+    role_term: reporting
+  - role_term: reports
+  - role_term: dashboard
+  - role_term: dashboards
+  - atomic: Power BI
+  - atomic: Tableau
+  - concept_term:
+    - apis
+    - api
+  - concept_term:
+    - apis
+    - apis
+  - concept_term:
+    - apis
+    - rest
+  - concept_term:
+    - data_formats
+    - xml
+  - concept_term:
+    - data_formats
+    - json
+  - role_term: sftp
+  - concept_term:
+    - integration_workflows
+    - integration
+  - concept_term:
+    - integration_workflows
+    - integrations
+  - concept_term:
+    - integration_workflows
+    - interface
+  - concept_term:
+    - integration_workflows
+    - interfaces
+  - concept_term:
+    - operations
+    - production support
+  - concept_term:
+    - operations
+    - application support
+  - concept_term:
+    - operations
+    - technical support
+  - concept_term:
+    - operations
+    - troubleshooting
+  - concept_term:
+    - operations
+    - root cause
+  - concept_term:
+    - operations
+    - incident
+  - concept_term:
+    - systems
+    - log analysis
+  - role_term: data operations
+  - concept_term:
+    - data_quality
+    - data integrity
+  - concept_term:
+    - integration_workflows
+    - operational workflows
+  - role_term: client data
+  - role_term: client systems
+  - role_term: client integrations
+  - role_term: requirements gathering
+  - concept_term:
+    - integration_workflows
+    - data mapping
+  - concept_term:
+    - integration_workflows
+    - mapping documents
+  - role_term: technical configuration
+  lane.analytics_terms:
+  - role_term: dashboard
+  - role_term: dashboards
+  - atomic: Tableau
+  - atomic: Power BI
+  - role_term: quicksight
+  - role_term: looker
+  - role_term: business intelligence
+  - role_term: obiee
+  - role_term: olap
+  - role_term: semantic layer
+  - role_term: ad hoc reporting
+  - role_term: reporting and analysis
+  - role_term: executive reporting
+  - atomic: dbt
+  - atomic: Snowflake
+  - role_term: facts
+  - role_term: dimensions
+  - role_term: scd
+  - role_term: snapshots
+  lane.wrong_desc_terms:
+  - role_term: selenium
+  - role_term: robot framework
+  - role_term: bdd frameworks
+  - role_term: functional testing
+  - role_term: regression testing
+  - &id004
+    role_term: prompt engineering
+  - role_term: langchain
+  - role_term: openai api
+  - role_term: anthropic api
+  - role_term: ai agents
+  - role_term: forecasting models
+  - role_term: predictive analytics
+  - role_term: statistical modeling
+  - concept_term:
+    - ai_ml
+    - machine learning
+  - role_term: deep learning
+  - concept_term:
+    - ai_ml
+    - nlp
+  - role_term: scada
+  - role_term: wastewater
+  - role_term: sewer
+  - role_term: gis
+  - role_term: arcgis
+  - role_term: aveva pi
+  - role_term: pi system
+  lane.platform_heavy_terms:
+  - cloud infrastructure
+  - infrastructure-as-code
+  - capacity planning
+  - database administration
+  - cluster administration
+  - network infrastructure
+  - infrastructure ownership
+  - platform ownership
+  - provision infrastructure
+  lane.platform_admin_title_terms:
+  - role_term: database administrator
+  - role_term: sql server administrator
+  - role_term: dba
+  - role_term: cloud support engineer
+  - role_term: cloud engineer
+  - role_term: infrastructure engineer
+  - role_term: systems administrator
+  - role_term: network administrator
+  - role_term: mft administrator
+  - role_term: managed file transfer
+  lane.low_signal_terms:
+  - role_term: no prior experience required
+  - role_term: training provided
+  - role_term: willing to relocate
+  - role_term: fresh graduates
+  - role_term: associate data engineer program
+  - role_term: passion for data
+  - role_term: eager to learn
+  - role_term: entry level
+  - role_term: recent graduates
+  - role_term: technical recruiter
+  - role_term: someone in your network
+  alignment.pipeline_keywords:
+  - concept_term:
+    - etl
+    - etl
+  - concept_term:
+    - etl
+    - elt
+  - concept_term:
+    - etl
+    - data pipeline
+  - concept_term:
+    - etl
+    - data pipelines
+  - role_term: ingestion
+  - concept_term:
+    - etl
+    - data ingestion
+  - role_term: transformation
+  - concept_term:
+    - etl
+    - data transformation
+  - concept_term:
+    - etl
+    - data integration
+  - concept_term:
+    - data_quality
+    - data quality
+  - concept_term:
+    - data_quality
+    - validation
+  - concept_term:
+    - data_quality
+    - reconciliation
+  alignment.integration_keywords:
+  - role_term: multiple source systems
+  - concept_term:
+    - apis
+    - api
+  - concept_term:
+    - apis
+    - rest
+  - concept_term:
+    - data_formats
+    - json
+  - concept_term:
+    - data_formats
+    - xml
+  - concept_term:
+    - etl
+    - data integration
+  - concept_term:
+    - integration_workflows
+    - external systems
+  - role_term: semi-structured
+  - role_term: structured and semi-structured
+  alignment.modern_heavy:
+  - atomic: Kafka
+  - atomic: Spark
+  - role_term: hadoop
+  - role_term: flink
+  alignment.ml_keywords:
+  - concept_term:
+    - ai_ml
+    - machine learning
+  - role_term: model
+  - role_term: training
+  - concept_term:
+    - ai_ml
+    - nlp
+  - concept_term:
+    - ai_ml
+    - classification
+  - role_term: regression
+  lane.analytics_title_terms:
+  - role_term: business intelligence engineer
+  - role_term: bi engineer
+  - role_term: analytics engineer
+  alignment.early_career:
+  - &id001
+    role_term: no prior experience
+  - &id002
+    role_term: 0-2 years
+  - role_term: 1-3 years
+  - role_term: junior
+  - role_term: early career
+  alignment.no_experience:
+  - *id001
+  - *id002
+  alignment.analytics:
+  - role_term: analytics
+  - *id003
+  - role_term: datasets for analytics
+  - role_term: business insights
+  - role_term: support analytics
+  - role_term: analytics platform
+  alignment.ai_terms:
+  - concept_term:
+    - ai_ml
+    - llm
+  - role_term: agent
+  - *id004
+  ecosystem.products:
+  - informatica
+  - iics
+  - idmc
+  - mdm
+  - master data management
+  - sap
+  - workday
+  - salesforce
+  - servicenow
+  - peoplesoft
+  - boomi
+  - mulesoft
+  - windchill
+  ecosystem.ownership:
+  - platform ownership
+  - platform administration
+  - mdm architecture
+  - golden record
+  - match and merge
+  - survivorship rules
+  - product certification
+  - certified administrator
+  - platform-specific certification
+  - hub console
+  - match/merge rules
+  - matchmerge rules
+  - provisioning tool
+  - survivorship
+  - match/merge
+  - cad integrations
+  - plm integration
+  - windchill data model
+  - info*engine
+  - product-specific certification
+  - platform owner
+  - platform roadmap
+  - platform-ownership
+  ecosystem.title: ecosystem.products
+  identity.database_development:
+  - concept_term:
+    - sql
+    - pl/sql
+  - concept_term:
+    - sql
+    - plsql
+  - concept_term:
+    - sql
+    - pl sql
+  - concept_term:
+    - sql
+    - stored procedures
+  - concept_term:
+    - sql
+    - stored procedure
+  - concept_term:
+    - sql
+    - database development
+  - concept_term:
+    - sql
+    - schema design
+  - concept_term:
+    - sql
+    - schema development
+  - concept_term:
+    - sql
+    - query optimization
+  - concept_term:
+    - sql
+    - sql optimization
+  - concept_term:
+    - sql
+    - query tuning
+  identity.integration_data:
+  - concept_term:
+    - etl
+    - etl
+  - concept_term:
+    - etl
+    - elt
+  - concept_term:
+    - etl
+    - data pipeline
+  - concept_term:
+    - etl
+    - data pipelines
+  - concept_term:
+    - etl
+    - data integration
+  - concept_term:
+    - etl
+    - data transformation
+  - concept_term:
+    - etl
+    - data ingestion
+  - concept_term:
+    - etl
+    - batch processing
+  - concept_term:
+    - integration_workflows
+    - data exchange
+  - role_term: source to target
+  - source-to-target
+  - data mapping
+  identity.database_usage:
+  - atomic: SQL
+  - atomic: SQL Server
+  - atomic: PostgreSQL
+  - atomic: MySQL
+  identity.data_stack:
+  - atomic: Snowflake
+  - atomic: Airflow
+  - atomic: Databricks
+  - atomic: Redshift
+  - atomic: Spark
+  identity.hardware_responsibilities:
+  - semiconductor
+  - silicon
+  - wafer
+  - fabrication
+  - transistor
+  - lithography
+  - flight systems
+  - flight control
+  - aircraft
+  - avionics
+  - embedded systems
+  - control systems
+  - hardware integration
+  - circuit design
+  - printed circuit
+  - power electronics
+  - battery storage
+  - power grid
+  - payload
+  - propulsion
+  - rocket
+  - launch vehicle
+  ecosystem.specialization:
+  - atomsphere
+  - atom/molecule
+  - atom and molecule
+  - molecules
+  - boomi atoms
+  - atom clouds
+  - boomi administration
+  - boomi deployment
+  - work within dell boomi
+  - experience with dell boomi
+  - boomi professional developer
+  - connector configuration
+  - mdm hub components
+  - schema manager
+  - match-merge engine
+  - stewardship workflows
+  - landing/staging tables
+  - migration of informatica
+  - migration of existing informatica workflows
+  - workday studio
+  - studio integrations
+  - eib
+  - core connectors
+  - peci
+  - tenant configuration
+  - tenant refresh
+  - integration system users
+  - workday business processes
+  - workday extend
+  - lightning web components
+  - aura components
+  - visualforce
+  - apex
+  - omniscripts
+  - process builder
+  - salesforce platform developer
+  - data model objects
+  - calculated insights
+  - service cloud implementation
+  - glide
+  - client scripts
+  - ui policies
+  - servicenow development
+  - servicenow certified
+  - proprietary connectors
+  - platform configuration
+  ecosystem.administration:
+  - platform admin
+  - platform administration
+  - system upgrades
+  - platform security
+  - environment ownership
+  - platform performance
+  - system configurations
+  - server upgrades
+  - runtime administration
+  ecosystem.admin_titles:
+  - administrator
+  - admin
+  ecosystem.data_platforms:
+  - palantir
+  - palantir foundry
+  - atomic: Snowflake
+  - atomic: Databricks
+  - atomic: Redshift
+  - atomic: BigQuery
+  ecosystem.data_specialization:
+  - foundry ontology
+  - code repositories
+  - pipeline builder
+  - contour
+  - snowpipe
+  - snowpark
+  ecosystem.transferable:
+  - atomic: SQL
+  - atomic: SQL Server
+  - atomic: PostgreSQL
+  - atomic: MySQL
+  - atomic: Python
+  - concept_term:
+    - etl
+    - etl
+  - concept_term:
+    - etl
+    - elt
+  - concept_term:
+    - etl
+    - data pipeline
+  - concept_term:
+    - etl
+    - data pipelines
+  - concept_term:
+    - etl
+    - data integration
+  - concept_term:
+    - etl
+    - data transformation
+  - concept_term:
+    - etl
+    - data ingestion
+  - concept_term:
+    - sql
+    - stored procedures
+  - concept_term:
+    - sql
+    - stored procedure
+  - concept_term:
+    - sql
+    - pl/sql
+  - concept_term:
+    - sql
+    - plsql
+  - concept_term:
+    - sql
+    - query optimization
+  - concept_term:
+    - apis
+    - api
+  - concept_term:
+    - apis
+    - apis
+  - concept_term:
+    - apis
+    - rest
+  - concept_term:
+    - apis
+    - soap
+  - concept_term:
+    - data_formats
+    - xml
+  - concept_term:
+    - data_formats
+    - json
+  - role_term: sftp
+  - role_term: source to target
+  - role_term: data warehouse
+  - source-to-target
+  - concept_term:
+    - integration_workflows
+    - data exchange
+  - data mapping
+  - concept_term:
+    - data_quality
+    - reconciliation
+  - data modeling
+  - concept_term:
+    - data_quality
+    - data quality
+tie_breakers:
+  Engineer_Data:
+  - atomic: SQL
+  - concept_term:
+    - etl
+    - etl
+  - concept_term:
+    - etl
+    - elt
+  - concept_term:
+    - etl
+    - pipeline
+  - concept_term:
+    - etl
+    - pipelines
+  - atomic: dbt
+  - atomic: Airflow
+  - role_term: data warehouse
+  Engineer_Analytics:
+  - role_term: dashboard
+  - role_term: reporting
+  - concept_term:
+    - monitoring
+    - metrics
+  - role_term: bi
+  - role_term: business intelligence
+  - role_term: analytics
+  Engineer_Platform:
+  - concept_term:
+    - devops
+    - ci/cd
+  - role_term: deployment
+  - concept_term:
+    - monitoring
+    - observability
+  - role_term: reliability
+  - concept_term:
+    - systems
+    - infrastructure
+  - role_term: platform
+eligibility_rules:
+- id: data_evidence
+  priority: 1000
+  when:
+    any:
+    - field: hits.core_data_signals
+      op: gte
+      value: 2
+    - all:
+      - field: hits.core_data_signals
+        op: gte
+        value: 1
+      - field: hits.support_signals
+        op: gte
+        value: 2
+  actions:
+  - op: set
+    field: data_ok
+    value: true
+  stop: false
+- id: backend_evidence
+  priority: 990
+  when:
+    field: hits.backend_data_signals
+    op: gte
+    value: 2
+  actions:
+  - op: set
+    field: backend_ok
+    value: true
+  stop: false
+- id: bridge_evidence
+  priority: 980
+  when:
+    all:
+    - field: hits.bridge_positive_signals
+      op: gte
+      value: 4
+    - field: hits.support_signals
+      op: gte
+      value: 2
+  actions:
+  - op: set
+    field: bridge_ok
+    value: true
+  stop: false
+- id: transferable_data_identity
+  priority: 970
+  when:
+    all:
+    - field: hits.core_data_signals
+      op: gte
+      value: 3
+    - field: hits.support_signals
+      op: gte
+      value: 2
+    - field: hits.analytics_terms
+      op: equals
+      value: 0
+    - field: hits.platform_heavy_terms
+      op: lte
+      value: 2
+  actions:
+  - op: set
+    field: data_identity
+    value: true
+  stop: false
+- id: target_eligibility
+  priority: 900
+  when:
+    all:
+    - field: data_ok
+      op: equals
+      value: true
+    - any:
+      - field: hits.strong_target_title_terms
+        op: gte
+        value: 1
+      - all:
+        - field: data_identity
+          op: equals
+          value: true
+        - field: hits.non_target_title_terms
+          op: equals
+          value: 0
+        - field: hits.bridge_title_terms
+          op: equals
+          value: 0
+        - field: hits.consultant_title_terms
+          op: equals
+          value: 0
+        - field: hits.data_title_identity
+          op: gte
+          value: 1
+  actions:
+  - op: append
+    field: eligible
+    value: target_lane
+  stop: false
+- id: secondary_eligibility
+  priority: 890
+  when:
+    all:
+    - field: hits.platform_heavy_terms
+      op: lte
+      value: 3
+    - any:
+      - field: data_ok
+        op: equals
+        value: true
+      - field: backend_ok
+        op: equals
+        value: true
+  actions:
+  - op: append
+    field: eligible
+    value: secondary_lane
+  stop: false
+- id: bridge_title_guard
+  priority: 880
+  when:
+    all:
+    - field: hits.bridge_title_terms
+      op: gte
+      value: 1
+    - field: data_identity
+      op: equals
+      value: false
+  actions:
+  - op: remove
+    field: eligible
+    value: secondary_lane
+  stop: false
+- id: bridge_eligibility
+  priority: 870
+  when:
+    all:
+    - field: bridge_ok
+      op: equals
+      value: true
+    - field: hits.platform_heavy_terms
+      op: lte
+      value: 3
+    - any:
+      - field: hits.bridge_title_terms
+        op: gte
+        value: 1
+      - field: hits.consultant_title_terms
+        op: gte
+        value: 1
+      - field: search_lane
+        op: in
+        value:
+        - bridge
+        - contract_bridge
+      - all:
+        - field: hits.strong_target_title_terms
+          op: equals
+          value: 0
+        - field: hits.secondary_title_terms
+          op: equals
+          value: 0
+  actions:
+  - op: append
+    field: eligible
+    value: bridge_lane
+  stop: false
+- id: survival_context
+  priority: 860
+  when:
+    all:
+    - field: search_lane
+      op: in
+      value:
+      - survival
+      - contract_survival
+    - field: hits.non_target_title_terms
+      op: gte
+      value: 1
+    - field: data_ok
+      op: equals
+      value: false
+    - field: backend_ok
+      op: equals
+      value: false
+    - field: bridge_ok
+      op: equals
+      value: false
+    - field: hits.platform_heavy_terms
+      op: lte
+      value: 3
+  actions:
+  - op: append
+    field: eligible
+    value: survival_lane
+  - op: add_score
+    field: points.survival_lane
+    value: 20
+  stop: false
+- id: target_title_weak_data_content
+  priority: 800
+  when:
+    all:
+    - field: hits.strong_target_title_terms
+      op: gte
+      value: 1
+    - field: data_ok
+      op: equals
+      value: false
+  actions:
+  - op: append
+    field: contradictions
+    value: target_title_weak_data_content
+  stop: false
+- id: target_secondary_title_conflict
+  priority: 790
+  when:
+    all:
+    - field: hits.strong_target_title_terms
+      op: gte
+      value: 1
+    - field: hits.secondary_title_terms
+      op: gte
+      value: 1
+  actions:
+  - op: append
+    field: contradictions
+    value: target_secondary_title_conflict
+  stop: false
+- id: positive_and_exclusion_signals
+  priority: 780
+  when:
+    all:
+    - field: hits.wrong_desc_terms
+      op: gte
+      value: 1
+    - any:
+      - field: data_ok
+        op: equals
+        value: true
+      - field: backend_ok
+        op: equals
+        value: true
+  actions:
+  - op: append
+    field: contradictions
+    value: positive_and_exclusion_signals
+  stop: false
+- id: target_title_platform_ownership
+  priority: 770
+  when:
+    all:
+    - field: hits.strong_target_title_terms
+      op: gte
+      value: 1
+    - field: hits.platform_heavy_terms
+      op: gt
+      value: 3
+  actions:
+  - op: append
+    field: contradictions
+    value: target_title_platform_ownership
+  stop: false
+- id: analytics_identity_guard
+  priority: 700
+  when:
+    field: hits.analytics_title_terms
+    op: gte
+    value: 1
+  actions:
+  - op: remove
+    field: eligible
+    value: target_lane
+  stop: false
+- id: analytics_bridge
+  priority: 690
+  when:
+    all:
+    - field: hits.analytics_title_terms
+      op: gte
+      value: 1
+    - field: bridge_ok
+      op: equals
+      value: true
+    - field: hits.platform_heavy_terms
+      op: lte
+      value: 3
+  actions:
+  - op: append
+    field: eligible
+    value: bridge_lane
+  stop: false
+- id: consultant_identity
+  priority: 600
+  when:
+    field: hits.consultant_title_terms
+    op: gte
+    value: 1
+  actions:
+  - op: set
+    field: eligible
+    value:
+    - wrong_lane
+  stop: false
+- id: consultant_bridge_exception
+  priority: 590
+  when:
+    all:
+    - field: hits.consultant_title_terms
+      op: gte
+      value: 1
+    - field: hits.wrong_desc_terms
+      op: equals
+      value: 0
+    - field: hits.platform_heavy_terms
+      op: lte
+      value: 3
+    - field: hits.support_signals
+      op: gte
+      value: 2
+    - any:
+      - field: hits.bridge_positive_signals
+        op: gte
+        value: 5
+      - field: hits.core_data_signals
+        op: gte
+        value: 3
+    - any:
+      - field: hits.bad_consultant_title_terms
+        op: equals
+        value: 0
+      - all:
+        - field: hits.bridge_positive_signals
+          op: gte
+          value: 7
+        - field: hits.core_data_signals
+          op: gte
+          value: 3
+        - field: hits.platform_heavy_terms
+          op: lte
+          value: 2
+  actions:
+  - op: append
+    field: eligible
+    value: bridge_lane
+  stop: false
+- id: admin_ownership_guard
+  priority: 500
+  when:
+    all:
+    - field: hits.platform_admin_title_terms
+      op: gte
+      value: 1
+    - any:
+      - field: bridge_ok
+        op: equals
+        value: false
+      - field: hits.core_data_signals
+        op: lt
+        value: 2
+  actions:
+  - op: set
+    field: eligible
+    value:
+    - wrong_lane
+  stop: false
+- id: description_exclusion_guard
+  priority: 490
+  when:
+    all:
+    - field: hits.wrong_desc_terms
+      op: gte
+      value: 2
+    - field: data_ok
+      op: equals
+      value: false
+    - field: backend_ok
+      op: equals
+      value: false
+  actions:
+  - op: set
+    field: eligible
+    value:
+    - wrong_lane
+  stop: false
+- id: low_signal_guard
+  priority: 480
+  when:
+    all:
+    - field: hits.low_signal_terms
+      op: gte
+      value: 2
+    - field: hits.strong_target_title_terms
+      op: equals
+      value: 0
+  actions:
+  - op: set
+    field: eligible
+    value:
+    - wrong_lane
+  stop: false
+- id: generic_software_guard
+  priority: 470
+  when:
+    all:
+    - field: hits.non_target_title_terms
+      op: gte
+      value: 1
+    - field: hits.strong_target_title_terms
+      op: equals
+      value: 0
+  actions:
+  - op: remove
+    field: eligible
+    value: target_lane
+  stop: false
+- id: support_identity_guard
+  priority: 460
+  when:
+    field: hits.support_title_identity
+    op: gte
+    value: 1
+  actions:
+  - op: remove
+    field: eligible
+    value: target_lane
+  stop: false
+- id: support_secondary_guard
+  priority: 450
+  when:
+    field: hits.support_title_identity
+    op: gte
+    value: 1
+  actions:
+  - op: remove
+    field: eligible
+    value: secondary_lane
+  stop: false
+- id: support_bridge
+  priority: 440
+  when:
+    all:
+    - field: hits.support_title_identity
+      op: gte
+      value: 1
+    - field: bridge_ok
+      op: equals
+      value: true
+  actions:
+  - op: append
+    field: eligible
+    value: bridge_lane
+  stop: false
+- id: platform_ownership_guard
+  priority: 100
+  when:
+    any:
+    - field: hits.platform_heavy_terms
+      op: gt
+      value: 3
+    - all:
+      - field: hits.infrastructure_title_identity
+        op: gte
+        value: 1
+      - field: hits.platform_heavy_terms
+        op: gte
+        value: 1
+  actions:
+  - op: set
+    field: eligible
+    value:
+    - wrong_lane
+  stop: false
+- id: hard_exclusion_override
+  priority: 0
+  when:
+    field: hard_exclusions
+    op: not_empty
+    value: true
+  actions:
+  - op: set
+    field: eligible
+    value:
+    - wrong_lane
+  stop: false
+- id: database_development_evidence
+  priority: 995
+  when:
+    all:
+    - field: hits.database_development
+      op: gte
+      value: 1
+    - any:
+      - field: hits.database_usage
+        op: gte
+        value: 1
+      - field: hits.integration_data
+        op: gte
+        value: 1
+      - field: hits.database_development
+        op: gte
+        value: 2
+  actions:
+  - op: set
+    field: data_ok
+    value: true
+  stop: false
+- id: integration_data_evidence
+  priority: 960
+  when:
+    all:
+    - field: hits.integration_data
+      op: gte
+      value: 1
+    - any:
+      - field: hits.database_usage
+        op: gte
+        value: 1
+      - field: hits.database_development
+        op: gte
+        value: 1
+      - field: hits.integration_data
+        op: gte
+        value: 2
+  actions:
+  - op: set
+    field: integration_data_ok
+    value: true
+  stop: false
+- id: supported_integration_target
+  priority: 895
+  when:
+    all:
+    - field: hits.integration_title_identity
+      op: gte
+      value: 1
+    - field: integration_data_ok
+      op: equals
+      value: true
+  actions:
+  - op: append
+    field: eligible
+    value: target_lane
+  - op: add_score
+    field: points.target_lane
+    value: 24
+  stop: false
+- id: integration_requires_data_domain
+  priority: 430
+  when:
+    all:
+    - field: hits.integration_title_identity
+      op: gte
+      value: 1
+    - field: integration_data_ok
+      op: equals
+      value: false
+  actions:
+  - op: remove
+    field: eligible
+    value: target_lane
+  stop: false
+- id: security_domain_identity_guard
+  priority: 210
+  when:
+    field: hits.security_title_identity
+    op: gte
+    value: 1
+  actions:
+  - op: set
+    field: eligible
+    value:
+    - wrong_lane
+  stop: false
+- id: ecosystem_identity_guard
+  priority: 200
+  when:
+    field: ecosystem_role_concentration
+    op: equals
+    value: true
+  actions:
+  - op: remove
+    field: eligible
+    value: target_lane
+  stop: false
+- id: database_and_data_stack_evidence
+  priority: 994
+  when:
+    all:
+    - field: hits.database_usage
+      op: gte
+      value: 1
+    - field: hits.data_stack_usage
+      op: gte
+      value: 1
+    - field: hits.support_signals
+      op: gte
+      value: 2
+  actions:
+  - op: set
+    field: data_ok
+    value: true
+  stop: false
+- id: integration_hardware_domain_guard
+  priority: 205
+  when:
+    all:
+    - field: hits.integration_title_identity
+      op: gte
+      value: 1
+    - field: hits.hardware_responsibilities
+      op: gte
+      value: 2
+  actions:
+  - op: set
+    field: eligible
+    value:
+    - wrong_lane
+  stop: false
+- id: transferable_data_counterweight
+  priority: 958
+  when:
+    field: hits.transferable_data
+    op: gte
+    value: 8
+  actions:
+  - op: set
+    field: transferable_data_strong
+    value: true
+  stop: false
+- id: ecosystem_specialization_evidence
+  priority: 956
+  when:
+    all:
+    - any:
+      - field: hits.ecosystem_terms
+        op: gte
+        value: 1
+      - field: hits.ecosystem_title
+        op: gte
+        value: 1
+    - field: hits.ecosystem_specialization
+      op: gte
+      value: 2
+  actions:
+  - op: set
+    field: ecosystem_specialized
+    value: true
+  stop: false
+- id: ecosystem_ownership_evidence
+  priority: 954
+  when:
+    all:
+    - any:
+      - field: hits.ecosystem_terms
+        op: gte
+        value: 1
+      - field: hits.ecosystem_title
+        op: gte
+        value: 1
+    - any:
+      - all:
+        - field: hits.ecosystem_title
+          op: gte
+          value: 1
+        - field: hits.ecosystem_ownership
+          op: gte
+          value: 1
+      - field: hits.ecosystem_ownership
+        op: gte
+        value: 2
+  actions:
+  - op: set
+    field: ecosystem_ownership_gate
+    value: true
+  stop: false
+- id: ecosystem_admin_evidence
+  priority: 952
+  when:
+    all:
+    - any:
+      - field: hits.ecosystem_terms
+        op: gte
+        value: 1
+      - field: hits.ecosystem_title
+        op: gte
+        value: 1
+    - field: hits.ecosystem_admin_title
+      op: gte
+      value: 1
+    - field: hits.ecosystem_administration
+      op: gte
+      value: 1
+    - any:
+      - field: hits.ecosystem_title
+        op: gte
+        value: 1
+      - all:
+        - field: transferable_data_strong
+          op: equals
+          value: false
+        - field: hits.ecosystem_administration
+          op: gte
+          value: 2
+  actions:
+  - op: set
+    field: ecosystem_admin_identity
+    value: true
+  stop: false
+- id: ecosystem_concentration_evidence
+  priority: 950
+  when:
+    any:
+    - field: ecosystem_ownership_gate
+      op: equals
+      value: true
+    - field: ecosystem_admin_identity
+      op: equals
+      value: true
+    - all:
+      - field: ecosystem_specialized
+        op: equals
+        value: true
+      - any:
+        - field: hits.ecosystem_title
+          op: gte
+          value: 1
+        - field: hits.ecosystem_specialization
+          op: gte
+          value: 6
+        - field: transferable_data_strong
+          op: equals
+          value: false
+  actions:
+  - op: set
+    field: ecosystem_role_concentration
+    value: true
+  stop: false
+- id: ecosystem_low_transfer_admin_guard
+  priority: 194
+  when:
+    all:
+    - field: ecosystem_admin_identity
+      op: equals
+      value: true
+    - field: transferable_data_strong
+      op: equals
+      value: false
+  actions:
+  - op: set
+    field: eligible
+    value:
+    - wrong_lane
+  stop: false
+- id: ecosystem_low_transfer_specialist_guard
+  priority: 193
+  when:
+    all:
+    - field: ecosystem_role_concentration
+      op: equals
+      value: true
+    - field: hits.ecosystem_specialization
+      op: gte
+      value: 4
+    - field: hits.transferable_data
+      op: lte
+      value: 3
+  actions:
+  - op: set
+    field: eligible
+    value:
+    - wrong_lane
+  stop: false
+derived_flags:
+- data_ok
+- backend_ok
+- bridge_ok
+- data_identity
+- integration_data_ok
+- transferable_data_strong
+- ecosystem_specialized
+- ecosystem_role_concentration
+- ecosystem_admin_identity
+- ecosystem_ownership_gate
