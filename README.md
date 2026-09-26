@@ -47,6 +47,7 @@ files under `configs/`.
 
 - [Change career policy through configuration](docs/career-policy.md)
 - [90-day calibration comparison](docs/calibration-comparison.md)
+- [Manual calibration review UI](docs/calibration-review.md)
 - [Focused domain calibration: integration, ecosystems and databases](docs/domain-calibration-comparison.md)
 - [Ecosystem concentration policy and comparison](docs/ecosystem-policy.md)
 - [Usage workflow: scraped jobs to results](docs/workflow.md)
