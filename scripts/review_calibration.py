@@ -7,7 +7,7 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from skillfreq.calibration_review import (
-    EVIDENCE_FIELDS, ISSUE_TAGS, SIGNALS, SUMMARY_FIELDS, build_queue, changes,
+    EVIDENCE_FIELDS, ISSUE_TAGS, SIGNALS, SUBGRADE_OPTIONS, SUMMARY_FIELDS, build_queue, changes,
     default_review_path, identity, load_comparison, load_reviews, save_review, text,
 )
 
@@ -122,15 +122,47 @@ def main():
     with st.expander('Grading versions'):
         comparison_table(row, ('grading_version',))
     st.caption('Save records explicitly. Previous / Next discard unsaved edits. Rebuild the queue to refresh filters.')
+    st.caption('Calibration mindset: judge whether the NEW result is justified by the posting and your configured rules.')
+    with st.expander('Calibration mindset — reminder'):
+        st.markdown(
+            "Judge whether SkillFreq's **NEW result** is justified by the job posting and your configured rules.\n\n"
+            "Do **not** grade based on:\n\n"
+            "- whether you personally like the job\n"
+            "- whether you would apply today\n"
+            "- whether you think a recruiter would hire you\n\n"
+            '**Ask:** Given what this posting says and the rules SkillFreq is supposed to follow, '
+            'is the NEW result correct?'
+        )
     editor = 'edit_' + repr(key)
     with st.form('review_' + repr(key)):
-        rating = st.radio('Rating', [1, 2, 3], index=int(saved['review_rating']) - 1 if saved else None,
+        rating = st.radio('Overall rating', [1, 2, 3], index=int(saved['review_rating']) - 1 if saved else None,
                           format_func=lambda n: {1: '1 = Good — better or correct', 2: '2 = Neutral / Unclear',
-                                                 3: '3 = Bad — worse or incorrect'}[n], key=editor + '_rating')
+                                                 3: '3 = Bad — worse or incorrect'}[n], key=editor + '_rating',
+                          help='Is the NEW grading behavior an improvement over OLD according to the posting '
+                               'and configured rules? Neutral / Unclear includes mixed results, both OLD and '
+                               'NEW being defensible, or insufficient evidence.')
+        subgrades = {}
+        for field, label, help_text in (
+            ('decision_quality', 'Decision quality',
+             "Is the NEW apply/manual-review/skip decision justified by the posting and SkillFreq's rules? "
+             'Compare NEW with OLD, not whether you personally would apply.'),
+            ('score_quality', 'Score quality',
+             'Does the NEW fit score reasonably reflect the evidence in the posting? Consider matched and '
+             'missing requirements, seniority, hard filters, and skills/stack evidence.'),
+            ('requirement_interpretation', 'Requirement interpretation',
+             'Did SkillFreq correctly interpret the requirement structure in the posting? Check required vs '
+             'preferred, alternatives (AWS, Azure, or GCP), grouped requirements, equivalent technologies, '
+             'and ambiguous wording. Were preferences treated as mandatory or alternatives counted separately?'),
+        ):
+            options = SUBGRADE_OPTIONS[field]
+            value = saved.get(field)
+            subgrades[field] = st.selectbox(label, options, index=options.index(value) if value in options else None,
+                                           key=editor + '_' + field, help=help_text,
+                                           placeholder='Choose a judgment', format_func=lambda v: v.replace('_', ' '))
         tags = st.multiselect('Issue tags (optional)', ISSUE_TAGS,
                               default=[t for t in text(saved.get('issue_tags')).split(';') if t in ISSUE_TAGS], key=editor + '_tags')
         note = st.text_area('Review note (optional)', text(saved.get('review_note')), key=editor + '_note')
-        st.caption('For 2 or 3, a note or issue tag will make the review more useful.')
+        st.caption('For 2 or 3, please add a note or issue tag explaining the uncertainty or problem. Saving is still allowed without one.')
         buttons = st.columns(4)
         previous = buttons[0].form_submit_button('Previous', disabled=run['index'] == 0)
         save = buttons[1].form_submit_button('Save')
@@ -138,7 +170,7 @@ def main():
         next_item = buttons[3].form_submit_button('Next', disabled=run['index'] == len(queue)-1)
     if save or save_next:
         try:
-            run['reviews'] = save_review(run['path'], row, rating, note, tags)
+            run['reviews'] = save_review(run['path'], row, rating, note, tags, **subgrades)
         except (OSError, ValueError) as error:
             st.error(f'Not saved: {error}. If the workbook is open in Excel, close it and retry.')
             st.stop()
@@ -150,7 +182,8 @@ def main():
     if previous or next_item or save_next:
         run['index'] = max(0, min(len(queue)-1, run['index'] + (-1 if previous else 1)))
     if previous or next_item or save or save_next:
-        st.session_state.clear_editor = [editor + suffix for suffix in ('_rating', '_tags', '_note')]
+        st.session_state.clear_editor = [editor + suffix for suffix in
+                                         ('_rating', '_tags', '_note', *(f'_{f}' for f in SUBGRADE_OPTIONS))]
         st.rerun()
 
 

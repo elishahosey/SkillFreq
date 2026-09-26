@@ -13,8 +13,14 @@ from openpyxl.styles import Font
 ISSUE_TAGS = [
     'hard_filter_problem', 'seniority_mismatch', 'skill_extraction_issue',
     'stack_mismatch', 'lane_assignment_issue', 'score_weighting_issue',
-    'ai_review_disagreement', 'posting_ambiguity', 'missing_context', 'other',
+    'ai_review_disagreement', 'posting_ambiguity', 'missing_context',
+    'requirement_semantics_issue', 'other',
 ]
+SUBGRADE_OPTIONS = {
+    'decision_quality': ('better', 'same', 'worse', 'unclear'),
+    'score_quality': ('too_high', 'reasonable', 'too_low', 'unclear'),
+    'requirement_interpretation': ('correct', 'unclear', 'incorrect'),
+}
 SUMMARY_FIELDS = ('role_lane', 'fit_score', 'fit_quality', 'apply_decision',
                   'pre_ai_score', 'learning_score', 'ai_review_required', 'confidence')
 EVIDENCE_FIELDS = ('blocking_reasons', 'exclusion_signals', 'seniority_signals',
@@ -192,6 +198,8 @@ def load_reviews(path, comparison=None):
         key = identity(row)
         if key in reviews:
             raise ValueError('Duplicate identities in review workbook; check the file before continuing.')
+        for field in SUBGRADE_OPTIONS:
+            row[field] = text(row.get(field))  # Older workbooks have no sub-grade columns.
         reviews[key] = row
     if not reviews:
         raise ValueError('Existing output contains no reviews. Choose a new output path.')
@@ -209,7 +217,8 @@ def default_review_path(comparison):
     return directory / f'calibration_review_{date.today().isoformat()}.xlsx'
 
 
-def save_review(path, row, rating, note='', tags=()):
+def save_review(path, row, rating, note='', tags=(), *, decision_quality='',
+                score_quality='', requirement_interpretation=''):
     path = Path(path).resolve()
     if path.suffix.lower() != '.xlsx':
         raise ValueError('Review output must end in .xlsx.')
@@ -217,6 +226,11 @@ def save_review(path, row, rating, note='', tags=()):
         raise ValueError('Review output must be separate from the input files.')
     if rating not in (1, 2, 3):
         raise ValueError('Choose a rating: 1, 2, or 3.')
+    subgrades = dict(decision_quality=text(decision_quality), score_quality=text(score_quality),
+                    requirement_interpretation=text(requirement_interpretation))
+    for field, value in subgrades.items():
+        if value and value not in SUBGRADE_OPTIONS[field]:
+            raise ValueError(f'Invalid {field}: {value}')
     reviews = load_reviews(path, row)
     fields = ('source_site', 'job_id', 'title', 'company', 'source', 'comparison_before', 'comparison_after')
     saved = {f: row.get(f, '') for f in fields}
@@ -228,7 +242,7 @@ def save_review(path, row, rating, note='', tags=()):
                 saved[name] = float(saved[name])
             except (TypeError, ValueError):
                 pass  # Keep missing/unavailable values as supplied.
-    saved.update(review_rating=rating, review_note=note, issue_tags=';'.join(tags),
+    saved.update(review_rating=rating, **subgrades, review_note=note, issue_tags=';'.join(tags),
                  reviewed=True, reviewed_at=datetime.now(timezone.utc).isoformat(timespec='seconds'))
     reviews[identity(row)] = saved
     book = Workbook()
