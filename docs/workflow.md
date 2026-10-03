@@ -85,9 +85,9 @@ Pop-Location
 ```
 
 The test scraper writes `jobs-M-D-YY.csv`. The move helper moves matching dated
-CSVs into the sibling repository's `import` folder; it can move more than the one
-new file. Run it without `-Execute` to preview the moves. These two scripts belong
-to the sibling JobSpy repository, not the SkillFreq CLI.
+CSVs into SkillFreq's `import` folder; it can move more than the one new file. Run
+it without `-Execute` to preview the moves. These two scripts belong to the
+sibling JobSpy repository, not the SkillFreq CLI.
 
 SkillFreq also contains [Jobspy/joblist.py](../Jobspy/joblist.py), a scraper helper
 with search terms and lane metadata. It writes its dated CSV in the directory
@@ -117,7 +117,7 @@ everything outside the target lane.
 Set these paths to your actual files. The date below is only an example.
 
 ```powershell
-$jobsCsv = "..\JobSpy\import\jobs-9-12-26.csv"
+$jobsCsv = ".\import\jobs-9-12-26.csv"
 $resultsCsv = "data\outputs\results-9-12-26.csv"
 
 python -m skillfreq.cli grade-csv `
@@ -155,16 +155,15 @@ and optional `DB_PORT`.
 
 ```powershell
 python -m skillfreq.cli excel-load `
-  --folder ..\JobSpy\import `
   --table staging.jobs `
   --mode append `
   --log-file logging/excel_to_db_log/jobs_folder_load.log
 ```
 
-This imports every CSV beneath the folder, including subfolders, and records the
-source filename. Move successfully imported files outside that intake tree before
-the next append run to avoid importing them again. Keep the selected CSV available
-at `$jobsCsv` for grading, or update that variable if you move it.
+With no `--folder` argument, this imports every CSV beneath `.\import`, including
+subfolders, and records the source filename. Move successfully imported files outside
+that intake tree before the next append run to avoid importing them again. Keep the
+selected CSV available at `$jobsCsv` for grading, or update that variable if you move it.
 
 `public.clean_jobs` normalizes and deduplicates `staging.jobs` for market analysis.
 It retains postings with a title, company and description. The view definition

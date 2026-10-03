@@ -198,8 +198,12 @@ Connection settings come from `.env`: `DATABASE_URL`, or `DB_NAME`, `DB_USER`,
 Import a JobSpy intake folder, including source filenames:
 
 ```powershell
-python -m skillfreq.cli excel-load --folder ../JobSpy/import --table staging.jobs --mode append
+python -m skillfreq.cli excel-load --table staging.jobs --mode append
 ```
+
+The folder form defaults to `.\import`, which is the intake folder populated by
+the JobSpy move helper. An explicit `--folder` can still be used for another intake
+location.
 
 Every CSV in that folder and its subfolders is loaded. Move processed inputs
 outside the intake tree before another append run.

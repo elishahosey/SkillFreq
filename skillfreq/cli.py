@@ -87,9 +87,13 @@ def main() -> None:
     titles.add_argument("--title-col", default="title", help="Title column name in the CSV")
 
     excel_load = sub.add_parser("excel-load", help="Load an Excel sheet or CSV file into a PostgreSQL table")
-    excel_source = excel_load.add_mutually_exclusive_group(required=True)
+    excel_source = excel_load.add_mutually_exclusive_group()
     excel_source.add_argument("--excel", help="Path to a .csv, .xlsx, .xls, or .xlsm file")
-    excel_source.add_argument("--folder", help="Folder whose CSV files should be loaded recursively")
+    excel_source.add_argument(
+        "--folder",
+        default="import",
+        help="Folder whose CSV files should be loaded recursively (default: .\\import)",
+    )
     excel_load.add_argument("--table", required=True, help="Destination table, e.g. jobs or staging.jobs")
     excel_load.add_argument("--sheet", default=0, help="Sheet name or zero-based sheet index")
     excel_load.add_argument("--schema", default="public", help="Default schema when --table omits one")
@@ -315,20 +319,7 @@ def main() -> None:
         if isinstance(sheet, str) and sheet.isdigit():
             sheet = int(sheet)
 
-        if args.folder:
-            result = load_csv_folder_to_postgres(
-                folder_path=Path(args.folder),
-                table_name=args.table,
-                mode=args.mode,
-                primary_key=args.primary_key,
-                schema=args.schema,
-                log_file=Path(args.log_file) if args.log_file else None,
-                connect_timeout=args.db_connect_timeout,
-                statement_timeout=args.db_statement_timeout,
-                lock_timeout=args.db_lock_timeout,
-            )
-            print(f"Loaded {result.rows} rows from {result.files} CSV files into {result.table} ({result.mode})")
-        else:
+        if args.excel:
             result = load_excel_to_postgres(
                 excel_path=Path(args.excel),
                 table_name=args.table,
@@ -343,6 +334,19 @@ def main() -> None:
             )
             print(f"Loaded {result.rows} rows into {result.table} ({result.mode})")
             print("Columns:", ", ".join(result.columns))
+        else:
+            result = load_csv_folder_to_postgres(
+                folder_path=Path(args.folder),
+                table_name=args.table,
+                mode=args.mode,
+                primary_key=args.primary_key,
+                schema=args.schema,
+                log_file=Path(args.log_file) if args.log_file else None,
+                connect_timeout=args.db_connect_timeout,
+                statement_timeout=args.db_statement_timeout,
+                lock_timeout=args.db_lock_timeout,
+            )
+            print(f"Loaded {result.rows} rows from {result.files} CSV files into {result.table} ({result.mode})")
         if result.log_file:
             print(f"Log file: {result.log_file}")
     elif args.cmd == "import-batch":

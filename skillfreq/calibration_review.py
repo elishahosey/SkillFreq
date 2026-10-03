@@ -170,16 +170,28 @@ def changes(row, threshold=5):
 
 def build_queue(rows, reviews, signals=SIGNALS[:4], threshold=5, limit=100,
                 unchanged_sample=5, status='Unreviewed'):
-    eligible = [r for r in rows if status == 'All' or
-                ((identity(r) in reviews) == (status == 'Reviewed'))]
-    selected = [r for r in eligible if any(changes(r, threshold)[s] for s in signals)]
-    selected.sort(key=lambda r: (identity(r) in reviews,
-                  *(-int(changes(r, threshold)[s]) for s in SIGNALS[:4]),
-                  -score_delta(r), identity(r)))
+    """Count saved reviews toward a comparison-wide target, including the sample."""
+    reviewed = [r for r in rows if identity(r) in reviews]
+    remaining = max(0, limit - len(reviewed))
+    eligible = [r for r in rows if identity(r) not in reviews]
+
+    def priority(row):
+        return (*(-int(changes(row, threshold)[s]) for s in SIGNALS[:4]),
+                -score_delta(row), identity(row))
+
+    selected = sorted((r for r in eligible if any(changes(r, threshold)[s] for s in signals)),
+                      key=priority)
     # Sample truly unchanged review fields, not small changes below the threshold.
     unchanged = [r for r in eligible if not any(changes(r, 0).values())]
-    sample = random.Random(42).sample(sorted(unchanged, key=identity), min(unchanged_sample, len(unchanged)))
-    return selected[:limit] + sample
+    sampled_reviews = sum(not any(changes(r, 0).values()) for r in reviewed)
+    sample_size = min(max(0, unchanged_sample - sampled_reviews), len(unchanged), remaining)
+    sample = random.Random(42).sample(sorted(unchanged, key=identity), sample_size)
+    pending = selected[:remaining - sample_size] + sample
+    if status == 'Reviewed':
+        return sorted(reviewed, key=priority)
+    if status == 'All':
+        return pending + sorted(reviewed, key=priority)
+    return pending
 
 
 def load_reviews(path, comparison=None):
@@ -197,13 +209,26 @@ def load_reviews(path, comparison=None):
             raise ValueError('Saved review has an invalid rating; check the review workbook.')
         key = identity(row)
         if key in reviews:
-            raise ValueError('Duplicate identities in review workbook; check the file before continuing.')
+            raise ValueError(f'Duplicate review rows exist for Job ID {key[1]}; check the file before continuing.')
         for field in SUBGRADE_OPTIONS:
             row[field] = text(row.get(field))  # Older workbooks have no sub-grade columns.
         reviews[key] = row
     if not reviews:
         raise ValueError('Existing output contains no reviews. Choose a new output path.')
     return reviews
+
+
+def find_review(reviews, job_id):
+    """Resolve an ID-only lookup without guessing between source sites."""
+    job_id = text(job_id)
+    if not job_id:
+        raise LookupError('Enter a Job ID to load an existing review.')
+    matches = [review for key, review in reviews.items() if key[1] == job_id]
+    if not matches:
+        raise LookupError(f'No saved review found for Job ID {job_id}.')
+    if len(matches) != 1:
+        raise ValueError(f'Duplicate review rows exist for Job ID {job_id}; resolve them before editing.')
+    return matches[0]
 
 
 def default_review_path(comparison):
@@ -218,7 +243,7 @@ def default_review_path(comparison):
 
 
 def save_review(path, row, rating, note='', tags=(), *, decision_quality='',
-                score_quality='', requirement_interpretation=''):
+                score_quality='', requirement_interpretation='', require_existing=False):
     path = Path(path).resolve()
     if path.suffix.lower() != '.xlsx':
         raise ValueError('Review output must end in .xlsx.')
@@ -232,6 +257,14 @@ def save_review(path, row, rating, note='', tags=(), *, decision_quality='',
         if value and value not in SUBGRADE_OPTIONS[field]:
             raise ValueError(f'Invalid {field}: {value}')
     reviews = load_reviews(path, row)
+    key = identity(row)
+    if require_existing:
+        try:
+            existing = find_review(reviews, key[1])
+        except LookupError as error:
+            raise ValueError(str(error)) from error
+        if identity(existing) != key:
+            raise ValueError('The saved review identity changed. Reload the review before editing.')
     fields = ('source_site', 'job_id', 'title', 'company', 'source', 'comparison_before', 'comparison_after')
     saved = {f: row.get(f, '') for f in fields}
     saved.update({f'{side}_{f}': row.get(f'{side}_{f}', '') for side in ('old', 'new') for f in GRADE_FIELDS})
@@ -242,26 +275,40 @@ def save_review(path, row, rating, note='', tags=(), *, decision_quality='',
                 saved[name] = float(saved[name])
             except (TypeError, ValueError):
                 pass  # Keep missing/unavailable values as supplied.
-    saved.update(review_rating=rating, **subgrades, review_note=note, issue_tags=';'.join(tags),
-                 reviewed=True, reviewed_at=datetime.now(timezone.utc).isoformat(timespec='seconds'))
-    reviews[identity(row)] = saved
-    book = Workbook()
+    human_fields = dict(review_rating=rating, **subgrades, review_note=note, issue_tags=';'.join(tags),
+                        reviewed=True, reviewed_at=datetime.now(timezone.utc).isoformat(timespec='seconds'))
+    saved = dict(reviews.get(key, saved), **human_fields)
+    # Keep unrelated columns, formulas, rows and worksheets intact on updates.
+    existing_file = path.exists()
+    book = load_workbook(path) if existing_file else Workbook()
     sheet = book.active
-    sheet.title = 'Reviews'
-    headers = list(saved)
-    sheet.append(headers)
-    for review in reviews.values():
-        sheet.append([review.get(f, '') for f in headers])
-    for cells in sheet:
-        for cell in cells:
-            if isinstance(cell.value, str):
-                cell.data_type = 's'  # Literal notes/IDs, including a leading '='.
-    for cell in sheet[1]:
+    headers = [text(cell.value) for cell in sheet[1]] if existing_file else []
+    original_column_count = len(headers)
+    if not existing_file:
+        sheet.title = 'Reviews'
+    for field in saved:
+        if field not in headers:
+            headers.append(field)
+            sheet.cell(1, len(headers), field)
+    if key in reviews:
+        row_number = next(cells[0].row for cells in sheet.iter_rows(min_row=2)
+                          if any(cell.value is not None for cell in cells) and
+                          identity(dict(zip(headers, (cell.value for cell in cells)))) == key)
+        updates = human_fields
+    else:
+        row_number = sheet.max_row + 1
+        updates = saved
+    for field, value in updates.items():
+        cell = sheet.cell(row_number, headers.index(field) + 1, value)
+        if isinstance(value, str):
+            cell.data_type = 's'  # Literal notes/IDs, including a leading '='.
+    reviews[key] = saved
+    for cell in sheet[1][original_column_count:]:
         cell.font = Font(bold=True)
-    sheet.freeze_panes = 'C2'
+        sheet.column_dimensions[cell.column_letter].width = 24
+    if not existing_file:
+        sheet.freeze_panes = 'C2'
     sheet.auto_filter.ref = sheet.dimensions
-    for column in sheet.columns:
-        sheet.column_dimensions[column[0].column_letter].width = 24
     path.parent.mkdir(parents=True, exist_ok=True)
     # A locked Excel file leaves the previous complete workbook intact.
     with tempfile.NamedTemporaryFile(dir=path.parent, suffix='.xlsx', delete=False) as temp:

@@ -56,3 +56,7 @@ __pycache__/
 #Personal files
 data/input/resumes/
 CurrentExportFromNotion/
+import/*
+
+#Ai related files
+bundleToGPT/*

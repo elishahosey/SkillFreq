@@ -35,14 +35,17 @@ Choose either:
   `new_grade_json` are also supported. Excel reads the first worksheet with
   headers on the first row. Keep IDs stored as text to retain leading zeros.
 
-The default queue contains up to **100 unreviewed changed jobs plus 5 unchanged
-jobs**. Selected signals are OR filters: decision change, lane change, absolute
+The default **Total review target** is **100 jobs for the comparison**, including
+saved reviews and up to 5 unchanged sanity checks. With 6 saved reviews, progress
+shows **6 / 100** and the queue contains at most 94 additional jobs. The unchanged
+sample is included within the target, and saved unchanged reviews count toward
+that sample. Selected signals are OR filters: decision change, lane change, absolute
 fit-score change of at least 5, or AI-review flag/reason change. Optional
 **Other evidence changed** includes requirement gaps, seniority, blockers,
 reasons, and smaller score changes. Adjust the threshold, count and status,
 then click **Load / rebuild queue**.
 
-Within the changed set, unreviewed jobs come first, then decision changes,
+Within the unreviewed changed set, priority is decision changes,
 lane changes, score changes and AI changes, then largest score difference.
 The unchanged sample uses a fixed random seed and excludes small score changes.
 “Unchanged” refers to the displayed grading fields, excluding version IDs;
@@ -76,7 +79,8 @@ existing issue tags. For ratings 2 or 3, please explain with a note or issue tag
 **Save + Next** saves and advances. **Save** stays on the current job.
 **Previous / Next** navigate without saving and discard unsaved edits.
 Ratings 2 and 3 without explanation show a gentle reminder but still save.
-At the end of a queue, rebuild it for the next batch. Saved items remain in the
+At the target, increase **Total review target** and rebuild to review more jobs.
+Rebuilding with the same target only loads the remaining work. Saved items remain in the
 current queue until rebuilding, so Previous can revisit them.
 
 With a blank output path, the UI finds the most recent matching
@@ -99,6 +103,11 @@ After restarting, choose the same inputs and click **Load / rebuild queue**.
 The saved file is detected and reviewed IDs are excluded by default, so the
 queue resumes with unreviewed work. Use **All** or **Reviewed** to amend saved
 ratings. Filters and an unsaved cursor are not persisted; saved reviews are.
+Progress counts all saved jobs still present in this comparison, regardless of
+the current change filters or review-status view. **All** and **Reviewed** keep
+saved jobs available for correction even when the target has already been met
+or lowered. If fewer unreviewed jobs match than needed, the UI explains that the
+filters must be adjusted to reach the target.
 Revisiting a saved record restores the overall rating, all three sub-grades,
 tags and note. Older review workbooks without sub-grade columns still load:
 these fields appear blank and are added on the next save. Existing reviews
@@ -108,6 +117,25 @@ Assumptions: input exports remain unchanged during a review run, one reviewer
 writes a workbook at a time, and a source-row ID is stable within its comparison.
 Company is shown when present; current grading CSVs omit it. Missing optional
 fields stay unavailable. No grader changes or versioning subsystem are needed.
+
+### Correct an earlier review
+
+After loading your comparison, enter its saved **Job ID** in the sidebar's
+**Edit existing review** section and click **Load review**. The normal job
+evidence and OLD/NEW comparison appear with all saved human answers populated.
+An **Editing existing review: <job_id>** indicator identifies this mode.
+
+Change the answers and click **Save** to update the existing row. The save
+preserves unrelated columns and other reviews and uses the same safe temporary
+write as normal review saves. **Return to review queue** returns to your previous
+queue position and filters; unsaved edits are discarded. Queue navigation is
+disabled while editing. Editing also works when the queue is empty or the target
+has been reached, and does not increase the completed-review count.
+
+IDs match exactly, including leading zeros. Internally the identity remains
+`(source_site, job_id)`. If the entered Job ID matches more than one saved row,
+the UI reports an error instead of selecting a source site. Missing reviews or
+missing source evidence produce a message without opening an editor.
 
 Deferred: keyboard shortcuts, company enrichment, additional import aliases,
 saved filter preferences and concurrent reviewers. There are no dashboards,

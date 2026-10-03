@@ -325,6 +325,37 @@ def create_table_statement(
     )
 
 
+def ensure_table_columns(
+    cur: object,
+    schema: str,
+    table: str,
+    df: pd.DataFrame,
+) -> None:
+    """Add columns introduced by a newer input export to an existing table."""
+    cur.execute(
+        """
+        SELECT column_name
+        FROM information_schema.columns
+        WHERE table_schema = %s AND table_name = %s
+        """,
+        (schema, table),
+    )
+    existing_columns = {row[0] for row in cur.fetchall()}
+    for column in df.columns:
+        if column in existing_columns:
+            continue
+        column_type = infer_postgres_type(df[column])
+        logger.info("Adding missing destination column: %s.%s.%s (%s)", schema, table, column, column_type)
+        cur.execute(
+            sql.SQL("ALTER TABLE {}.{} ADD COLUMN IF NOT EXISTS {} {}").format(
+                sql.Identifier(schema),
+                sql.Identifier(table),
+                sql.Identifier(column),
+                sql.SQL(column_type),
+            )
+        )
+
+
 def rows_for_insert(df: pd.DataFrame) -> list[tuple[object, ...]]:
     prepared = df.astype(object).where(pd.notnull(df), None)
     return [tuple(row) for row in prepared.to_numpy()]
@@ -415,6 +446,7 @@ def load_excel_to_postgres(
 
                 logger.info("Ensuring destination table exists")
                 cur.execute(create_table_statement(resolved_schema, table, df, primary_key))
+                ensure_table_columns(cur, resolved_schema, table, df)
 
                 if rows:
                     logger.info("Writing rows to PostgreSQL")

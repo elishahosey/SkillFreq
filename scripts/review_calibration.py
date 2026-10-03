@@ -8,7 +8,7 @@ import streamlit as st
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from skillfreq.calibration_review import (
     EVIDENCE_FIELDS, ISSUE_TAGS, SIGNALS, SUBGRADE_OPTIONS, SUMMARY_FIELDS, build_queue, changes,
-    default_review_path, identity, load_comparison, load_reviews, save_review, text,
+    default_review_path, find_review, identity, load_comparison, load_reviews, save_review, text,
 )
 
 
@@ -53,8 +53,10 @@ def main():
         output = st.text_input('Review output path (blank = find existing or create dated file)', '')
         signals = st.multiselect('Include any of these changes', SIGNALS, default=list(SIGNALS[:4]))
         threshold = st.number_input('Minimum absolute fit-score change', min_value=0.0, value=5.0)
-        limit = st.number_input('Maximum changed records', min_value=1, max_value=10000, value=100)
-        sample = st.number_input('Unchanged sanity sample', min_value=0, max_value=100, value=5)
+        limit = st.number_input('Total review target', min_value=1, max_value=10000, value=100,
+                                help='Saved reviews for this comparison count toward this total.')
+        sample = st.number_input('Unchanged sanity sample', min_value=0, max_value=100, value=5,
+                                 help='Included within the total target. Previously reviewed unchanged jobs count toward this sample.')
         status = st.selectbox('Review status', ['Unreviewed', 'All', 'Reviewed'])
         load = st.form_submit_button('Load / rebuild queue')
     if load:
@@ -69,7 +71,9 @@ def main():
                 reviews = load_reviews(path, rows[0])
                 queue = build_queue(rows, reviews, signals, threshold, limit, sample, status)
                 st.session_state.run = dict(queue=queue, reviews=reviews, path=path, message=message,
-                                            index=0, threshold=threshold)
+                                            index=0, threshold=threshold, target=limit, status=status,
+                                            comparison_keys={identity(r) for r in rows},
+                                            records={identity(r): r for r in rows}, editing_key=None)
                 for key in list(st.session_state):
                     if key.startswith('edit_'):
                         del st.session_state[key]
@@ -80,20 +84,62 @@ def main():
         st.info('Choose saved grading exports or an OLD/NEW comparison file, then load a targeted queue.')
         st.stop()
     run = st.session_state.run
+    if 'records' not in run:
+        st.info('Click Load / rebuild queue to load the updated review controls.')
+        st.stop()
+    with st.sidebar.form('existing_review'):
+        st.markdown('**Edit existing review**')
+        lookup_id = st.text_input('Job ID')
+        load_existing = st.form_submit_button('Load review')
+    if load_existing:
+        try:
+            fresh_reviews = load_reviews(run['path'], next(iter(run['records'].values())))
+            existing = find_review(fresh_reviews, lookup_id)
+            existing_key = identity(existing)
+            if existing_key not in run['records']:
+                raise LookupError('The saved review was found, but its job evidence is missing from the loaded comparison.')
+            run['reviews'] = fresh_reviews
+            run['editing_key'] = existing_key
+            # Reload saved values even when reopening the same job with unsaved edits.
+            for widget in list(st.session_state):
+                if widget.startswith('edit_'):
+                    del st.session_state[widget]
+        except LookupError as error:
+            st.sidebar.warning(str(error))
+        except (OSError, ValueError) as error:
+            st.sidebar.error(str(error))
+    editing = run['editing_key'] is not None
+    if editing and st.sidebar.button('Return to review queue'):
+        run['editing_key'] = None
+        for widget in list(st.session_state):
+            if widget.startswith('edit_'):
+                del st.session_state[widget]
+        st.rerun()
     queue, reviews = run['queue'], run['reviews']
     st.caption(run['message'])
     st.caption(f"Reviews: {run['path']}")
     if 'notice' in st.session_state:
         st.info(st.session_state.pop('notice'))
-    if not queue:
-        st.info('No records match. Adjust the filters or choose All / Reviewed to revisit saved work.')
+    completed = len(run['comparison_keys'] & reviews.keys())
+    target = run['target']
+    st.progress(min(completed / target, 1.0), text=f'{completed} / {target} total records reviewed')
+    if completed >= target:
+        st.success('Review target reached. Increase the total review target to review more jobs, or choose All / Reviewed to revisit saved work.')
+    if not queue and not editing:
+        if completed < target:
+            st.info('No records match. Adjust the filters or choose All / Reviewed to revisit saved work.')
         st.stop()
-    completed = sum(identity(r) in reviews for r in queue)
-    st.progress(completed / len(queue), text=f'{completed} / {len(queue)} queue records reviewed')
-    row = queue[run['index']]
+    pending = sum(identity(r) not in reviews for r in queue)
+    st.caption(f'{pending} unreviewed records in this queue.')
+    if not editing and run['status'] != 'Reviewed' and completed + pending < target:
+        st.info('The current filters provide fewer records than needed to reach the target. Adjust the filters to include more jobs.')
+    row = run['records'][run['editing_key']] if editing else queue[run['index']]
     key = identity(row)
     saved = reviews.get(key, {})
-    st.caption(f"Record {run['index'] + 1} of {len(queue)} · {'Reviewed' if saved else 'Unreviewed'}")
+    if editing:
+        st.info(f'Editing existing review: {key[1]}')
+    else:
+        st.caption(f"Record {run['index'] + 1} of {len(queue)} · {'Reviewed' if saved else 'Unreviewed'}")
     st.subheader(row['title'] or 'Untitled job')
     st.text(f"Company: {row['company'] or 'Not available'}\nSource: {key[0] or 'Not available'}\nJob ID: {key[1]}")
     if row.get('source'):
@@ -159,26 +205,28 @@ def main():
             subgrades[field] = st.selectbox(label, options, index=options.index(value) if value in options else None,
                                            key=editor + '_' + field, help=help_text,
                                            placeholder='Choose a judgment', format_func=lambda v: v.replace('_', ' '))
-        tags = st.multiselect('Issue tags (optional)', ISSUE_TAGS,
-                              default=[t for t in text(saved.get('issue_tags')).split(';') if t in ISSUE_TAGS], key=editor + '_tags')
+        saved_tags = [t for t in text(saved.get('issue_tags')).split(';') if t]
+        tags = st.multiselect('Issue tags (optional)', list(dict.fromkeys(ISSUE_TAGS + saved_tags)),
+                              default=saved_tags, key=editor + '_tags')
         note = st.text_area('Review note (optional)', text(saved.get('review_note')), key=editor + '_note')
         st.caption('For 2 or 3, please add a note or issue tag explaining the uncertainty or problem. Saving is still allowed without one.')
         buttons = st.columns(4)
-        previous = buttons[0].form_submit_button('Previous', disabled=run['index'] == 0)
+        previous = buttons[0].form_submit_button('Previous', disabled=editing or run['index'] == 0)
         save = buttons[1].form_submit_button('Save')
-        save_next = buttons[2].form_submit_button('Save + Next')
-        next_item = buttons[3].form_submit_button('Next', disabled=run['index'] == len(queue)-1)
+        save_next = buttons[2].form_submit_button('Save + Next', disabled=editing)
+        next_item = buttons[3].form_submit_button('Next', disabled=editing or run['index'] == len(queue)-1)
     if save or save_next:
         try:
-            run['reviews'] = save_review(run['path'], row, rating, note, tags, **subgrades)
+            run['reviews'] = save_review(run['path'], row, rating, note, tags,
+                                         require_existing=editing, **subgrades)
         except (OSError, ValueError) as error:
             st.error(f'Not saved: {error}. If the workbook is open in Excel, close it and retry.')
             st.stop()
-        st.session_state.notice = 'Review saved.'
+        st.session_state.notice = 'Existing review updated.' if editing else 'Review saved.'
         if rating in (2, 3) and not note.strip() and not tags:
             st.session_state.notice += ' Consider adding a note or issue tag for this rating.'
         if save_next and run['index'] == len(queue)-1:
-            st.session_state.notice += ' End of queue. Rebuild to load more unreviewed records.'
+            st.session_state.notice += ' End of queue. Increase the target or adjust filters and rebuild to review more jobs.'
     if previous or next_item or save_next:
         run['index'] = max(0, min(len(queue)-1, run['index'] + (-1 if previous else 1)))
     if previous or next_item or save or save_next:

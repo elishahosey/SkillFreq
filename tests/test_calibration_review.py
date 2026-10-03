@@ -4,11 +4,11 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from openpyxl import Workbook
+from openpyxl import Workbook, load_workbook
 from streamlit.testing.v1 import AppTest
 
 from skillfreq.calibration_review import (
-    SUBGRADE_OPTIONS, build_queue, default_review_path, identity, load_comparison, load_reviews, save_review,
+    SUBGRADE_OPTIONS, build_queue, default_review_path, find_review, identity, load_comparison, load_reviews, save_review,
 )
 
 
@@ -85,6 +85,43 @@ class CalibrationReviewTest(unittest.TestCase):
             save_review(path, rows[0], 1)
         self.assertEqual(path.read_bytes(), original)
 
+    def test_total_target_counts_saved_reviews_across_filters_and_rebuilds(self):
+        rows = [dict(self.records[0], job_id=str(i)) for i in range(120)]
+        reviews = {identity(row): {} for row in rows[:6]}
+        queue = build_queue(rows, reviews, limit=100, unchanged_sample=0)
+        self.assertEqual(len(queue), 94)
+        self.assertFalse(any(identity(row) in reviews for row in queue))
+        reviews[identity(queue[0])] = {}
+        self.assertEqual(len(build_queue(rows, reviews, limit=100, unchanged_sample=0)), 93)
+        # Saved reviews count even when they no longer meet the change filters.
+        for row in rows[:6]:
+            row['new_apply_decision'] = row['old_apply_decision']
+        reviews[('unrelated', 'job')] = {}
+        self.assertEqual(len(build_queue(rows, reviews, limit=100, unchanged_sample=0)), 93)
+        self.assertEqual(len(build_queue(rows, reviews, limit=100, unchanged_sample=0, status='All')), 100)
+        self.assertEqual(len(build_queue(rows, reviews, limit=100, status='Reviewed')), 7)
+        self.assertEqual(build_queue(rows, reviews, limit=7), [])
+        self.assertEqual(build_queue(rows, reviews, limit=3), [])
+        self.assertEqual(len(build_queue(rows, reviews, limit=3, status='Reviewed')), 7)
+        self.assertEqual(len(build_queue(rows, reviews, limit=10, unchanged_sample=0)), 3)
+
+    def test_unchanged_sample_is_part_of_total_and_counts_saved_sample(self):
+        changed = [dict(self.records[0], job_id=str(i)) for i in range(10)]
+        unchanged = [dict(self.records[2], job_id=str(i)) for i in range(10, 20)]
+        rows = changed + unchanged
+        reviews = {identity(changed[0]): {}, identity(unchanged[0]): {}}
+        queue = build_queue(rows, reviews, limit=6, unchanged_sample=3)
+        self.assertEqual(len(queue), 4)
+        self.assertEqual(sum(row in unchanged for row in queue), 2)
+        self.assertEqual(queue, build_queue(rows, reviews, limit=6, unchanged_sample=3))
+        for row in queue:
+            reviews[identity(row)] = {}
+        self.assertEqual(build_queue(rows, reviews, limit=6, unchanged_sample=3), [])
+        more = build_queue(rows, reviews, limit=8, unchanged_sample=3)
+        self.assertEqual(len(more), 2)
+        self.assertTrue(all(row in changed for row in more))
+        self.assertEqual(len(build_queue(rows, {}, limit=2, unchanged_sample=5)), 2)
+
     def test_two_exports_match_source_identity_and_read_grade_evidence(self):
         import json
         paths = [self.directory / 'old.csv', self.directory / 'new.csv']
@@ -119,6 +156,73 @@ class CalibrationReviewTest(unittest.TestCase):
                 save_review(self.output, self.records[0], 3)
         self.assertEqual(load_reviews(self.output)[identity(self.records[0])]['review_rating'], 1)
         self.assertEqual(list(self.directory.glob('*.xlsx')), [self.output])
+
+    def test_find_review_by_exact_id_and_reject_unknown_or_ambiguous_id(self):
+        save_review(self.output, self.records[0], 3, 'Check requirements')
+        reviews = load_reviews(self.output)
+        self.assertEqual(find_review(reviews, ' 001 ')['review_note'], 'Check requirements')
+        for job_id in ('', '1', 'unknown'):
+            with self.assertRaises(LookupError):
+                find_review(reviews, job_id)
+        save_review(self.output, dict(self.records[0], source_site='another_site'), 1)
+        with self.assertRaisesRegex(ValueError, 'Duplicate review rows'):
+            find_review(load_reviews(self.output), '001')
+        original = self.output.read_bytes()
+        with self.assertRaisesRegex(ValueError, 'Duplicate review rows'):
+            save_review(self.output, self.records[0], 2, require_existing=True)
+        self.assertEqual(self.output.read_bytes(), original)
+
+    def test_duplicate_review_rows_and_missing_edit_target_never_write(self):
+        with self.assertRaisesRegex(ValueError, 'No saved review'):
+            save_review(self.output, self.records[0], 1, require_existing=True)
+        self.assertFalse(self.output.exists())
+        save_review(self.output, self.records[0], 1)
+        book = load_workbook(self.output)
+        book.active.append([cell.value for cell in book.active[2]])
+        book.save(self.output)
+        book.close()
+        original = self.output.read_bytes()
+        with self.assertRaisesRegex(ValueError, 'Duplicate review rows'):
+            load_reviews(self.output)
+        with self.assertRaisesRegex(ValueError, 'Duplicate review rows'):
+            save_review(self.output, self.records[0], 3, require_existing=True)
+        self.assertEqual(self.output.read_bytes(), original)
+
+    def test_edit_preserves_other_records_extra_columns_and_formulas(self):
+        # Save in a different order from the source to verify identity-based updates.
+        save_review(self.output, self.records[1], 2, 'Keep this note', ['posting_ambiguity'])
+        save_review(self.output, self.records[0], 1)
+        book = load_workbook(self.output)
+        sheet = book.active
+        extra = sheet.max_column + 1
+        sheet.cell(1, extra, 'custom_metadata')
+        extra_letter = sheet.cell(1, extra).column_letter
+        sheet.column_dimensions[extra_letter].width = 42
+        sheet.cell(2, extra, 'Other record metadata')
+        sheet.cell(3, extra, 'Edited record metadata')
+        sheet.cell(1, extra + 1, 'custom_formula')
+        sheet.cell(3, extra + 1, '=1+2')
+        book.create_sheet('Extra').cell(1, 1, 'Keep this sheet')
+        book.save(self.output)
+        original_other = [cell.value for cell in sheet[2]]
+        original_headers = [cell.value for cell in sheet[1]]
+        book.close()
+        save_review(self.output, self.records[0], 3, 'Corrected', ['stack_mismatch'],
+                    decision_quality='worse', score_quality='too_high',
+                    requirement_interpretation='incorrect', require_existing=True)
+        reviews = load_reviews(self.output)
+        self.assertEqual(len(reviews), 2)
+        self.assertEqual(find_review(reviews, '001')['review_rating'], 3)
+        self.assertEqual(find_review(reviews, '001')['review_note'], 'Corrected')
+        book = load_workbook(self.output)
+        self.assertEqual(book.active.max_row, 3)
+        self.assertEqual([cell.value for cell in book.active[1]], original_headers)
+        self.assertEqual([cell.value for cell in book.active[2]], original_other)
+        self.assertEqual(book.active.cell(3, extra).value, 'Edited record metadata')
+        self.assertEqual(book.active.column_dimensions[extra_letter].width, 42)
+        self.assertEqual(book.active.cell(3, extra + 1).value, '=1+2')
+        self.assertEqual(book['Extra'].cell(1, 1).value, 'Keep this sheet')
+        book.close()
 
     def test_legacy_workbook_loads_and_gains_subgrades_without_losing_reviews(self):
         # An actual old-format workbook: no sub-grade columns, not even blank ones.
@@ -218,6 +322,107 @@ class CalibrationReviewTest(unittest.TestCase):
             self.assertEqual(next(w for w in reopened.selectbox if w.label == label).value, value)
         self.assertEqual(next(w for w in reopened.multiselect if w.label == 'Issue tags (optional)').value,
                          ['requirement_semantics_issue'])
+
+    def test_ui_cumulative_progress_completion_and_target_changes(self):
+        save_review(self.output, self.records[0], 1)
+        app = self.app()
+        next(w for w in app.number_input if w.label == 'Total review target').set_value(2)
+        next(w for w in app.number_input if w.label == 'Unchanged sanity sample').set_value(0)
+        self.click(app, 'Load / rebuild queue')
+        self.assertEqual(app.get('progress')[0].proto.text, '1 / 2 total records reviewed')
+        self.assertEqual(len(app.session_state.run['queue']), 1)
+        app.radio[0].set_value(1)
+        self.click(app, 'Save + Next')
+        self.assertEqual(app.get('progress')[0].proto.text, '2 / 2 total records reviewed')
+        self.assertTrue(any('target reached' in item.value for item in app.success))
+        self.click(app, 'Load / rebuild queue')
+        self.assertEqual(app.get('progress')[0].proto.text, '2 / 2 total records reviewed')
+        self.assertFalse(app.subheader)
+        next(w for w in app.number_input if w.label == 'Total review target').set_value(1)
+        self.click(app, 'Load / rebuild queue')
+        self.assertEqual(app.get('progress')[0].proto.text, '2 / 1 total records reviewed')
+        self.assertEqual(app.get('progress')[0].proto.value, 100)
+        next(w for w in app.selectbox if w.label == 'Review status').select('Reviewed')
+        self.click(app, 'Load / rebuild queue')
+        self.assertEqual(len(app.session_state.run['queue']), 2)
+        self.assertEqual(app.radio[0].value, 1)
+        restarted = self.app()
+        self.assertEqual(restarted.get('progress')[0].proto.text, '2 / 100 total records reviewed')
+        self.assertEqual(restarted.subheader[0].value, 'Unchanged')
+        self.assertTrue(any('fewer records' in item.value for item in restarted.info))
+
+    def test_ui_edit_existing_review_and_return_to_queue(self):
+        save_review(self.output, self.records[0], 3, 'Original note', ['stack_mismatch', 'legacy_tag'],
+                    decision_quality='worse', score_quality='too_high', requirement_interpretation='incorrect')
+        app = self.app()
+        self.click(app, 'Next')
+        original_queue = app.session_state.run['queue']
+        original_index = app.session_state.run['index']
+        next(w for w in app.text_input if w.label == 'Job ID').input('001')
+        self.click(app, 'Load review')
+        self.assertEqual(app.subheader[0].value, 'Changed decision')
+        self.assertTrue(any('Editing existing review: 001' in item.value for item in app.info))
+        self.assertTrue(any(item.value == 'Build pipelines' for item in app.text))
+        self.assertTrue(app.table)
+        self.assertEqual(app.radio[0].value, 3)
+        self.assertEqual(app.text_area[0].value, 'Original note')
+        self.assertEqual(next(w for w in app.multiselect if w.label == 'Issue tags (optional)').value,
+                         ['stack_mismatch', 'legacy_tag'])
+        labels = ('Decision quality', 'Score quality', 'Requirement interpretation')
+        for label, expected in zip(labels, ('worse', 'too_high', 'incorrect')):
+            self.assertEqual(next(w for w in app.selectbox if w.label == label).value, expected)
+        # Loading the same ID again restores saved answers rather than stale drafts.
+        app.text_area[0].input('Discard this draft')
+        self.click(app, 'Load review')
+        self.assertEqual(app.text_area[0].value, 'Original note')
+        app.radio[0].set_value(1)
+        app.text_area[0].input('Corrected note')
+        for label, value in zip(labels, ('better', 'reasonable', 'correct')):
+            next(w for w in app.selectbox if w.label == label).select(value)
+        next(w for w in app.multiselect if w.label == 'Issue tags (optional)').unselect('stack_mismatch')
+        self.click(app, 'Save')
+        reviews = load_reviews(self.output)
+        self.assertEqual(len(reviews), 1)
+        edited = find_review(reviews, '001')
+        self.assertEqual(edited['review_rating'], 1)
+        self.assertEqual(edited['review_note'], 'Corrected note')
+        self.assertEqual(edited['issue_tags'], 'legacy_tag')
+        for field, value in zip(SUBGRADE_OPTIONS, ('better', 'reasonable', 'correct')):
+            self.assertEqual(edited[field], value)
+        self.assertEqual(app.get('progress')[0].proto.text, '1 / 100 total records reviewed')
+        self.click(app, 'Return to review queue')
+        self.assertEqual(app.session_state.run['queue'], original_queue)
+        self.assertEqual(app.session_state.run['index'], original_index)
+        self.assertEqual(app.subheader[0].value, 'Unchanged')
+        self.assertIsNone(app.radio[0].value)
+        app.radio[0].set_value(1)
+        self.click(app, 'Save')
+        self.assertEqual(len(load_reviews(self.output)), 2)
+
+    def test_ui_edit_lookup_errors_and_completed_queue(self):
+        save_review(self.output, self.records[0], 1)
+        app = self.app()
+        next(w for w in app.number_input if w.label == 'Total review target').set_value(1)
+        self.click(app, 'Load / rebuild queue')
+        self.assertFalse(app.subheader)
+        next(w for w in app.text_input if w.label == 'Job ID').input('unknown')
+        self.click(app, 'Load review')
+        self.assertTrue(any('No saved review found' in item.value for item in app.warning))
+        next(w for w in app.text_input if w.label == 'Job ID').input('001')
+        self.click(app, 'Load review')
+        self.assertEqual(app.radio[0].value, 1)
+        self.click(app, 'Return to review queue')
+        self.assertFalse(app.subheader)
+        # A review added to disk after loading must be read on lookup.
+        save_review(self.output, dict(self.records[0], job_id='missing-source'), 1)
+        next(w for w in app.text_input if w.label == 'Job ID').input('missing-source')
+        self.click(app, 'Load review')
+        self.assertTrue(any('evidence is missing' in item.value for item in app.warning))
+        save_review(self.output, dict(self.records[0], source_site='another_site'), 1)
+        next(w for w in app.text_input if w.label == 'Job ID').input('001')
+        self.click(app, 'Load review')
+        self.assertTrue(any('Duplicate review rows' in item.value for item in app.error))
+        self.assertIsNone(app.session_state.run['editing_key'])
 
 
 if __name__ == '__main__':
