@@ -21,15 +21,17 @@ flowchart TD
     G --> J[Optional AI adjudication for ambiguous jobs]
 ```
 
-**The shortest path is scrape → CSV → grade → review.** PostgreSQL adds market
-prevalence and persistent history. AI is optional and does not run automatically.
+**Normal workflow: import jobs → refresh market data → grade → review.**
+Direct CSV grading is also available. AI is optional and does not run automatically.
 
 ## Start with jobs already in PostgreSQL
 
-Choose **Terminal → Run Task → Grade DB Jobs - Last 90 Days** in VS Code.
+Run `python -m skillfreq.cli grade`, or choose
+**Terminal → Run Task → Grade DB Jobs - Last 90 Days** in VS Code.
 It reads deduplicated titles and descriptions from `public.clean_jobs`, grades them
-with your current profile and rules, and exports `data/outputs/results-db-90-days.csv`
-plus its `.grading.yml` snapshot. Open the CSV to review lanes, fit, learning,
+with your current profile and rules, and automatically creates a timestamped CSV
+under `data/outputs/` plus its `.grading.yml` snapshot. The terminal prints the
+output path. Open the CSV to review lanes, fit, learning,
 confidence, apply decisions and full evidence in `grade_json`.
 
 The window uses posting date. No input CSV or new scrape is needed. The DB view
@@ -112,7 +114,7 @@ are separate from SkillFreq's final decisions. For broad market prevalence, use
 the job population you intend to measure rather than automatically discarding
 everything outside the target lane.
 
-## 3. Grade the CSV directly
+## 3. Optional: grade a specific CSV directly
 
 Set these paths to your actual files. The date below is only an example.
 
@@ -205,10 +207,22 @@ population first, then aggregate its `mentions_skill` values by canonical skill.
 ### Grade with the refreshed market data
 
 ```powershell
-python -m skillfreq.cli grade-csv --input $jobsCsv --out $resultsCsv
+python -m skillfreq.cli grade
 ```
 
-This reads the existing prevalence view. Learning points require a missing/weak
+This grades stored jobs from the last 90 posting-date days in `public.clean_jobs`
+using the refreshed `public.skill_prevalence` view. No file paths are required.
+The result CSV and matching snapshot receive a new timestamped basename.
+Change the database window with `--since-days`, or select a specific file/output:
+
+```powershell
+python -m skillfreq.cli grade --input .\import\specific-jobs.csv
+python -m skillfreq.cli grade --input .\import\specific-jobs.csv --out data/outputs/specific-results.csv
+```
+
+`--input` and `--out` are independent optional overrides; file grading still uses
+the refreshed market data. Grading reads the latest refresh, without running a
+new refresh itself. Learning points require a missing/weak
 skill, an appropriate role lane, adjacent profile experience and a configured
 growth path. A required technology can reduce fit while increasing learning value.
 Unavailable market data is reported explicitly; grading can still complete.

@@ -116,3 +116,41 @@ class GradeDatabaseTest(unittest.TestCase):
         self.assertEqual(options['statement_timeout'], 25)
         self.assertFalse(options['use_market_data'])
         self.assertTrue(options['persist_grades'])
+
+    def test_grade_defaults_to_database_and_current_market(self):
+        from skillfreq.cli import main
+        with patch('sys.argv', ['skillfreq', 'grade']), patch('skillfreq.cli.CommandDiagnostics'), \
+             patch('skillfreq.cli.grade_database', return_value=[]) as grade, \
+             patch('skillfreq.cli.grade_csv') as csv_grade, patch('builtins.print'):
+            main()
+        args, options = grade.call_args
+        self.assertTrue(options['use_market_data'])
+        self.assertEqual(options['since_days'], 90)
+        self.assertFalse(options['persist_grades'])
+        self.assertEqual(args[0].parent, Path('data/outputs'))
+        self.assertRegex(args[0].name, r'^results-db-\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}-\d{6}\.csv$')
+        csv_grade.assert_not_called()
+
+    def test_grade_optional_csv_uses_current_market_and_output_override(self):
+        from skillfreq.cli import main
+        with patch('sys.argv', ['skillfreq', 'grade', '--input', 'jobs.csv', '--out', 'selected.csv']), \
+             patch('skillfreq.cli.CommandDiagnostics'), patch('skillfreq.cli.grade_database') as database, \
+             patch('skillfreq.cli.grade_csv', return_value=[]) as grade, patch('builtins.print'):
+            main()
+        args, options = grade.call_args
+        self.assertEqual(args, (Path('jobs.csv'), Path('selected.csv')))
+        self.assertTrue(options['use_market_data'])
+        database.assert_not_called()
+
+    def test_csv_output_is_optional_and_database_filters_are_rejected(self):
+        from skillfreq.cli import main
+        for command in ('grade', 'grade-csv'):
+            with self.subTest(command=command), \
+                 patch('sys.argv', ['skillfreq', command, '--input', 'jobs.csv']), \
+                 patch('skillfreq.cli.CommandDiagnostics'), \
+                 patch('skillfreq.cli.grade_csv', return_value=[]) as grade, patch('builtins.print'):
+                main()
+                self.assertTrue(grade.call_args.args[1].name.startswith('results-csv-'))
+        with patch('sys.argv', ['skillfreq', 'grade', '--input', 'jobs.csv', '--limit', '5']), \
+             patch('sys.stderr'), self.assertRaises(SystemExit):
+            main()

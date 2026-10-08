@@ -166,16 +166,17 @@ def main() -> None:
     run.add_argument('--persist-grades', action='store_true', help='Append grades and configuration to PostgreSQL skill_scores')
     grade_parser = sub.add_parser('grade-csv', help='Deterministically grade an existing job CSV')
     grade_parser.add_argument('--input', required=True)
-    grade_parser.add_argument('--out', default='data/outputs/grades.csv')
+    grade_parser.add_argument('--out', help='Output CSV path (default: a new timestamped file in data/outputs)')
     grade_parser.add_argument('--profile', default='configs/profile.yml')
     grade_parser.add_argument('--offline-grading', action='store_true')
     grade_parser.add_argument('--persist-grades', action='store_true')
-    grade_db_parser = sub.add_parser('grade-db', help='Grade stored jobs from PostgreSQL public.clean_jobs')
+    grade_db_parser = sub.add_parser('grade', aliases=['grade-db'], help='Grade stored PostgreSQL jobs using current market data; optionally select a CSV')
+    grade_db_parser.add_argument('--input', help='Optional job CSV instead of PostgreSQL jobs; still uses current market data')
     grade_db_parser.add_argument('--since-days', type=int, default=90, help='Posting-date lookback (default: 90 days)')
     grade_db_parser.add_argument('--limit', type=int, help='Grade at most this many newest jobs')
-    grade_db_parser.add_argument('--out', default='data/outputs/results-db-90-days.csv')
+    grade_db_parser.add_argument('--out', help='Output CSV path (default: a new timestamped file in data/outputs)')
     grade_db_parser.add_argument('--profile', default='configs/profile.yml')
-    grade_db_parser.add_argument('--offline-grading', action='store_true', help='Skip market data; still read jobs from PostgreSQL')
+    grade_db_parser.add_argument('--offline-grading', action='store_true', help='Skip market data; database jobs still require PostgreSQL unless --input is supplied')
     grade_db_parser.add_argument('--persist-grades', action='store_true', help='Append grading history to PostgreSQL skill_scores')
     policy_report = sub.add_parser('policy-report', help='Inspect policy dependencies and static quality findings')
     policy_report.add_argument('--out', default='docs/generated/policy-observability.md')
@@ -191,6 +192,12 @@ def main() -> None:
     trace_parser.add_argument('--profile', default='configs/profile.yml')
     trace_parser.add_argument('--offline-grading', action='store_true')
     args = parser.parse_args()
+    if args.cmd in ('grade', 'grade-db', 'grade-csv'):
+        if args.cmd != 'grade-csv' and args.input and (args.since_days != 90 or args.limit is not None):
+            parser.error('--since-days and --limit select database jobs; omit them when using --input')
+        if args.out is None:
+            source = 'csv' if args.input else 'db'
+            args.out = f'data/outputs/results-{source}-{datetime.now():%Y-%m-%d_%H-%M-%S-%f}.csv'
 
     for timeout_name in (
         "db_connect_timeout",
@@ -218,13 +225,13 @@ def main() -> None:
     import_batch.set_defaults(command="import-batch")
     refresh_skills.set_defaults(command="refresh-job-skills")
     
-    if args.cmd == 'grade-csv':
+    if args.cmd == 'grade-csv' or (args.cmd in ('grade', 'grade-db') and args.input):
         from .score.grading import GradingContext
         results = grade_csv(Path(args.input), Path(args.out),
                             context=GradingContext.load(profile_path=Path(args.profile)),
                             use_market_data=not args.offline_grading, persist_grades=args.persist_grades)
         print(f'Graded {len(results)} jobs: {args.out}')
-    elif args.cmd == 'grade-db':
+    elif args.cmd in ('grade', 'grade-db'):
         from .score.grading import GradingContext
         results = grade_database(Path(args.out), since_days=args.since_days, limit=args.limit,
                                  context=GradingContext.load(profile_path=Path(args.profile)),

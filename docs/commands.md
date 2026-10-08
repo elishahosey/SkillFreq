@@ -64,15 +64,20 @@ This task uses the SkillFreq virtual environment and your existing `.env` databa
 connection. It reads stored titles and descriptions directly from `public.clean_jobs`
 and runs the deterministic grading flow, including available market prevalence.
 
-Results go to `data/outputs/results-db-90-days.csv`, with the configuration snapshot
-in `data/outputs/results-db-90-days.grading.yml`. Each run replaces these two DB
-exports; the existing `results.csv` and CSV/scraping tasks remain available.
+Results receive a new timestamped filename under `data/outputs/`, with a matching
+`.grading.yml` snapshot. The terminal prints the path. Supply `--out` only when
+you need a specific filename; an explicit existing output path replaces that export.
 
 Equivalent command after activating the environment:
 
 ```powershell
-python -m skillfreq.cli grade-db --since-days 90 --out data/outputs/results-db-90-days.csv
+python -m skillfreq.cli grade
 ```
+
+`grade-db` remains an alias. Both paths are optional: `--input jobs.csv` selects
+file jobs instead of stored jobs, while `--out results.csv` chooses the export.
+Current PostgreSQL market data is used in either mode unless `--offline-grading`
+is supplied. `--since-days` and `--limit` apply to database jobs only.
 
 For a smaller test, add `--limit 10` to select the ten newest matching postings.
 The cutoff uses `date_posted >= CURRENT_DATE - 90` in PostgreSQL, not import date.

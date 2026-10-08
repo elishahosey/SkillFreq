@@ -27,6 +27,16 @@ SkillFreq does not call AI automatically.
 
 ## Quick start
 
+With jobs imported and market data refreshed, run:
+
+```powershell
+python -m skillfreq.cli grade
+```
+
+This grades stored jobs from the last 90 days using current market data and prints
+the automatically generated output path. Optionally use `--input jobs.csv` for a
+specific job file or `--out results.csv` to choose the output filename.
+
 1. [Set up the Python environment](docs/commands.md#setup).
 2. [Grade stored PostgreSQL jobs from a VS Code task](docs/commands.md#grade-jobs-from-postgresql),
    or [grade a CSV](docs/commands.md#grade-a-csv).
