@@ -183,42 +183,12 @@ def extract_requirement_flags(
         "requirement_interpretation": [],
     }
 
-    # years parsing
-    # Normalize escaped plus signs from scraped/CSV text, e.g. "4\\+ years" -> "4+ years"
-    years_text = required_text
-    if not years_text:
-        # Use configured experience sentences, excluding any explicitly preferred section.
-        candidates = full_text.replace(preferred_text, '') if preferred_text else full_text
-        years_text = ' '.join(re.findall(config['years_fallback_pattern'], candidates.replace('\\+', '+')))
-    normalized_full_text = years_text.replace("\\+", "+")
-
-    years_range_match = re.search(
-        r"(\d+)\s*(?:-|to)\s*(\d+)\s*\+?\s+years",
-        normalized_full_text,
-    )
-
-    if years_range_match:
-        flags["years_required"] = (
-            int(years_range_match.group(1)),
-            int(years_range_match.group(2)),
-        )
-    else:
-        single_years = re.findall(
-            r"(\d+)\s*\+?\s+years",
-            normalized_full_text,
-        )
-
-        if single_years:
-            flags["years_required"] = max(int(y) for y in single_years)
-
-    explicit_years = [int(m.group(1)) for pattern in config['explicit_years_patterns']
-                      for m in re.finditer(pattern, full_text)]
-    if explicit_years:
-        existing = flags['years_required']
-        previous = min(existing) if isinstance(existing, tuple) else (existing or 0)
-        flags['years_required'] = max([previous] + explicit_years)
-    flags["seniority_signals"] = list(term_counts(full_text, config["lead_terms"]))
-    flags["is_lead_like"] = bool(flags["seniority_signals"])
+    flags.update(_experience_evidence(sections, config))
+    flags["seniority_signals"] = list(term_counts(full_text, config["seniority_terms"]))
+    flags["is_lead_like"] = bool(term_counts(full_text, config["lead_terms"]))
+    flags['ownership_evidence'] = [s for s in _requirement_sentences(full_text)
+                                   if any(re.search(p, s) for p in config.get('ownership_patterns', []))]
+    flags['clearance_evidence'] = _clearance_evidence(sections, config)
     flags["requirement_ambiguity"] = any(re.search(p, full_text) for p in config["ambiguity_patterns"])
     flags['requirement_ambiguity'] |= any(
         re.search(r'(?<!\w)' + re.escape(term) + config['skill_alternative_suffix'], full_text)
@@ -352,7 +322,73 @@ def extract_requirement_flags(
 
 def _requirement_sentences(text: str) -> list[str]:
     """Split bullets/short prose while retaining deterministic source text."""
-    return [part.strip(' -*\t') for part in re.split(r'(?<=[.!?])\s+|\n+', text) if part.strip(' -*\t')]
+    parts = re.split(r'(?<=[.!?;])\s+|\n+|,?\s+but\s+|\s+\*\s+', text)
+    return [re.sub(r'^-\s+', '', part.strip(' *\t')) for part in parts if part.strip(' -*\t')]
+
+
+def _is_preferred(source, config):
+    return any(re.search(p, source) for p in config.get('preferred_patterns', [r'\bpreferred\b']))
+
+
+def _normalized_requirement_text(text):
+    # Scraped Markdown can be escaped repeatedly; consume the complete escape.
+    return re.sub(r'\\+(?=[+\-&()])', '', text).replace('**', '').replace('–', '-').replace('—', '-')
+
+
+def _experience_evidence(sections, config):
+    evidence, anomalies = [], []
+    preferred = _normalized_requirement_text(sections.get('preferred', ''))
+    text = _normalized_requirement_text(sections['full_text'])
+    # Inspect local clauses, even when a different required section exists.
+    pattern = r'(?<![\w.,-])(?P<low>\d+)(?:\s*(?:-|to)\s*(?P<high>\d+))?\s*\+?\)?\s*(?:years?|yrs?)\b'
+    for source in _requirement_sentences(text):
+        if _is_preferred(source, config) or (preferred and source in preferred):
+            continue
+        matches = list(re.finditer(pattern, source))
+        for match in matches:
+            low = int(match['low'])
+            high = int(match['high']) if match['high'] else low
+            if not 0 <= low <= high <= config.get('maximum_experience_years', 50):
+                anomalies.append(dict(source=source, value=match.group(), reason='invalid_experience_range'))
+                continue
+            local = source[max(0, match.start()-60):match.end()+100]
+            if not re.search(config.get('experience_context_pattern', r'\bexperience\b'), local):
+                continue
+            value = (low, high) if match['high'] else low
+            evidence.append(dict(source=source, value=value, minimum=low))
+        for pattern_explicit in config.get('explicit_years_patterns', []):
+            for match in re.finditer(pattern_explicit, source):
+                value = int(match.group(1))
+                if value <= config.get('maximum_experience_years', 50):
+                    evidence.append(dict(source=source, value=value, minimum=value))
+    strongest = max(evidence, key=lambda item: item['minimum']) if evidence else None
+    return dict(years_required=strongest['value'] if strongest else None,
+                years_evidence=evidence, years_anomalies=anomalies)
+
+
+def _clearance_evidence(sections, config):
+    policy = config.get('clearance')
+    if not policy:
+        return []
+    preferred = _normalized_requirement_text(sections.get('preferred', ''))
+    required = _normalized_requirement_text(sections.get('required', ''))
+    evidence = []
+    for source in _requirement_sentences(_normalized_requirement_text(sections['full_text'])):
+        if 'clearance' not in source or not re.search(policy['level_pattern'], source):
+            continue
+        if re.search(policy['negation_pattern'], source) or _is_preferred(source, config) or (preferred and source in preferred):
+            continue
+        # Ability-to-obtain is not evidence of current possession, even with 'active'.
+        if re.search(policy['obtain_pattern'], source):
+            kind = 'obtain'
+        elif re.search(policy['active_pattern'], source):
+            kind = 'active' if (source in required or re.search(policy['required_pattern'], source)) else 'unspecified'
+        elif re.search(policy['required_pattern'], source):
+            kind = 'unspecified'
+        else:
+            continue
+        evidence.append(dict(kind=kind, source=source))
+    return evidence
 
 
 def _requirement_sources(sections, config):
@@ -360,19 +396,18 @@ def _requirement_sources(sections, config):
     covered = []
     for section in ('required', 'preferred'):
         for source in _requirement_sentences(sections.get(section, '')):
-            modality = 'preferred' if re.search(r'\bpreferred\b', source) else section
+            modality = 'preferred' if _is_preferred(source, config) else section
             covered.append(source)
             yield modality, section, source
     # Headless explicit requirements are common in pasted snippets. Other prose
     # remains unclassified instead of turning every technology mention mandatory.
-    if any(sections.get(section) for section in ('required', 'preferred', 'responsibilities')):
-        return
+    scoped = any(sections.get(section) for section in ('required', 'preferred', 'responsibilities'))
     for source in _requirement_sentences(sections['full_text']):
         if any(source in part or part in source for part in covered):
             continue
-        if re.search(r'\bpreferred\b', source):
+        if _is_preferred(source, config):
             yield 'preferred', 'unknown', source
-        elif any(re.search(pattern, source) for pattern in config.get('unscoped_requirement_patterns', [])):
+        elif not scoped and any(re.search(pattern, source) for pattern in config.get('unscoped_requirement_patterns', [])):
             yield 'required', 'unknown', source
 
 

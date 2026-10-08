@@ -42,6 +42,14 @@ class GradingContext:
         paths = dict(skills=skills_path, profile=profile_path, weights=weight_path, roles=roles_path,
                      market_skills=taxonomy_path, requirements=requirements_path)
         snapshot = {key: read_config(path) for key, path in paths.items()}
+        experience = snapshot['profile'].get('experience_years')
+        if experience is not None and (not isinstance(experience, list) or len(experience) != 2 or
+                any(isinstance(v, bool) or not isinstance(v, (int, float)) for v in experience) or
+                not 0 <= experience[0] <= experience[1] <= 50):
+            raise ValueError('experience_years must be a plausible [minimum, maximum] range')
+        clearance = snapshot['profile'].get('active_clearance')
+        if clearance is not None and not isinstance(clearance, bool):
+            raise ValueError('active_clearance must be true, false or null')
         # Version algorithms as well as authoring inputs; no deployment service needed.
         root = Path(__file__).resolve().parents[1]
         modules = ['configuration.py','score/grading.py','score/lane_classifier.py','score/decision_layer.py',
@@ -268,6 +276,9 @@ def _grade_job(row, context=None, *, prevalence=None, market_context=None):
         if 'lead_like' not in flags['reason_codes']:
             flags['reason_codes'].append('lead_like')
     flags['seniority_signals'] = list(dict.fromkeys(flags['seniority_signals'] + title_seniority))
+    title_levels = {name: level['rank'] for name, level in context.requirements.get('seniority_levels', {}).items()
+                    if term_counts(title, level['terms'])}
+    flags['title_levels'] = title_levels
     lanes = score_lanes(row, context.roles)
     gaps = extract_gaps(description, flags, context)
     years = flags['years_required']
@@ -275,6 +286,16 @@ def _grade_job(row, context=None, *, prevalence=None, market_context=None):
                  has_hard_requirement_blockers=flags['has_hard_requirement_blockers'], is_lead_like=flags['is_lead_like'],
                  missing_required_atomic=gaps['required']['atomic_skills'], blockers=[], review_flags=[],
                  search_lane=clean_text(row.get('search_lane')).lower())
+    experience = context.profile_config.get('experience_years')
+    facts.update(experience_gap=max(0, facts['years_required'] - max(experience))
+                 if experience and facts['years_required'] is not None else None,
+                 seniority_rank=max(title_levels.values(), default=0),
+                 ownership_evidence=bool(flags.get('ownership_evidence')),
+                 years_anomaly=bool(flags.get('years_anomalies')),
+                 active_clearance_missing=any(e['kind'] == 'active' for e in flags['clearance_evidence'])
+                 and context.profile_config.get('active_clearance') is False,
+                 clearance_review=bool(flags['clearance_evidence'])
+                 and context.profile_config.get('active_clearance') is not True)
     facts.update({'hits.'+k:v for k,v in lanes.category_hits.items()})
     # Reuse authored evidence flags across stages without duplicating policy predicates.
     facts.update({'flags.'+k:v for k,v in lanes.policy_flags.items()})
@@ -304,7 +325,10 @@ def _grade_job(row, context=None, *, prevalence=None, market_context=None):
         matched_capability_concepts=concepts, missing_required_skills=gaps['required'],
         missing_preferred_skills=gaps['preferred'], growth_skills=growth, market_relevant_gaps=growth,
         matched_role_signals=[e for e in lanes.triggered_rules if e['kind']=='signal'],
-        seniority_signals=dict(terms=flags['seniority_signals'], years_required=flags['years_required']),
+        seniority_signals=dict(terms=flags['seniority_signals'], years_required=flags['years_required'],
+                              title_levels=title_levels, candidate_experience_years=experience,
+                              experience_gap=facts['experience_gap'], years_evidence=flags['years_evidence'],
+                              years_anomalies=flags['years_anomalies']),
         exclusion_signals=[e for e in lanes.triggered_rules if e.get('lane')=='wrong_lane'],
         triggered_rules=lanes.triggered_rules + fit_evidence + alignment_evidence,
         reason_codes=reasons, apply_decision='', fit_quality='',

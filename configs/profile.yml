@@ -1,3 +1,6 @@
+# Candidate-confirmed in the 2026-10-08 calibration; use upper bound for gaps.
+experience_years: [3, 4]
+active_clearance: false
 skills:
   sql: 1.0
   etl: 1.0

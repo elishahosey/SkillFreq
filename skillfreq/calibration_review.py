@@ -28,6 +28,17 @@ EVIDENCE_FIELDS = ('blocking_reasons', 'exclusion_signals', 'seniority_signals',
                    'missing_required_skills', 'missing_preferred_skills',
                    'review_flags', 'ai_review_reasons', 'reason_codes')
 GRADE_FIELDS = SUMMARY_FIELDS + EVIDENCE_FIELDS + ('grading_version',)
+
+
+def compact_requirement_evidence(value):
+    """Keep gap counts visible while full source groups live in the expander."""
+    result = {k: v for k, v in value.items() if k not in
+              ('requirement_groups', 'unsatisfied_groups', 'ambiguous_groups')}
+    for key in ('unsatisfied_groups', 'ambiguous_groups'):
+        groups = value.get(key, [])
+        if groups:
+            result[key] = [dict(type=g['type'], skills=g['skills']) for g in groups]
+    return result
 SIGNALS = ('Decision changed', 'Lane changed', 'Score changed', 'AI review changed',
            'Other evidence changed')
 ALIASES = {'lane': 'role_lane', 'fit': 'fit_score', 'score': 'fit_score',

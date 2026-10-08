@@ -8,6 +8,7 @@ import streamlit as st
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from skillfreq.calibration_review import (
     EVIDENCE_FIELDS, ISSUE_TAGS, SIGNALS, SUBGRADE_OPTIONS, SUMMARY_FIELDS, build_queue, changes,
+    compact_requirement_evidence,
     default_review_path, find_review, identity, load_comparison, load_reviews, save_review, text,
 )
 
@@ -25,8 +26,7 @@ def comparison_table(row, fields):
             return value or '—'
         if isinstance(value, dict):
             # Repeated source spans and group audits belong in the details expander.
-            value = {k: v for k, v in value.items() if k not in
-                     ('requirement_groups', 'unsatisfied_groups', 'ambiguous_groups')}
+            value = compact_requirement_evidence(value)
             return '\n'.join(f'{k.replace("_", " ")}: {text(v)}' for k, v in value.items()) or 'None'
         if isinstance(value, list):
             return '; '.join(text(v.get('matched_terms', v)) if isinstance(v, dict) else text(v)

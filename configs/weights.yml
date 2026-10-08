@@ -48,9 +48,9 @@ fit:
   - id: overlevel_penalty
     priority: 100
     when:
-      field: years_required
+      field: experience_gap
       op: gte
-      value: 7
+      value: 3
     actions:
     - op: subtract_score
       field: fit_score
@@ -106,13 +106,56 @@ fit:
   - id: overlevel_review_gate
     priority: 50
     when:
-      field: years_required
+      field: experience_gap
       op: gte
-      value: 7
+      value: 3
     actions:
     - op: append
       field: review_flags
       value: overlevel_experience
+    stop: false
+  # Added after the structural 85-job rerun: relative to the profile upper bound.
+  - id: substantial_experience_gap
+    priority: 99
+    when: {field: experience_gap, op: gte, value: 5}
+    actions:
+    - {op: subtract_score, field: fit_score, value: 8}
+    - {op: append, field: review_flags, value: substantial_experience_gap}
+    stop: false
+  - id: extreme_seniority_gap
+    priority: 98
+    when:
+      all:
+      - {field: experience_gap, op: gte, value: 6}
+      - any:
+        - {field: seniority_rank, op: gte, value: 2}
+        - {field: ownership_evidence, op: equals, value: true}
+    actions:
+    - {op: append, field: blockers, value: extreme_seniority_experience_gap}
+    stop: false
+  - id: title_seniority_review
+    priority: 49
+    when: {field: seniority_rank, op: gte, value: 1}
+    actions:
+    - {op: append, field: review_flags, value: title_seniority}
+    stop: false
+  - id: experience_anomaly_review
+    priority: 48
+    when: {field: years_anomaly, op: equals, value: true}
+    actions:
+    - {op: append, field: review_flags, value: experience_parse_anomaly}
+    stop: false
+  - id: active_clearance_gate
+    priority: 47
+    when: {field: active_clearance_missing, op: equals, value: true}
+    actions:
+    - {op: append, field: blockers, value: active_clearance_unavailable}
+    stop: false
+  - id: clearance_review_gate
+    priority: 46
+    when: {field: clearance_review, op: equals, value: true}
+    actions:
+    - {op: append, field: review_flags, value: clearance_eligibility_review}
     stop: false
   - id: many_required_gaps
     priority: 40

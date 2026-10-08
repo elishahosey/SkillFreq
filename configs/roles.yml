@@ -867,6 +867,16 @@ lane_rules:
   active: true
   max_hits: 1
   group: identity.database_development
+- id: software_work_evidence
+  category: software_work
+  signal_type: capability
+  lane: secondary_lane
+  weight: 0
+  scope: description
+  hard_exclusion: false
+  active: true
+  max_hits: 1
+  pattern: '\b(?:api development|software engineering fundamentals|programming languages|software components|code software applications|backend services)\b'
 - id: integration_data
   category: integration_data
   signal_type: capability
@@ -2391,6 +2401,42 @@ eligibility_rules:
       - field: backend_ok
         op: equals
         value: true
+    # Generic data/systems/API/validation cannot establish technical identity.
+    # Reuse existing independent signals; unfamiliar titles remain discoverable.
+    - any:
+      - field: hits.integration_title_identity
+        op: gte
+        value: 1
+      - field: hits.software_work
+        op: gte
+        value: 1
+      - field: hits.strong_target_title_terms
+        op: gte
+        value: 1
+      - field: hits.secondary_title_terms
+        op: gte
+        value: 1
+      - field: hits.database_development
+        op: gte
+        value: 1
+      - all:
+        - field: hits.integration_data
+          op: gte
+          value: 1
+        - any:
+          - field: hits.database_usage
+            op: gte
+            value: 1
+          - field: hits.data_stack_usage
+            op: gte
+            value: 1
+      - all:
+        - field: backend_ok
+          op: equals
+          value: true
+        - field: hits.database_usage
+          op: gte
+          value: 1
   actions:
   - op: append
     field: eligible

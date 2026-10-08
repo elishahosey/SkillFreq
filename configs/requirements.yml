@@ -7,11 +7,13 @@ section_patterns:
   - requirements
   - required skills
   - basic qualifications
+  - what you will need
+  - '(?m)^\s*(?:\*\*|#+\s*)?(?:what we need from you|who are we looking for)\b'
   - '(?m)^\s*(?:\*\*|#+\s*)?required\s*:'
   - '\brequired\s*:'
   preferred:
   - preferred qualifications
-  - nice to have
+  - '(?m)^\s*(?:\*\*|#+\s*)?(?:what would be )?nice[ -]to[ -]have\b'
   - preferred
   - pluses
   - preferred skills
@@ -20,6 +22,7 @@ section_patterns:
   - key responsibilities
   - what you'll do
   - job description
+  - '(?m)^\s*(?:\*\*|#+\s*)?(?:what we offer|about us)\b'
 core_blocker_skills:
 - etl
 - python
@@ -57,6 +60,10 @@ seniority_terms:
 - senior
 - technical leadership
 - manager
+- sr
+- director
+- vp
+- vice president
 modern_blocker_count: 2
 ambiguity_patterns:
 - \b(?:one of the following|and/or)\b
@@ -78,3 +85,32 @@ equivalences: {}
 # Grammar for headless requirement snippets; not role/career policy.
 unscoped_requirement_patterns:
 - '\b(?:required|must|experience with|one or more of|or equivalent)\b'
+
+# Clause-local modality; compensation bonuses are not skill preferences.
+preferred_patterns:
+- '\bpreferred\b'
+- '\b(?:a|is a|be a) plus\b'
+- '\bnice[ -]to[ -]have\b'
+- '\b(?:desired|desirable|optional)\b'
+- '\bbonus\b(?!\s*(?:pay|equity|eligible|potential|of|up to))'
+- '\bgood to have\b'
+maximum_experience_years: 50
+experience_context_pattern: '\b(?:experience|expertise|proficiency|background)\b'
+seniority_levels:
+  senior: {rank: 1, terms: [senior, sr]}
+  lead: {rank: 2, terms: [lead]}
+  staff: {rank: 3, terms: [staff]}
+  principal: {rank: 3, terms: [principal]}
+  manager: {rank: 3, terms: [manager]}
+  architect: {rank: 3, terms: [architect]}
+  director: {rank: 4, terms: [director]}
+  vp: {rank: 4, terms: [vp, vice president]}
+ownership_patterns:
+- '\b(?:lead|leading|manage|managing)\s+(?:technical\s+|engineering\s+|a\s+|the\s+)?teams?\b'
+- '\b(?:architecture ownership|set technical direction|technical leadership|defining architecture)\b'
+clearance:
+  level_pattern: '\b(?:secret|top secret|ts/sci|ts sci|sci|q clearance)\b'
+  active_pattern: '\b(?:active|current|currently|possess|hold|maintain|maintained)\b'
+  obtain_pattern: '\b(?:obtain|obtainable|eligible|eligibility|ability to|able to)\b'
+  required_pattern: '\b(?:must|required|requirement|requires)\b'
+  negation_pattern: '\b(?:no|not|without)\b.{0,35}\b(?:clearance|required|necessary)\b'

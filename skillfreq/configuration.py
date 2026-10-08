@@ -141,6 +141,8 @@ def validate_grading_settings(settings, roles):
     from skillfreq.score.policy import LANES, validate_rules
     fields = {'always','role_lane','fit_score','years_required','has_hard_requirement_blockers',
               'is_lead_like','missing_required_atomic','blockers','review_flags','search_lane','ai_review_required'}
+    fields |= {'experience_gap', 'seniority_rank', 'ownership_evidence', 'years_anomaly',
+               'active_clearance_missing', 'clearance_review'}
     fields |= {'hits.'+r['category'] for r in roles['lane_rules']}
     fields |= {'flags.'+name for name in roles.get('derived_flags', [])}
     validate_rules(settings['fit']['rules'], fields, dict(fit_score='score',blockers='list',review_flags='list'))
