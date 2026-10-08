@@ -255,6 +255,12 @@ career policy.
 
 ## 6. Save grading history when useful
 
+Keep the results CSV and its matching `.grading.yml` as an audit trail for runs
+you may want to revisit. Archive them before reusing the same output path. For
+reproduction, also retain the input jobs, source code, original configuration and
+runtime versions. See [preserving and reproducing a grading run](grading-reproduction.md)
+for the retention checklist and offline/market replay steps.
+
 To grade and append an audit record directly:
 
 ```powershell

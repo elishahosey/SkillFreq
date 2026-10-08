@@ -11,6 +11,7 @@ operations and how to interpret results, use the [workflow guide](workflow.md).
 | Install or activate SkillFreq | [Setup](#setup) |
 | Grade stored jobs from the last 90 days | [`grade-db` / VS Code task](#grade-jobs-from-postgresql) |
 | Grade a specific job CSV | [`grade-csv`](#grade-a-csv) |
+| Reproduce an old grading run | [Audit trail and reproduction guide](grading-reproduction.md) |
 | Scrape one job with the sibling JobSpy project | [JobSpy helpers](#jobspy-helpers) |
 | Grade jobs from URLs | [`fetch` and `run`](#fetch-links-and-grade-job-pages) |
 | Import jobs into PostgreSQL | [`excel-load`](#load-data-into-postgresql) |

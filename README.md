@@ -53,6 +53,7 @@ files under `configs/`.
 - [Usage workflow: scraped jobs to results](docs/workflow.md)
 - [Command reference](docs/commands.md)
 - [Grading architecture, configuration and migrations](docs/deterministic-grading.md)
+- [Preserve the audit trail and reproduce a grading run](docs/grading-reproduction.md)
 - [Example grades with full evidence](docs/grading-examples.yml)
 - [Representative grading comparisons](docs/grading-comparison.md)
 - [Historical job comparison](docs/grading-historical-sample.md)

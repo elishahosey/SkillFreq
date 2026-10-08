@@ -155,6 +155,8 @@ Atomic aliases and market taxonomy hashing are unchanged. Each market-backed gra
 records extraction run IDs, scope size, read time and the prevalence values used.
 Keep the Git revision/code available as well as the configuration snapshot to rerun
 an old implementation; hashes identify code but do not archive its source.
+See [preserving and reproducing a grading run](grading-reproduction.md) for what
+to retain, how to verify those hashes and how to reuse historical market values.
 
 The grading migration and direct/batch inserts were tested in rollback-only
 transactions. `--persist-grades` applies the grading migration when first used.
