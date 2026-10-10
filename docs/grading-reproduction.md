@@ -5,6 +5,11 @@ want to explain, compare or reproduce later. They are part of the audit trail.
 The YAML alone is not a complete backup: it records configuration contents and
 code fingerprints, but does not archive source code, job inputs or dependencies.
 
+For new runs, [runnable grading snapshots](grading-snapshots.md) archive source
+and configuration together and let OLD/NEW graders share one job and market
+snapshot. Use that workflow for future comparisons on refreshed data. The
+historical recovery details below still apply to exports saved before that workflow.
+
 ## What to keep
 
 | Artifact | Why it matters |

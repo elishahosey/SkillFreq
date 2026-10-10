@@ -20,6 +20,16 @@ exports; `scripts/regrade_saved_cohort.py` can generate a new export. The existi
 comparison scripts produce reports from those exports, not an Excel review table.
 The review UI only reads the saved results and their existing `grade_json` evidence.
 
+For repeatable OLD/NEW runs on refreshed market data, use the
+[runnable grading snapshots](grading-snapshots.md) workflow. It saves each grader's
+code and configuration, then generates both exports from the same retained jobs
+and market snapshot. Loading unrelated exports can leave very few matched jobs;
+queue filters cannot recover records excluded by identity matching.
+
+The [worked requirement-semantics comparison](grading-snapshots.md#worked-comparison-requirement-semantics-on-the-refreshed-cohort)
+lists the exact OLD/NEW paths for the 141-job refreshed cohort prepared on
+October 9, 2026, plus its validation results and replay command.
+
 Choose either:
 
 - **Two grading exports:** OLD and NEW CSV/XLSX paths. Matching uses
