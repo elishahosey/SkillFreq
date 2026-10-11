@@ -1,8 +1,11 @@
 # SkillFreq workflow: from scraped jobs to results
 
-Use this guide for the daily workflow. For the scoring rules and implementation,
+Use this guide for daily grading and for comparing changes to the grader.
+For the scoring rules and implementation,
 see [deterministic grading](deterministic-grading.md).
 For a browsable list of commands and options, use the [command reference](commands.md).
+The [grading snapshot guide](grading-snapshots.md) contains the detailed save,
+market-capture and comparison commands.
 
 ```mermaid
 flowchart TD
@@ -270,10 +273,14 @@ career policy.
 ## 6. Save grading history when useful
 
 Keep the results CSV and its matching `.grading.yml` as an audit trail for runs
-you may want to revisit. Archive them before reusing the same output path. For
-reproduction, also retain the input jobs, source code, original configuration and
-runtime versions. See [preserving and reproducing a grading run](grading-reproduction.md)
-for the retention checklist and offline/market replay steps.
+you may want to revisit. Use a new output path for each retained run. The YAML
+records configuration and implementation fingerprints; it does not contain the
+Python source needed to execute that historical grader. Save a runnable grader
+ZIP before changing its rules or code if you want to compare it later.
+
+For reproduction, retain the input jobs, market snapshot, runnable grader and
+runtime versions along with the results. See [preserving and reproducing a
+grading run](grading-reproduction.md) for the retention checklist and replay steps.
 
 To grade and append an audit record directly:
 
@@ -309,6 +316,133 @@ results CSV so the importer can validate and save its configuration snapshot.
 
 `--batch-mode replace` explicitly clears and reloads that batch's existing records;
 the default is append.
+
+## Compare grading changes on the same jobs
+
+Use this optional branch when investigating a grading change. Daily grading
+uses the current checkout and available market data. A controlled comparison
+uses two saved graders with one shared job list and one shared market snapshot.
+
+```text
+result = grade(grader code + configuration, job inputs, market snapshot, runtime)
+```
+
+**OLD and NEW identify grader versions, not the age of the jobs.** Both graders
+can evaluate the same refreshed population. A version hash identifies the
+grader's code/configuration, not its job list or market capture. Holding jobs,
+market and runtime fixed lets you attribute result differences to the grader
+change. Human review still determines whether those differences are improvements.
+
+```mermaid
+flowchart TD
+    A[Save baseline grader before edits] --> B[Change rules or grading code]
+    B --> C[Save candidate grader]
+    D[Retain one exact job list] --> F[Compare saved baseline and candidate]
+    E[Capture market once or reuse a retained capture] --> F
+    A --> F
+    C --> F
+    F --> G[New comparison directory with old.csv and new.csv]
+    G --> H[Review changes and record human judgments]
+    H --> I[Keep the comparison and review workbook together]
+```
+
+### Choose what you want to measure
+
+| Question | Grader | Jobs | Market |
+|---|---|---|---|
+| Reproduce a saved result | Same saved grader | Same retained inputs | Same retained capture |
+| Evaluate a grader change | Baseline versus candidate | One shared job list | One shared capture |
+| Evaluate a market refresh | One saved grader | One shared job list | Earlier versus refreshed capture |
+| Evaluate both graders on new jobs | Baseline versus candidate | One shared new job list | One shared capture |
+
+Keep the runtime fixed too. If graders, job membership and market values all
+change together, the comparison cannot isolate which change caused a result.
+Repeating a rolling database query may select different jobs or posting text.
+Retaining `jobs.csv` fixes the actual identities and descriptions instead.
+
+### Save, compare and review
+
+1. **Save the baseline before editing.** `grading_snapshot.py save` archives the
+   exact source and grading configuration, including uncommitted edits, plus a
+   replay worker, version identities, checksums and runtime/package versions.
+   Jobs and market values are separate inputs. Credentials and `.env` are not
+   included. A YAML snapshot alone cannot reconstruct missing historical source.
+2. **Retain the job list and market capture.** Use an existing export or a jobs
+   CSV containing identities, titles and descriptions. Existing grade columns
+   are ignored during comparison. After a normal market refresh,
+   `capture-market` reads prevalence once; it does not refresh the database.
+   Reuse an existing `market.json` when continuing a comparison on retained data.
+   A job's recorded percentages are not a backup of the complete market mapping.
+3. **Save the candidate after the targeted change.** Give both snapshots a
+   short purpose/change description and date, such as
+   `baseline-review-2026-10-09.zip` and
+   `candidate-boomi-specialization-2026-10-10.zip`. Keep version hashes in the
+   manifests. A new change needs a new snapshot filename.
+4. **Compare the two archives.** `grading_snapshot.py compare` takes `--old`,
+   `--new`, one `--input`, one `--market`, and a new `--out-dir`. Each grader
+   runs its saved implementation in a separate process; the active checkout's
+   rules are not substituted. Replay neither queries the database nor persists
+   grades there. The directory is published only after both runs succeed.
+   It retains exact copies of the four supplied inputs as `old.grader.zip`,
+   `new.grader.zip`, `jobs.csv` and `market.json`. These files come from the saved
+   baseline, saved candidate, chosen job export and captured market respectively.
+   See [how to prepare each input](grading-snapshots.md#where-the-four-retained-inputs-come-from)
+   for commands and the distinction between a new comparison and a historical replay.
+5. **Review the paired CSVs.** In the calibration review app, select **Two
+   grading exports**, set OLD to the new directory's `old.csv`, and NEW to its
+   `new.csv`. Use a separate review workbook for a different comparison. To
+   resume an existing workbook, use the same input paths recorded in it.
+   Compare lanes, fit, decisions, AI-review flags/reasons and requirement evidence.
+6. **Preserve the complete comparison.** Keep both archives, paired results,
+   configuration/run records, shared inputs, comparison metadata and human
+   judgments. Refreshing the database or editing the current grader does not
+   update saved CSVs. Generate later comparisons in new directories.
+
+### Know which artifact does what
+
+| Artifact | Purpose |
+|---|---|
+| Grader ZIP | Runnable saved code/configuration, worker, runtime record and checksums |
+| `jobs.csv` | Exact shared job inputs used by both graders |
+| `market.json` | Full shared prevalence mapping and extraction provenance |
+| `old.csv`, `new.csv` | Results from the two saved graders |
+| `old.grading.yml`, `new.grading.yml` | Configuration and implementation fingerprints for each result |
+| `old.run.json`, `new.run.json` | Versions, identities, market checksum and runtime/drift records |
+| `comparison.json` | Pair identity, job count and retained-file checksums |
+| Review workbook | Human judgments for its recorded pair of input paths |
+
+Both graders must use the same taxonomy version as the captured market. The
+comparison also checks recorded Python/package versions. A deliberate
+`--allow-runtime-drift` run records the differences, but is no longer exact
+runtime reproduction. Dependencies are version-recorded rather than bundled as
+installable packages. File hashes establish integrity against the retained
+records; they do not establish grading correctness.
+
+For old exports with only a `.grading.yml`, restore the matching historical
+source/configuration before saving a runnable archive. The detailed guide's
+`save --expect-snapshot` check verifies that restoration. Loading historical
+configuration under today's changed code creates a different grader.
+
+### Current retained comparison and prepared next comparison
+
+The October 9 historical comparison remains **`3678ae1f5835169c` →
+`5e01f710d103c4c0`** on the retained 141 refreshed jobs and market capture. Its
+`old.csv` and `new.csv` keep those meanings. The five-job human spot check used
+two equivalent `5e01...` exports; it was a current-state review, not a
+before/after improvement assessment.
+
+The prepared next comparison is **`5e01f710d103c4c0` → `434d61fbf4dfe7b9`**,
+covering the targeted Boomi specialization correction. Its dated baseline and
+candidate archives reuse the same retained jobs and market. The destination is
+`comparison-boomi-specialization-2026-10-10`; the comparison has not been run as
+part of this documentation update. For this next run, the prior comparison's
+NEW grader becomes the baseline OLD grader. The earlier comparison stays intact.
+
+Use the [current comparison command](grading-snapshots.md#current-comparison-baseline-versus-boomi-correction)
+when ready. The [historical lineage audit](grading-lineage-audit-2026-10-10.md)
+records the verified versions and saved-result differences. Detailed commands,
+runtime handling and historical recovery remain in
+[grading-snapshots.md](grading-snapshots.md).
 
 ## 7. Choose a resume and apply
 

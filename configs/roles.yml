@@ -2111,6 +2111,9 @@ term_groups:
   - work within dell boomi
   - experience with dell boomi
   - boomi professional developer
+  # Proprietary development responsibilities, not incidental product mentions.
+  - core boomi components
+  - code within the boomi environment
   - connector configuration
   - mdm hub components
   - schema manager

@@ -1,4 +1,6 @@
 import csv
+import json
+import os
 from pathlib import Path
 import tempfile
 import unittest
@@ -17,6 +19,10 @@ class CalibrationReviewTest(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.directory = Path(self.temp.name)
+        self.settings = self.directory / 'review-settings.json'
+        preferences = patch.dict(os.environ, SKILLFREQ_REVIEW_SETTINGS=str(self.settings))
+        preferences.start()
+        self.addCleanup(preferences.stop)
         self.source = self.directory / 'comparison.csv'
         self.rows = [dict(id='001', source_site='site', title='Changed decision', company='Example',
                          description='Build pipelines', old_lane='target', new_lane='target',
@@ -254,6 +260,29 @@ class CalibrationReviewTest(unittest.TestCase):
         self.assertEqual(reviews[identity(self.records[1])]['decision_quality'], 'same')
         self.assertEqual(reviews[identity(self.records[1])]['score_quality'], 'reasonable')
         self.assertEqual(reviews[identity(self.records[1])]['requirement_interpretation'], 'correct')
+
+    def test_paths_restored_in_new_session_and_failed_load_keeps_preferences(self):
+        save_review(self.output, self.records[0], 1)
+        app = self.app()
+        saved = self.settings.read_bytes()
+        self.assertEqual(json.loads(saved)['output'], str(self.output.resolve()))
+        reopened = AppTest.from_file(Path(__file__).resolve().parents[1] / 'scripts/review_calibration.py',
+                                     default_timeout=15).run()
+        self.assertEqual(reopened.selectbox[0].value, 'One comparison file')
+        self.assertEqual(reopened.text_input[1].value, str(self.source.resolve()))
+        self.assertEqual(reopened.text_input[2].value, str(self.output.resolve()))
+        reopened.text_input[1].input(str(self.directory / 'missing.csv'))
+        reopened.button[0].click().run()
+        self.assertTrue(reopened.error)
+        self.assertEqual(self.settings.read_bytes(), saved)
+
+    def test_invalid_path_preferences_fall_back_to_defaults(self):
+        self.settings.write_text('{broken', encoding='utf-8')
+        app = AppTest.from_file(Path(__file__).resolve().parents[1] / 'scripts/review_calibration.py',
+                                default_timeout=15).run()
+        self.assertFalse(app.exception)
+        self.assertEqual(app.selectbox[0].value, 'Two grading exports')
+        self.assertEqual(app.text_input[2].value, '')
 
     def app(self):
         app = AppTest.from_file(Path(__file__).resolve().parents[1] / 'scripts/review_calibration.py',

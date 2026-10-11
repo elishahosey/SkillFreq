@@ -109,6 +109,76 @@ process using its saved source/configuration; the active checkout's grading rule
 are not substituted. Replay does not query the database or persist grades there.
 The comparison directory is published only after both runs succeed.
 
+### Where the four retained inputs come from
+
+The files inside a completed comparison folder are exact copies of the inputs
+supplied to its original `compare` command. The command gives those copies
+standard names so the comparison can later be replayed independently of the
+original filenames:
+
+| Retained file | Original input | How to prepare it when needed |
+|---|---|---|
+| `old.grader.zip` | ZIP passed through `--old` | Run `save` while the baseline code and configuration are present, before editing. For a historical version, reuse its saved ZIP or restore and verify its matching source/configuration first. |
+| `new.grader.zip` | ZIP passed through `--new` | Run `save` after making the candidate change. Saving archives the grader; it does not grade jobs. |
+| `jobs.csv` | CSV passed through `--input` | Select an existing job export or grading export containing job identities, titles and descriptions. The comparison copies the whole file; existing grade columns are ignored when calculating results. |
+| `market.json` | JSON passed through `--market` | Run `capture-market` once to read the current database prevalence mapping and provenance, or reuse a retained capture when holding the market fixed. |
+
+For a **new comparison**, the preparation commands can look like this. These
+example names describe a future change; save the baseline before making that
+change and save the candidate afterward:
+
+```powershell
+# Before editing the grader:
+python scripts/grading_snapshot.py save `
+  --out data/outputs/graders/baseline-before-change-2026-10-10.zip
+
+# After making the intended change:
+python scripts/grading_snapshot.py save `
+  --out data/outputs/graders/candidate-change-description-2026-10-10.zip
+
+# Retain a chosen existing job export as the fixed input:
+Copy-Item -LiteralPath data/outputs/results-db-2026-10-08_17-08-54-691977.csv `
+  -Destination data/outputs/jobs-selected-2026-10-10.csv
+
+# Capture the market once, if this comparison needs a new market capture:
+python scripts/grading_snapshot.py capture-market `
+  --out data/outputs/market-captured-2026-10-10.json
+```
+
+Choose unused destination names, substitute the actual date and change
+description, and select the job export appropriate to the comparison. If no job
+export exists yet, a raw jobs CSV with the columns described above is sufficient.
+Alternatively, the normal database grading command creates an export:
+
+```powershell
+python -m skillfreq.cli grade --out data/outputs/jobs-export-2026-10-10.csv
+```
+
+That last command grades the current database cohort using the current grader
+and market; its saved grade columns will be ignored by `compare`. It is not needed
+when an appropriate export already exists. A fresh database query or market
+capture does not recreate a historical cohort or snapshot.
+
+Pass the prepared files to `compare` as `--old`, `--new`, `--input` and `--market`.
+The new output directory will contain `old.grader.zip`, `new.grader.zip`,
+`jobs.csv` and `market.json`, plus the paired results and provenance records:
+
+```text
+save baseline + save candidate + select job export + capture/reuse market
+                              ↓
+                           compare
+                              ↓
+retained copies of all four inputs + old.csv + new.csv + provenance
+```
+
+For the **existing historical comparison**, those four retained files already
+exist. Reusing its `old.grader.zip` and `new.grader.zip` replays
+`3678ae1f5835169c` → `5e01f710d103c4c0`; it does not include the later Boomi
+correction. For `5e01f710d103c4c0` → `434d61fbf4dfe7b9`, use the
+[prepared dated inputs below](#current-comparison-baseline-versus-boomi-correction).
+Keep the retained 141 jobs and market capture, and write to a new comparison
+directory. Do not regenerate or replace the historical files.
+
 Both graders must have the same taxonomy version as the captured market. A
 taxonomy change needs an explicitly compatible market extraction; the tool fails
 instead of silently mixing incompatible percentages. Python and saved package
@@ -143,6 +213,38 @@ not proof that the historical grader was restored. See
 The new snapshot workflow works prospectively without historical reconstruction:
 save today's grader, change it, save the candidate, and run both on whichever
 shared jobs and market snapshot you want to evaluate.
+
+## Current comparison: baseline versus Boomi correction
+
+Use a short purpose or change description followed by the date. The filenames
+prepared for this comparison are:
+
+- `data/outputs/graders/baseline-review-2026-10-09.zip`: `5e01f710d103c4c0`.
+- `data/outputs/graders/candidate-boomi-specialization-2026-10-10.zip`: `434d61fbf4dfe7b9`.
+- `data/outputs/jobs-refreshed-2026-10-09.csv`: an exact copy of the retained 141-job input.
+- `data/outputs/market-refreshed-2026-10-09.json`: an exact copy of the retained market snapshot.
+
+The input dates identify the retained October 9 comparison capture. Its job
+population comes from the October 8 export. Grader version hashes remain in the
+archive manifests; they do not need to appear in the filenames.
+
+These are verified copies of existing artifacts. No fresh market capture or
+grading run was performed. The historical comparison directory remains intact.
+
+From the repository root, run the standard comparison command when ready:
+
+```powershell
+& .\.venv-skillfreq\Scripts\python.exe scripts/grading_snapshot.py compare `
+  --old data/outputs/graders/baseline-review-2026-10-09.zip `
+  --new data/outputs/graders/candidate-boomi-specialization-2026-10-10.zip `
+  --input data/outputs/jobs-refreshed-2026-10-09.csv `
+  --market data/outputs/market-refreshed-2026-10-09.json `
+  --out-dir data/outputs/comparison-boomi-specialization-2026-10-10
+```
+
+Then review `comparison-boomi-specialization-2026-10-10/old.csv` against the
+adjacent `new.csv`.
+The comparison command refuses to overwrite an existing destination.
 
 ## Worked comparison: requirement semantics on the refreshed cohort
 

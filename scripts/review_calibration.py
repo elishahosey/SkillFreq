@@ -1,7 +1,9 @@
 """Launch with: python -m streamlit run scripts/review_calibration.py"""
 from pathlib import Path
 import json
+import os
 import sys
+import tempfile
 
 import streamlit as st
 
@@ -16,6 +18,42 @@ from skillfreq.calibration_review import (
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OLD = ROOT / 'data/outputs/results-db-90-days-requirements.csv'
 DEFAULT_NEW = ROOT / 'data/outputs/results-db-90-days-requirement-semantics.csv'
+INPUT_MODES = ['Two grading exports', 'One comparison file']
+
+
+def settings_path():
+    return Path(os.environ.get('SKILLFREQ_REVIEW_SETTINGS',
+                               str(ROOT / 'data/outputs/calibration-review-settings.json')))
+
+
+def load_path_settings():
+    defaults = dict(mode=INPUT_MODES[0], before=str(DEFAULT_OLD), after=str(DEFAULT_NEW), output='')
+    try:
+        saved = json.loads(settings_path().read_text(encoding='utf-8'))
+        if isinstance(saved, dict):
+            defaults.update({key: saved[key] for key in defaults if isinstance(saved.get(key), str)})
+        if defaults['mode'] not in INPUT_MODES:
+            defaults['mode'] = INPUT_MODES[0]
+    except (OSError, ValueError):
+        pass  # Missing or invalid preferences must not prevent reviewing.
+    return defaults
+
+
+def save_path_settings(mode, before, after, output):
+    destination = settings_path()
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    saved = dict(mode=mode, before=str(Path(before).resolve()) if before.strip() else '',
+                 after=str(Path(after).resolve()), output=str(output.resolve()))
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(mode='w', encoding='utf-8', dir=destination.parent,
+                                         suffix='.json', delete=False) as stream:
+            temporary = Path(stream.name)
+            json.dump(saved, stream, indent=2)
+        temporary.replace(destination)
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
 
 
 def comparison_table(row, fields):
@@ -46,11 +84,15 @@ def main():
     # Clear only the departed editor; values are restored from saved reviews.
     for widget in st.session_state.pop('clear_editor', []):
         st.session_state.pop(widget, None)
+    for name, value in load_path_settings().items():
+        st.session_state.setdefault('path_' + name, value)
     with st.sidebar.form('queue_options'):
-        mode = st.selectbox('Input format', ['Two grading exports', 'One comparison file'])
-        before = st.text_input('OLD export path', str(DEFAULT_OLD))
-        after = st.text_input('NEW export / comparison path', str(DEFAULT_NEW))
-        output = st.text_input('Review output path (blank = find existing or create dated file)', '')
+        mode = st.selectbox('Input format', INPUT_MODES, key='path_mode')
+        before = st.text_input('OLD export path', key='path_before')
+        after = st.text_input('NEW export / comparison path', key='path_after')
+        output = st.text_input('Review output path (blank = find existing or create dated file)',
+                               key='path_output',
+                               help='Paths are remembered after a successful load. Clear this when starting a new comparison to find or create its review workbook.')
         signals = st.multiselect('Include any of these changes', SIGNALS, default=list(SIGNALS[:4]))
         threshold = st.number_input('Minimum absolute fit-score change', min_value=0.0, value=5.0)
         limit = st.number_input('Total review target', min_value=1, max_value=10000, value=100,
@@ -80,6 +122,10 @@ def main():
         except (OSError, ValueError, KeyError) as error:
             st.error(str(error))
             st.stop()
+        try:
+            save_path_settings(mode, before, after, path)
+        except OSError as error:
+            st.warning(f'Queue loaded, but paths could not be remembered: {error}')
     if 'run' not in st.session_state:
         st.info('Choose saved grading exports or an OLD/NEW comparison file, then load a targeted queue.')
         st.stop()

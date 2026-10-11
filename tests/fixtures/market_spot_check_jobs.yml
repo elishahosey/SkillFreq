@@ -1,0 +1,281 @@
+- id: in-7fb8f90cfca11195
+  title: Robotics Engineer
+  description: "Robotics Engineer in a fast moving start up.This is an awesome opportunity to join a fast\
+    \ paced start up organisation who have big plans! If you are a motivated engineer who loves to solve\
+    \ complex problems....please read on!!\n  \n  \n?This is an LA based role, you will need to be based\
+    \ in the area or open to relocating.\n  \n  \nThe Role\n  \n  \nYou will own precise and reliable\
+    \ robot motion across trajectory planning, control algorithms, sensor feedback, simulation and real-world\
+    \ performance. Day to day, this includes building kinematic and dynamic models, tuning control loops\
+    \ for accuracy and repeatability, integrating motion with computer vision and sensor feedback for\
+    \ closed-loop behaviours, and developing safety, fault detection and recovery mechanisms.\n  \n  \n\
+    You will work closely with a cross functional team including perception, AI/ML and software engineers\
+    \ to turn R&D into robust, production-ready systems. It is a strong opportunity for an early-career\
+    \ engineer who wants to grow quickly across controls, motion planning, system integration and deployment.\n\
+    \  \n  \nAbout You\n  \n  \nIdeally you will hold a BS in Robotics, Control Systems or a similar discipline,\
+    \ and bring 2+ years of hands-on experience developing robotics or motion-control systems:\n  \n \
+    \ \n(not all required of course!)\n  \n  \nCore technical requirements:\n  \n  \nRobot kinematics,\
+    \ including forward/inverse kinematics, coordinate frames, Jacobians and workspace analysis\n  \n\
+    Motion-control algorithms, including trajectory generation, PID control loops, velocity/acceleration\
+    \ control and motion profiling\n  \nStrong C++ and/or Python for developing and debugging robotic\
+    \ control software\n  \nROS / ROS 2 or comparable robotics middleware\n  \nRobotic hardware, including\
+    \ servo motors, motor controllers, encoders and force/torque sensors\n  \nReal-time systems, including\
+    \ control-loop timing, latency, synchronisation, communication protocols and deterministic behaviour\n\
+    \  \nIntegrating perception and sensor feedback (cameras, force sensors) into closed-loop motion\n\
+    \  \nDebugging and system integration across mechanical, electrical, firmware and software components\n\
+    \  \n  \nNice to have:\n  \n  \n6+ DOF robotic arms\n  \nAI/ML models applied to robotics and motion\
+    \ control\n  \nCollision detection and robot safety systems\n  \nMoveIt or similar motion planning\
+    \ frameworks\n  \nGazebo, Isaac Sim or other robot simulation tools\n  \nForce/impedance control\n\
+    \  \n  \nThe Company\n  \n  \nThis is a fast-paced, innovative robotics startup building automation\
+    \ that works in the real world, not just the lab. Our robots are already deployed commercially and\
+    \ performing every day, and we are now scaling the technology further. Our engineers get real ownership,\
+    \ close collaboration across disciplines, and the chance to see their work running on live systems.\n\
+    \  \n  \nNext Steps\n  \n  \nIf this sounds like the right next move for you, submit your application\
+    \ and we will be in touch."
+- id: li-4446676420
+  title: Lead Devops Engineer (GovCloud)
+  description: "Looking for more details about our benefits? You can also learn all about them by clicking\n\
+    **HERE**\n**This Is Helix. Powered by You.**\nAt\n**BMC Helix**\n, we don’t do ordinary. We’re the\n\
+    **AI-native engine**\nbehind the world’s most forward-thinking IT organizations, helping them focus\
+    \ on what matters most. What are we passionate about? We're here to reset the economics of enterprise\
+    \ IT and help others realize the ROI of AI.\n  \n  \nWe are a mix of\n**curious minds, creative thinkers,\
+    \ and courageous builders**\nwho believe tech should change the game—not just play it. We celebrate\
+    \ wins, support each other, and laugh a lot.\n  \n  \nWe are the change makers. With decades of leadership\
+    \ and established trust in IT service and operations management, we’re scaling with purpose—through\
+    \ organic innovation, strategic acquisitions, and relentless R&D. Our open-first\n**Agentic AI platform**\n\
+    empowers autonomous agents to drive real outcomes with speed, accountability, and precision.\n  \n\
+    \  \nWe are laser-focused on delivering real value to our customers by accelerating innovation and\
+    \ the application of applying agentic AI in digital service and operations management for IT organizations\
+    \ around the world.\n  \n  \nOur SaaS Ops department focuses on delivering SaaS excellence and a great\
+    \ SaaS experience for our customers. We continuously grow by adding and implementing the most cutting-edge\
+    \ technologies and investing in Innovation! Our team is a global and versatile group of professionals,\
+    \ so if you’re looking for a place where your ideas will be heard – this is the place for you!\n \
+    \ \n  \n**Lead Devops Engineer**\nAt BMC, we help global enterprises run and reinvent their businesses\
+    \ with cutting-edge technology. Our BMC Helix portfolio delivers modern, cloud-native SaaS solutions\
+    \ for IT Service Management (ITSM), IT Operations Management (ITOM), and AIOps.\n  \n  \nWithin IT\
+    \ Operations Management (ITOM), BMC Helix empowers organizations to proactively monitor, diagnose,\
+    \ and remediate issues across complex hybrid and multi-cloud environments. We’re building intelligent\
+    \ automation that keeps mission-critical systems resilient, scalable, and secure.\n  \n  \nNow, we’re\
+    \ looking for a Lead DevOps Engineer to join our team and play a pivotal role in shaping the future\
+    \ of ITOM delivery.\n  \n  \n**Here is how, through this exciting role, YOU will contribute to BMC's\
+    \ and your own success:**\n\n* Lead monthly deployments and upgrades of the ITOM SaaS suite across\
+    \ 20+ global data centers, including AWS GovCloud (IL4 and IL5).\n* Oversee semi-annual upgrades of\
+    \ services like Victoria Metrics, OpenSearch, Redis, and Kafka across AWS, Oracle, and Google Cloud.\n\
+    * Migrate customers between ITOM instances, apply hotfixes, implement change requests, and resolve\
+    \ service requests.\n* Remediate monitoring alerts, drive automation initiatives, and establish repeatable,\
+    \ reliable processes that scale.\n\n**To ensure you’re set up for success, you will bring the following\
+    \ skillset & experience:**\n\n* 8-10+ years of experience in a DevOps role\n* Bachelor’s Degree in\
+    \ a related field; certifications such as ITIL, MCSE, VCP, AWS, GCP, OCI are a plus\n* Ability to\
+    \ obtain US Secret Security Clearance\n* Strong experience with Kubernetes, including Helm charts\n\
+    * Proficiency in Shell scripting (absolute must); additional scripting/automation experience with\
+    \ Python and Java is desirable\n* Hands-on experience implementing CI/CD pipelines using tools such\
+    \ as Jenkins and Spinnaker, following best practices\n* Solid knowledge of Terraform (must-have);\
+    \ Ansible experience is a plus\n* Familiarity with version control systems (Git) and project management\
+    \ tools (JIRA)\n* Experience with AWS (including GovCloud), Google Cloud, and Oracle Cloud\n* Proficient\
+    \ in AWS managed services such as Kafka, OpenSearch, ElastiCache, and Postgres/RDS\n* Basic knowledge\
+    \ of networking concepts\n* Experience with monitoring tools such as Kibana, Fluentbit, Clickhouse;\
+    \ knowledge of Victoria Metrics is a bonus\n\n**Why Work Here? Because You’ll Matter.**\nWe’re not\
+    \ hiring for roles—we’re hiring for\n**impact**\n. At Helix, you’ll solve hard problems, build smart\
+    \ solutions, and work with people who challenge and champion you. You’ll see your ideas come to life—and\
+    \ your work make a difference.\n  \n  \nWe believe in\n**trust, transparency, and grit**\n. Our culture\
+    \ is inclusive, flexible, and built for people who want to stretch themselves - and support others\
+    \ doing the same. Whether you’re remote or in-office, you’ll find space to show up fully and contribute\
+    \ meaningfully. You won’t be boxed in—you’ll be backed up.\n  \n  \n**Make Your Mark At Helix**\n\
+    If Helix excites you but you're unsure if you meet every qualification,\n**apply anyway**\n. We value\
+    \ diverse perspectives and believe the best ideas come from everywhere.\n  \n  \n**EEOC Statement**\n\
+    Helix is committed to equal opportunity employment regardless of race, age, sex, creed, color, religion,\
+    \ citizenship status, sexual orientation, gender, gender expression, gender identity, national origin,\
+    \ disability, marital status, pregnancy, disabled veteran or status asa protected veteran. If you\
+    \ need a reasonable accommodation for any part of the application and hiring process, visit the accommodation\
+    \ request page.\n  \n  \nBMC Helix maintains a strict policy of not requesting any form of payment\
+    \ in exchange for employment opportunities, upholding a fair and ethical hiring process.\n  \n  \n\
+    The annual base salary range represents the low and high end of the BMC Helix salary range for this\
+    \ position. Actual salaries depend on a wide range of factors that are considered in making compensation\
+    \ decisions, including but not limited to skill sets; experience and training, licensure, and certifications;\
+    \ and other business and organizational needs.\n  \n  \nThe range listed is just one component of\
+    \ Helix's employee compensation package. Other rewards may include a variable plan and country specific\
+    \ benefits.\n  \n  \nAt Helix, it is not typical for an individual to be hired at /near the top of\
+    \ the range. A reasonable estimate of the current range is $132,975 - $221,625"
+- id: li-4459650362
+  title: Quality Assurance Supervisor
+  description: "Tyndale is seeking an experienced Quality Assurance Supervisor to lead the day-to-day\
+    \ operations of our software QA team and help ensure the quality and reliability of Tyndale’s custom-developed\
+    \ applications.\n  \n  \nThis is a great opportunity for a QA professional ready to combine their\
+    \ software testing expertise with team leadership and development. You’ll oversee manual and automated\
+    \ testing, release validation, defect triage, and QA processes while coaching and developing team\
+    \ members. Working closely with Development and Infrastructure, you’ll help strengthen testing practices,\
+    \ improve release reliability, and ensure quality remains at the forefront throughout the software\
+    \ development lifecycle.\n  \n  \n**HYBRID/REMOTE:**\nTyndale supports a strong work-life balance.\
+    \ This opportunity requires onsite work a minimum of 2 days per week, and 3 days per week remotely.\
+    \ To be considered, candidates must reside within a commutable distance from our corporate headquarters\
+    \ in Pipersville, PA (Bucks County) or our location in Houston, TX (City Centre).\n  \n  \n**About\
+    \ Tyndale**\nThe Tyndale Company is a private, a Top Workplace winner in PA and TX, and an industry\
+    \ leading national supplier of arc-rated flame-resistant clothing (FRC) to the energy sector including\
+    \ utilities, oil and gas, transportation, chemical manufacturing, and NFPA 70E markets. We’re a family-owned\
+    \ business providing a retail-style apparel experience to hundreds of thousands of energy workers\
+    \ across the US and Canada. We’re the leading distributor of innovative FRC solutions, and the largest\
+    \ industrial supplier of Carhartt FR, Ariat FR, and Wrangler FR clothing.\n  \n  \n**Responsibilities**\n\
+    \n* Lead the day-to-day workflow and priorities of the Quality Assurance team, including testing activities,\
+    \ release coordination, test case development, and management of reported software issues.\n* Coach,\
+    \ train, and support QA team members through clear expectations, regular communication, timely feedback,\
+    \ and performance management.\n* Plan and oversee manual and automated software testing, including\
+    \ smoke, regression, functional, and other applicable testing to ensure quality prior to release.\n\
+    * Coordinate software release validation and triage defects and reported issues, ensuring problems\
+    \ are appropriately documented and routed to Development or System Administration for resolution.\n\
+    * Partner closely with Development throughout the software development lifecycle to communicate testing\
+    \ results, resolve issues, and maintain an effective flow of technical and application knowledge.\n\
+    * Collaborate with Infrastructure to troubleshoot environment-related issues, coordinate implementations,\
+    \ and support reliable software releases.\n* Build, maintain, and continuously improve CI/CD and QA\
+    \ processes that support consistent, efficient, and reliable software delivery.\n* Ensure manual and\
+    \ automated test cases and supporting QA documentation remain accurate, current, and effective for\
+    \ Tyndale’s custom-developed applications.\n* Monitor team productivity, quality, and adherence to\
+    \ established QA standards while proactively identifying and resolving barriers to successful delivery.\n\
+    * Support adoption of new QA tools, processes, technologies, and AI solutions that improve testing\
+    \ effectiveness, team productivity, and software quality.\n* Collaborate with IT leadership and peer\
+    \ teams to identify risks, escalate issues, support departmental priorities, and contribute to broader\
+    \ IT initiatives.\n\n**Qualifications**\n\n* 2+ years of professional experience in software development\
+    \ and/or software quality assurance required.\n* 2+ years of supervisory/management experience - managing,\
+    \ training, and coaching IT staff required.\n* Minimum of Associate's degree preferred but not required.\n\
+    * Strong understanding of the Software Development Lifecycle (SDLC) required.\n* Experience overseeing\
+    \ or working with both manual and automated software testing practices.\n* Experience with automated\
+    \ testing tools such as TestComplete, Selenium, xUnit, SoapUI, or LoadComplete preferred.\n* Experience\
+    \ working with SQL databases such as Microsoft SQL Server or MySQL preferred.\n* Experience with scripting\
+    \ and build tools such as PowerShell and MSBuild preferred.\n* Strong leadership, organization, communication,\
+    \ problem-solving, and prioritization skills with a proactive, detail-oriented approach to managing\
+    \ multiple priorities.\n\n**Benefits**\n\n* Health & Wellness: Comprehensive medical, dental, and\
+    \ vision insurance with competitive premiums. Paid parental leave. Mental health support through an\
+    \ EAP and partial reimbursement on copays, fertility support, and robust wellness programs with annual\
+    \ reimbursements.\n* Work-Life Balance: Many positions with Tyndale offer hybrid onsite + remote work\
+    \ schedules, generous PTO, paid holidays + a floating holiday, and more.\n* Financial Compensation:\
+    \ Competitive salary, 401(k) with matching, and bonus opportunities.\n* Career Growth & Development:\
+    \ Training/certification/tuition reimbursement programs and demonstrated paths for knowledge share\
+    \ and internal promotion opportunity.\n* Culture & Perks: Family-owned values, award winning culture,\
+    \ team-engagement events, casual dress code, company-sponsored charitable events and activities, and\
+    \ an inclusive workplace that values collaboration and integrity.\n\n**Qualified candidates are encouraged\
+    \ to apply on our website,**\n**www.tyndaleusa.com/careers**\n**.**\n**E.O.E**"
+- id: in-12212552d5d9b1fa
+  title: Integration Engineer with Integration Tool Experience
+  description: "**US-E-Consulting- APIs and Integration - Integration Engineer III with Integration Tools\
+    \ - AI & Engineering - FY27**  \n  \n**Integration Engineer III/AI & Engineering**  \n  \nJoin our\
+    \ AI & Engineering team transforming technology platforms, driving innovation, and helping make a\
+    \ significant impact on our clients' success. You'll work alongside talented professionals reimagining\
+    \ and re-engineering operations and processes that are critical to business. Your contributions can\
+    \ help clients improve financial performance, accelerate new digital ventures, and fuel growth through\
+    \ innovation.  \n  \nAI & Engineering leverages cutting-edge engineering capabilities to build, deploy,\
+    \ and operate integrated/verticalized sector solutions in software, data, AI, network, and hybrid\
+    \ cloud infrastructure. These solutions are powered by engineering for business advantage, transforming\
+    \ mission-critical operations. We enable clients to stay ahead with the latest advancements by transforming\
+    \ engineering teams and modernizing technology & data platforms. Our delivery models are tailored\
+    \ to meet each client's unique requirements.  \n  \nEngineering as a Service provides complete design,\
+    \ implementation, and technology operations, leveraging our core engineering expertise. We transform\
+    \ engineering teams, modernize technology, and deliver complex programs with a product engineering\
+    \ approach. Our flexible delivery models-traditional teams, pools, or pods-are tailored to each client's\
+    \ needs, offering engineering-led advisory, implementation, and operational capabilities to accelerate\
+    \ innovation.  \n  \nRecruiting for this role ends on 12/1/2026.  \n  \n**Work You'll Do**  \n  \n\
+    As an Integration Engineer III you will have hands-on integration development skills to develop solutions\
+    \ streamlining business processes working with internal consultants, near-shore, off-shore technologists\
+    \ and vendor relationships. You will be part of API management strategies to enable seamless communication\
+    \ between applications. You will work across geographies with accountability for the success, effectiveness\
+    \ and delivery of multiple work streams, managing a large, dispersed technology team.  \n  \n**Key\
+    \ Responsibilities:**  \n\n* Integration Design & Architecture: Design complex integration solutions\
+    \ following industry best practices and leveraging various integration design patterns (e.g., publish/subscribe,\
+    \ request/reply, aggregator). Develop and implement solutions that adhere to established enterprise\
+    \ architecture frameworks.\n* API Management: Design, build, and manage APIs using API Management\
+    \ capabilities, ensuring secure and efficient communication between systems (REST/SOAP).\n* EDI Implementation\
+    \ & Management: Implement and manage Electronic Data Interchange (EDI) processes, including configuration\
+    \ of trading partners, profiles, and standards (ANSI X12, EDIFACT).\n* Development & Deployment: Develop,\
+    \ test, and deploy integration processes across environments (Test, UAT, Production), managing the\
+    \ full software development lifecycle (SDLC).\n* Troubleshooting and Support: Monitor integration\
+    \ performance, proactively identify and resolve issues, and provide expert-level post-deployment support.\n\
+    * Documentation: Create and maintain comprehensive technical documentation for designs, configurations,\
+    \ data mapping, and architectural decisions.\n* Collaboration & Best Practices: Work closely with\
+    \ cross-functional teams to optimize data flows and adhere to industry best practices in integration\
+    \ development.\n* Accountability: Take ownership of assigned integration projects, manage expectations,\
+    \ and guide junior team members toward successful project delivery.\n\n* AI & Agentic Integration:\
+    \ Utilize AI features (e.g., Boomi GPT, MuleSoft Vibes) to accelerate development, automate documentation,\
+    \ and troubleshoot issues\n\n  \n**Qualifications**  \n  \n**Required**  \n\n* Bachelor's degree in\
+    \ computer science, software engineering, information technology or a related field.\n* 3+ years of\
+    \ hands-on experience with the Boomi platform or other related integration products. Must have Integration\
+    \ Tool development experience.\n* Previous experience working in a consulting firm environment or\
+    \ within a relevant industry sector (e.g. retail, healthcare, manufacturing, financial services, etc.).\n\
+    * 3+ years' experience working on other integration platforms such as MuleSoft, IBM WebSphere processor,\
+    \ TIBCO business works, Workato, Informatica, Google Apigee, Azure Logic Apps.\n* Strong understanding\
+    \ of enterprise integration design patterns, API protocols (REST/SOAP), XML, JSON, and data mapping.\n\
+    * Proficiency with all core Boomi components including connectors (Database, FTP, Web Services, ERP\
+    \ specific), process building, and robust error handling.\n* Strong proficiency and experience in\
+    \ writing custom Groovy and JavaScript code within the Boomi environment for complex logic and data\
+    \ manipulation.\n* Experience with EDI standards (ANSI X12, EDIFACT) and implementing EDI solutions,\
+    \ including understanding of common documents (810, 850, 856, etc.)\n* Experience with rational databases\
+    \ and strong SQL skills.\n* Strong understanding of the SDLC methodologies.\n* Integration certifications\
+    \ - Boomi, MuleSoft, Tibco, Workato, etc.\n* One certification in a cloud technology platform such\
+    \ as AWS, GCP or Azure.\n* Proficiency in at least one programming language - Spring Boot, JavaScript\
+    \ or Python.\n\n  \nAbility to travel up to 50% of the time, based on the work you do and the clients\
+    \ and industries/sectors you serve.  \n  \n**Preferred**\n  \n\n* Familiarity with Boomi Agent Studio,\
+    \ Agent Step, Agent Control Tower, and pre-built agents like DesignGen, Scribe, and Pathfinder.\n\
+    * Exposure to and understanding of enterprise architecture frameworks (e.g. TOGAF)\n* Experience integrating\
+    \ specific enterprise systems such as Salesforce, SAP, Oracle, HCM, Workday, etc.\n* Familiarity with\
+    \ cloud technologies and architectures (AWS, Azure, GCP).\n* Boomi Professional Level Certifications\
+    \ (Administrator, Architect)\n\n  \n**Sponsorship:**  \n\n* Limited immigration sponsorship may be\
+    \ available.\n\n  \nInformation for applicants with a need for accommodation: https://www2.deloitte.com/us/en/pages/careers/articles/join-deloitte-assistance-for-disabled-applicants.html\
+    \  \n  \n**Wages and Salary**  \n  \nThe wage range for this role takes into account the wide range\
+    \ of factors that are considered in making compensation decisions including but not limited to skill\
+    \ sets; experience and training; licensure and certifications; and other business and organizational\
+    \ needs. The disclosed range estimate has not been adjusted for the applicable geographic differential\
+    \ associated with the location at which the position may be filled. At Deloitte, it is not typical\
+    \ for an individual to be hired at or near the top of the range for their role and compensation decisions\
+    \ are dependent on the facts and circumstances of each case. A reasonable estimate of the current\
+    \ range is $131,00 to $218,300.  \n  \nYou may also be eligible to participate in a discretionary\
+    \ annual incentive program, subject to the rules governing the program, whereby an award, if any,\
+    \ depends on various factors, including, without limitation, the individual, and organizational performance."
+- id: in-85165dc0ecbc4c68
+  title: AI & Automation Development Intern
+  description: "**About us**\n============\n\nHMH is a leading provider of drilling solutions, offering\
+    \ a wide range of products and services that are designed to be the safest and most efficient in the\
+    \ industry. Apart from our expertise in land and offshore operations, we are continuously expanding\
+    \ our knowledge within subsea mining, geothermal, onshore and offshore construction, as well as offshore\
+    \ wind industries. With offices in 16 countries across five continents, HMH maintains a strong global\
+    \ presence.  \n  \nHMH is a frontrunner in developing and providing automation and digital solutions\
+    \ for our drilling customers to support their endeavor to improve efficiency and environmental footprint.\
+    \ Equipped with its brilliant team of engineers, HMH is committed to actively exploring opportunities\
+    \ in other industries. For us, this means new opportunities and challenges that we need creativity\
+    \ and great minds to solve in our efforts to innovate our future.\n\n**Do you want to join our team?**\n\
+    ---------------------------------\n\nAt HMH we value our employees. We offer exciting job opportunities\
+    \ that will give you the opportunity to grow in your role and give you the professional development\
+    \ you deserve. In addition to competitive pay and benefits, you will join a casual and inclusive work\
+    \ environment. Our environment is based on respect and having a good day at work, so you can expect\
+    \ to join a knowledgeable, global team who help each other to succeed.\n\nThe IT Intern will be responsible\
+    \ for:\n\n* Assist in gathering business requirements and documenting process steps, decision points,\
+    \ exceptions, and expected outcomes for AI-enabled automation opportunities.\n* Participate in the\
+    \ development, testing, and evaluation of AI agents and automated workflows under the guidance of\
+    \ experienced team members.\n* Assist with connecting approved data sources, such as databases, data\
+    \ warehouses, files, APIs, and business applications, to support workflow decisions.\n* Help develop\
+    \ workflow logic that combines defined business rules with AI-generated recommendations or decisions.\n\
+    * Support the implementation of human-review and approval steps when a workflow requires validation,\
+    \ correction, escalation, or authorization.\n* Assist with configuring approved automated actions\
+    \ in destination systems through APIs, integration services, or workflow tools.\n* Test workflow outputs,\
+    \ decision paths, data validation, error handling, and exception scenarios, and document the results.\n\
+    * Help monitor prototypes and solutions, identify issues or improvement opportunities, and work with\
+    \ the team to refine performance and reliability.\n* Assist in documenting solution designs, prompts,\
+    \ decision rules, integrations, test cases, operating procedures, and lessons learned.\n* Stay up\
+    \ to date with developments in artificial intelligence, agentic systems, workflow automation, and\
+    \ responsible AI practices.\n\nThe Intern will also learn about the following:\n\n* AI agents, generative\
+    \ AI, large language models, and prompt design\n* Agent orchestration, tool and function calling,\
+    \ and structured outputs\n* Business-process analysis and intelligent workflow automation\n* Data\
+    \ retrieval from databases, warehouses, files, APIs, and enterprise applications\n* Decision workflows\
+    \ with and without human review\n* API integration and authorized actions in destination systems\n\
+    * Testing, evaluation, monitoring, exception handling, and auditability\n* Responsible AI, information\
+    \ security, privacy, access control, and documentation\n* Agile software development, version control,\
+    \ code review, and project collaboration\n\n**Skills/Requirements**\n\n* Currently enrolled and working\
+    \ toward completion of Bachelor or Graduate degree from an accredited university or college in Computer\
+    \ Science, Artificial Intelligence, Data Science, Software Engineering, Information Systems, Computer\
+    \ Engineering, or a related field\n* Minimum GPA of 3.0\n* Strong interest in AI, automation, software\
+    \ development, and business-process improvement, with a desire to learn and grow\n* Basic programming\
+    \ knowledge in Python or a similar language\n* Basic understanding of databases, SQL, APIs, JSON,\
+    \ or software integration concepts\n* Familiarity with generative AI, large language models, prompt\
+    \ engineering, machine learning, or workflow automation through coursework, personal projects, or\
+    \ prior experience is preferred\n* Excellent problem-solving and analytical skills\n* Strong written\
+    \ and spoken communication and interpersonal skills\n* Ability to work independently and as part of\
+    \ a team\n* Attention to detail and ability to prioritize tasks\n* Professionalism and a strong work\
+    \ ethic\n\n**Additional Information**\n\n* Must be legally authorized to work in the United States\
+    \ on a full-time basis, now or in the future, without employer sponsorship for employment visa status.\n\
+    * No relocation assistance provided.\n* **Internship is 12 weeks, May 24 - August 13, 2027**\n\n**Location**\n\
+    \nHouston, TX\n\n**\\\\*\\\\*This position is not open to visa sponsorship\\\\*\\\\***"

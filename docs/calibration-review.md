@@ -20,6 +20,14 @@ exports; `scripts/regrade_saved_cohort.py` can generate a new export. The existi
 comparison scripts produce reports from those exports, not an Excel review table.
 The review UI only reads the saved results and their existing `grade_json` evidence.
 
+After a successful **Load / rebuild queue**, the app remembers the input format,
+OLD and NEW paths, and the resolved review workbook path across restarts. These
+local preferences are saved in the Git-ignored
+`data/outputs/calibration-review-settings.json`; failed loads leave them unchanged.
+When switching comparisons, change the input paths and clear **Review output path**
+to discover or create the matching workbook. Delete the settings file to restore
+the original defaults. Missing or invalid settings fall back to those defaults.
+
 For repeatable OLD/NEW runs on refreshed market data, use the
 [runnable grading snapshots](grading-snapshots.md) workflow. It saves each grader's
 code and configuration, then generates both exports from the same retained jobs
