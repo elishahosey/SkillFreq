@@ -56,6 +56,7 @@ files under `configs/`.
 ## Documentation
 
 - [Change career policy through configuration](docs/career-policy.md)
+- [Edit local profile and policy YAML with Streamlit](docs/config-editor.md)
 - [90-day calibration comparison](docs/calibration-comparison.md)
 - [Manual calibration review UI](docs/calibration-review.md)
 - [Focused domain calibration: integration, ecosystems and databases](docs/domain-calibration-comparison.md)
