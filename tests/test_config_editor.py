@@ -15,7 +15,7 @@ from scripts.config_editor import (
     FILES, Preview, edit_value, load_config, make_preview, make_changes_preview,
     parse_yaml, save_preview, semantic_diff, validate_candidate,
 )
-from scripts.config_editor_views import search_settings, settings_catalog, VIEWS
+from scripts.config_editor_views import search_settings, settings_catalog, VIEWS, GUIDANCE, ISSUE_CHEAT_SHEET
 from skillfreq import configuration
 from skillfreq.configuration import CONFIG_DIR
 
@@ -285,10 +285,18 @@ class ConfigEditorTest(unittest.TestCase):
     def test_ui_views_render_and_advanced_policy_is_opt_in(self):
         app = AppTest.from_string('from pathlib import Path\nfrom scripts.config_editor import main\n'
                                  f'main(Path({str(self.directory)!r}))', default_timeout=25).run()
+        self.assertTrue(any(m.value == ISSUE_CHEAT_SHEET.strip() for m in app.markdown))
+        self.assertTrue(any(c.value == GUIDANCE['profile.yml'] for c in app.caption))
+        guidance_views = {'Profile': 'profile.yml', 'Skills / Vocabulary': 'skills.yml',
+                          'Role Lanes': 'roles.yml',
+                          'Seniority / Requirements / Hard Filters': 'requirements.yml'}
         for view in VIEWS[1:]:
             app.radio[0].set_value(view).run()
             self.assertFalse(app.exception, view)
             self.assertFalse(app.error, view)
+            self.assertTrue(any(m.value == ISSUE_CHEAT_SHEET.strip() for m in app.markdown), view)
+            if view in guidance_views:
+                self.assertTrue(any(c.value == GUIDANCE[guidance_views[view]] for c in app.caption), view)
         app.radio[0].set_value('Quick Edit').run()
         app.text_input[0].set_value('preferred_patterns').run()
         self.assertFalse(any(b.label == 'Validate and preview' for b in app.button))

@@ -15,14 +15,22 @@ from skillfreq.score.policy import LANES
 VIEWS = ('Quick Edit', 'Profile', 'Skills / Vocabulary', 'Role Lanes',
          'Seniority / Requirements / Hard Filters', 'Advanced Policy', 'Advanced YAML')
 GUIDANCE = {
-    'profile.yml': 'Change this when the candidate profile itself is inaccurate. If the grader ignores the correct profile value, investigate code.',
-    'skills.yml': 'Add a term when the vocabulary is incomplete. If the term already exists but extraction misses it, investigate the grader/extractor.',
-    'market_skills.yml': 'Atomic technology aliases belong here; broader capability phrases belong in skills.yml. An existing alias that is missed requires extractor investigation.',
-    'roles.yml': 'Change this when the configured role policy is wrong. If the intended rule already exists but the lane result is wrong, investigate lane logic.',
-    'requirements.yml': 'Change policy when the tolerance/ranking is wrong. Incorrect years or ownership evidence requires grader investigation. years_required = 200, or “strong plus” becoming required despite correct preferred patterns, is a parser issue.',
-    'weights.yml': 'Change these only when calibration evidence shows the scoring policy itself is wrong. Do not compensate for broken extraction or lane logic. Correct rules applied to incorrectly calculated fields require grader work.',
+    'profile.yml': 'Candidate Profile: Change this when SkillFreq’s stored description of your actual experience, skills, familiarity, growth interests, or clearance status is inaccurate or outdated. If those values are already correct but the grader behaves as if they are different, investigate grader code instead. A job belonging in a different lane is a Role/Lane Policy question.',
+    'skills.yml': 'Vocabulary: Add or change terms when the config does not know a synonym, capability phrase, or capability-to-technology mapping. If the correct term already exists but extraction fails to use it, investigate the extractor/grader. Atomic technology aliases belong in market_skills.yml.',
+    'market_skills.yml': 'Vocabulary: Add or change terms when the config does not know a technology synonym or alias. If the correct term already exists but extraction fails to use it, investigate the extractor/grader. Broader capability phrases and capability-to-technology mappings belong in skills.yml.',
+    'roles.yml': 'Role/Lane Policy: Change this when your intended policy for what kinds of jobs belong in TARGET, SECONDARY, BRIDGE, SURVIVAL, or WRONG is represented incorrectly. “This type of job should be TARGET” is usually a role-policy question, not a candidate-profile question. For example, changing how Integration Engineer fits your search strategy is a role-policy edit. If the correct rule already exists but the job still becomes WRONG, investigate lane logic.',
+    'requirements.yml': 'Requirements/Seniority Policy: Change this when the intended tolerance, ranking, vocabulary, or requirement policy itself is wrong. If years, modality, ownership, or clearance evidence are extracted incorrectly from the posting, investigate grader/parser logic instead. Changing seniority ranking/tolerance is a config decision; years_required = 200, or “strong plus” classified as required despite correct preferred patterns, is a grader/parser issue.',
+    'weights.yml': 'Scoring/Decision Policy: Change this only when calibration evidence shows the scoring policy itself is wrong. Do not use weight or threshold changes to compensate for broken extraction, incorrect lane classification, or ignored profile/config values.',
     'resume_signal.yml': 'These are resume evidence domains and references, not candidate proficiency. Correct references that are ignored require resume extraction work.',
 }
+ISSUE_CHEAT_SHEET = """**Which kind of issue is this?**
+
+- **Facts about me are wrong** → Profile
+- **Type of job belongs in a different lane** → Role/Lane Policy
+- **Seniority/requirement tolerance itself is wrong** → Requirements/Policy
+- **Missing synonym/alias/technology mapping** → Vocabulary
+- **Config is already correct but output is wrong** → Grader/code
+"""
 ERRORS = (ValueError, TypeError, KeyError, OSError, yaml.YAMLError, re.error)
 
 
@@ -196,6 +204,7 @@ def render_editor(config_dir):
     st.title('SkillFreq calibration config')
     st.info('Config issue: If I can fix the behavior by changing configuration without changing the intended algorithm, it is probably a config issue.\n\n'
             'Grader issue: If I need to change how the algorithm parses, resolves, scores, or applies that configuration, it is probably a grader issue.')
+    st.markdown(ISSUE_CHEAT_SHEET)
     view = st.sidebar.radio('View', VIEWS)
     reset = st.sidebar.button('Reload / reset')
     if reset or st.session_state.get('config_directory') != str(config_dir):
