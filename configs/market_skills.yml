@@ -84,3 +84,47 @@ Power BI:
 Tableau:
   - tableau
 
+# Explicit technologies; generic capability words belong in skills.yml.
+Java:
+  - java
+Kotlin:
+  - kotlin
+C++:
+  - c++
+Bash:
+  - bash
+Linux:
+  - linux
+Spring:
+  - spring framework
+CSS:
+  - css
+HTML:
+  - html
+JavaScript:
+  - javascript
+XSLT:
+  - xslt
+JUnit:
+  - junit
+Oracle Database:
+  - oracle sql
+  - oracle database
+  - pl/sql
+Azure DevOps:
+  - azure devops
+Ansible:
+  - ansible
+Git:
+  - git
+Adobe Journey Optimizer:
+  - adobe journey optimizer
+  - ajo
+Adobe Experience Platform:
+  - adobe experience platform
+  - aep
+Adobe Journey Optimizer Decisioning:
+  - adobe journey optimizer decisioning
+  - journey optimizer decisioning
+  - ajo-d
+

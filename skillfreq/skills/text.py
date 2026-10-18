@@ -14,6 +14,13 @@ def normalize_text(value) -> str:
     return _normalized(clean_text(value))
 
 
+def mask_urls(value) -> str:
+    """Keep offsets while excluding link targets from technology evidence."""
+    return re.sub(r'(?:https?://|www\.)[^\s<>\[\]()]+',
+                  lambda match: ' ' * len(match.group()),
+                  value if isinstance(value, str) else clean_text(value), flags=re.I)
+
+
 @lru_cache(maxsize=128)
 def _normalized(text):
     return ' '.join(text.casefold().split())

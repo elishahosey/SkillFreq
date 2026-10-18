@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Iterable, Mapping, Sequence
 
 import yaml
-from .text import normalize_text, term_counts
+from .text import mask_urls, normalize_text, term_counts
 
 
 Taxonomy = dict[str, list[str]]
@@ -60,7 +60,7 @@ def extract_market_skills(
     text: str | None, taxonomy: Mapping[str, Sequence[str]]
 ) -> list[SkillMatch]:
     """Return one normalized result per skill, with aliases retained as evidence."""
-    normalized_text = normalize_text(text)
+    normalized_text = normalize_text(mask_urls(text))
     if not normalized_text:
         return []
 

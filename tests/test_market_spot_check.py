@@ -23,11 +23,15 @@ class MarketSpotCheckTest(unittest.TestCase):
         job = self.jobs['in-12212552d5d9b1fa']
         before = grade_job(job, self.before)
         after = grade_job(job, self.context)
-        self.assertEqual(before.fit_score, 84.82)
+        # Expanded requirement vocabulary now captures required JavaScript.
+        # Keep the specialization comparison isolated from that shared change.
+        self.assertIn('JavaScript', before.missing_required_skills['atomic_skills'])
+        self.assertEqual(before.fit_score, 81.82)
         self.assertEqual(before.apply_decision, 'apply_now')
         self.assertFalse(before.policy_flags['ecosystem_specialized'])
         self.assertEqual(after.role_lane, 'target_lane')
-        self.assertEqual(after.fit_score, 76.82)
+        self.assertEqual(after.fit_score, 73.82)
+        self.assertEqual(before.fit_score - after.fit_score, 8)
         self.assertEqual(after.fit_quality, 'possible_fit')
         self.assertEqual(after.apply_decision, 'manual_review')
         self.assertTrue(after.policy_flags['ecosystem_specialized'])

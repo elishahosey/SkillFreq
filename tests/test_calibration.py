@@ -93,7 +93,7 @@ class CalibrationTest(unittest.TestCase):
         grade=grade_job(job,self.context,prevalence=self.prevalence)
         self.assertEqual(grade.seniority_signals['years_required'],10)
         self.assertIn('overlevel_experience',grade.review_flags)
-        self.assertEqual(grade.apply_decision,'manual_review')
+        self.assertEqual(grade.apply_decision,'skip')
 
     def test_cached_matcher_preserves_boundary_evidence(self):
         import re

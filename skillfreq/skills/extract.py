@@ -23,7 +23,7 @@ BAD_SINGLE_WORDS = {
 }
 
 from skillfreq.configuration import CONFIG_DIR, read_config
-from skillfreq.skills.text import term_counts
+from skillfreq.skills.text import mask_urls, term_counts
 
 
 def _nlp():
@@ -114,7 +114,7 @@ def extract_jd_skills(jdParsedObject):
 
 def extract_sections(description: str, config=None) -> Dict[str, str]:
     config = config or read_config(CONFIG_DIR/"requirements.yml")
-    text = description.lower()
+    text = _normalized_requirement_text(description.lower())
 
     matches = []
 
@@ -124,7 +124,8 @@ def extract_sections(description: str, config=None) -> Dict[str, str]:
                 # An inline modality ("Power BI preferred") is not a heading.
                 if m.group() == 'preferred':
                     prefix = text[text.rfind('\n', 0, m.start()) + 1:m.start()].strip(' -*#\t')
-                    if prefix and not text[m.end():].lstrip().startswith(':'):
+                    suffix = text[m.end():].split('\n', 1)[0].strip(' :*\t')
+                    if prefix or (suffix and not text[m.end():].lstrip().startswith(':')):
                         continue
                 matches.append((m.start(), m.end(), section_name))
 
@@ -247,6 +248,12 @@ def extract_requirement_flags(
                     if skill in satisfied_skills:
                         chars[start:end] = ' ' * (end-start)
                 semantic_text[section_name].append(''.join(chars))
+            else:
+                # An example tool list does not erase the independent capability
+                # before it (e.g. CI/CD experience with tools such as ...).
+                example = re.search(r'\b(?:such as|including|for example)\b', source)
+                if example and example.start() < mentions[0][0]:
+                    semantic_text[section_name].append(source[:example.start()])
         required_text = '\n'.join(semantic_text['required'])
         preferred_text = '\n'.join(semantic_text['preferred'])
     flags['semantic_requirement_text'] = dict(required=required_text, preferred=preferred_text)
@@ -340,7 +347,7 @@ def _experience_evidence(sections, config):
     preferred = _normalized_requirement_text(sections.get('preferred', ''))
     text = _normalized_requirement_text(sections['full_text'])
     # Inspect local clauses, even when a different required section exists.
-    pattern = r'(?<![\w.,-])(?P<low>\d+)(?:\s*(?:-|to)\s*(?P<high>\d+))?\s*\+?\)?\s*(?:years?|yrs?)\b'
+    pattern = r'(?<![\w.,-])(?P<low>\d+)(?:\s*(?:-|to)\s*(?P<high>\d+))?\s*(?:\+|or more)?\)?\s*(?:years?|yrs?)\b'
     for source in _requirement_sentences(text):
         if _is_preferred(source, config) or (preferred and source in preferred):
             continue
@@ -352,7 +359,9 @@ def _experience_evidence(sections, config):
                 anomalies.append(dict(source=source, value=match.group(), reason='invalid_experience_range'))
                 continue
             local = source[max(0, match.start()-60):match.end()+100]
-            if not re.search(config.get('experience_context_pattern', r'\bexperience\b'), local):
+            required_context = (source in sections.get('required', '') and
+                                re.search(config.get('required_years_context_pattern', r'(?!)'), local))
+            if not required_context and not re.search(config.get('experience_context_pattern', r'\bexperience\b'), local):
                 continue
             value = (low, high) if match['high'] else low
             evidence.append(dict(source=source, value=value, minimum=low))
@@ -398,7 +407,8 @@ def _requirement_sources(sections, config):
         for source in _requirement_sentences(sections.get(section, '')):
             modality = 'preferred' if _is_preferred(source, config) else section
             covered.append(source)
-            yield modality, section, source
+            for clause in _scoped_requirement_clauses(source, config.get('_taxonomy', {})):
+                yield modality, section, clause
     # Headless explicit requirements are common in pasted snippets. Other prose
     # remains unclassified instead of turning every technology mention mandatory.
     scoped = any(sections.get(section) for section in ('required', 'preferred', 'responsibilities'))
@@ -407,8 +417,28 @@ def _requirement_sources(sections, config):
             continue
         if _is_preferred(source, config):
             yield 'preferred', 'unknown', source
+        elif any(re.search(pattern, source) for pattern in config.get('explicit_requirement_patterns', [])):
+            for clause in _scoped_requirement_clauses(source, config.get('_taxonomy', {})):
+                yield 'required', 'unknown', clause
         elif not scoped and any(re.search(pattern, source) for pattern in config.get('unscoped_requirement_patterns', [])):
             yield 'required', 'unknown', source
+
+
+def _scoped_requirement_clauses(source, taxonomy):
+    """Separate named requirements from elaborations and scoped alternatives.
+
+    Unparenthesized mixed Boolean grammar remains ambiguous. Never split a
+    sentence-wide example/alternative list into mandatory individual skills.
+    """
+    elaboration = re.search(r',\s*including\b', source)
+    if elaboration and _atomic_mentions(source[:elaboration.start()], taxonomy):
+        return [source[:elaboration.start()], source[elaboration.end():].strip()]
+    if not re.search(r'\([^()]*\bor (?:similar|equivalent)\b[^()]*\)', source):
+        return [source]
+    outside = re.sub(r'\([^()]*\)', '', source)
+    if re.search(r'\bor\b|\b(?:such as|including|one of)\b', outside):
+        return [source]
+    return [part.strip() for part in re.split(r',\s*(?![^()]*\))', source) if part.strip()]
 
 
 def _atomic_mentions(source, taxonomy):
@@ -417,6 +447,7 @@ def _atomic_mentions(source, taxonomy):
     Market extraction remains unchanged: this disambiguation is for requirement
     operands only. Preserve offsets into the original sentence.
     """
+    source = mask_urls(source)
     mentions = []
     for skill, aliases in taxonomy.items():
         for alias in aliases:
@@ -429,10 +460,16 @@ def _atomic_mentions(source, taxonomy):
 
 
 def _requirement_grammar(source, mentions):
-    equivalent = bool(re.search(r'\bor equivalent(?: experience)?\b', source))
-    alternative = bool(re.search(r'\b(?:one of|one or more|and/or)\b|\bor\b', source))
-    examples = bool(re.search(r'\b(?:such as|including|for example)\b|\be\.g\.', source))
+    operand_text = source[mentions[0][0]:]
+    equivalent = bool(re.search(r'\bor (?:equivalent(?: experience)?|similar)\b', operand_text))
     between = source[mentions[0][0]:mentions[-1][1]]
+    alternative = bool(re.search(r'\b(?:and/or|or)\b', operand_text) or
+                       re.search(r'\b(?:one of|one or more)\b', source[:mentions[0][0]]))
+    # Slash-only parenthesized lists are alternatives, not three mandates.
+    # XML/XSLT outside parentheses is left as an enumeration.
+    alternative |= any(m.start() < mentions[0][0] and mentions[-1][1] < m.end()
+                       for m in re.finditer(r'\([^()]+/[^()]+\)', source))
+    examples = bool(re.search(r'\b(?:such as|including|for example)\b|\be\.g\.', source[:mentions[0][0]]))
     # Only conjunctions between atomic operands count; "design and develop"
     # before the list is not mixed Boolean grammar. and/or is one connective.
     mixed = (alternative or equivalent) and bool(re.search(r'\band\b', between.replace('and/or', 'or')))

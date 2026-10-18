@@ -95,7 +95,7 @@ class ReviewedCalibrationTest(unittest.TestCase):
         self.assertNotIn('extreme_seniority_experience_gap', modest.blocking_reasons)
         substantial = self.grade(text + '9 years of experience.', 'Principal Data Engineer')
         self.assertIn('substantial_experience_gap', substantial.review_flags)
-        self.assertNotIn('extreme_seniority_experience_gap', substantial.blocking_reasons)
+        self.assertIn('extreme_seniority_experience_gap', substantial.blocking_reasons)
         extreme = self.grade(text + '10 years of experience.', 'Principal Data Engineer')
         self.assertIn('extreme_seniority_experience_gap', extreme.blocking_reasons)
         self.assertEqual(extreme.apply_decision, 'skip')

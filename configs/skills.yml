@@ -1,3 +1,21 @@
+# Requirement evidence only: zero fit weights prevent vocabulary coverage from
+# silently changing general profile alignment. No inferred candidate proficiency.
+network_architecture:
+  terms: [networking architecture, network architecture]
+firewall_administration:
+  terms: [firewall administration, firewall configurations]
+concurrent_programming:
+  terms: [multithreading, multi-threaded environments, synchronization]
+memory_management:
+  terms: [memory management, low-memory environments]
+storage_technologies:
+  terms: [server storage technologies, raid, scsi]
+ci_cd:
+  terms: [ci/cd, continuous integration/continuous deployment]
+healthcare_supply_chain:
+  terms: [healthcare supply chain, medical/surgical purchasing]
+federal_health:
+  terms: [federal health]
 data_formats:
   terms:
   - json

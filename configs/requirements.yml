@@ -1,10 +1,11 @@
 section_patterns:
   required:
+  - '(?m)^\s*(?:#+\s*)?(?:qualifications|requirements/qualifications|what we look for|who you are|education and experience|education, experience and (?:skills|qualifications))\s*:?[ \t]*$'
   - required qualifications
   - minimum qualifications
   - must have
   - mandatory skills?
-  - requirements
+  - '(?m)^\s*(?:#+\s*)?requirements(?:\s*:|[ \t]*$)'
   - required skills
   - basic qualifications
   - what you will need
@@ -18,8 +19,8 @@ section_patterns:
   - pluses
   - preferred skills
   responsibilities:
-  - responsibilities
-  - key responsibilities
+  - '(?m)^\s*(?:essential job functions|what you will do|work you.ll do|physical requirements[^\n]*|working conditions|benefits|the team)\s*:?[ \t]*$'
+  - '(?m)^\s*(?:#+\s*)?(?:key )?responsibilities\b'
   - what you'll do
   - job description
   - '(?m)^\s*(?:\*\*|#+\s*)?(?:what we offer|about us)\b'
@@ -85,17 +86,22 @@ equivalences: {}
 # Grammar for headless requirement snippets; not role/career policy.
 unscoped_requirement_patterns:
 - '\b(?:required|must|experience with|one or more of|or equivalent)\b'
+# Explicit qualification clauses remain requirements even under a duty heading.
+explicit_requirement_patterns:
+- '\b(?:is a must|must have|proficiency in|expertise in)\b'
 
 # Clause-local modality; compensation bonuses are not skill preferences.
 preferred_patterns:
 - '\bpreferred\b'
 - '\b(?:a|is a|be a) plus\b'
+- '\ba (?:strong|big|definite) plus\b'
 - '\bnice[ -]to[ -]have\b'
 - '\b(?:desired|desirable|optional)\b'
 - '\bbonus\b(?!\s*(?:pay|equity|eligible|potential|of|up to))'
 - '\bgood to have\b'
 maximum_experience_years: 50
 experience_context_pattern: '\b(?:experience|expertise|proficiency|background)\b'
+required_years_context_pattern: '\byears?\s+(?:in|configuring|working with)\b'
 seniority_levels:
   senior: {rank: 1, terms: [senior, sr]}
   lead: {rank: 2, terms: [lead]}

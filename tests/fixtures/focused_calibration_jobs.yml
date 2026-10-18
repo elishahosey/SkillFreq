@@ -1,0 +1,77 @@
+# Short mechanism fixtures, not permanent copies of the reviewed cohort.
+- name: backend_requirements
+  title: Senior Software Engineer, Backend
+  description: |
+    What You'll Do:
+    Build backend services and REST APIs.
+    What We Look For:
+    Experience using one of Python or Kotlin.
+    Familiar with distributed systems and technologies like AWS, MySQL and Kubernetes.
+- name: vendor_requirements
+  title: Adobe AJO Architect
+  description: |
+    Qualifications
+    Required:
+    3+ years of hands-on implementation experience with Adobe Journey Optimizer (AJO), including triggers and actions.
+    2+ years working with Adobe Experience Platform (AEP), including schemas and Web/Mobile SDK or Edge Network event forwarding to support AJO triggers.
+    5+ years in customer data, marketing technology, or digital campaign management with API configuration and Git.
+    Preferred:
+    Experience with Adobe Journey Optimizer Decisioning (AJO-D).
+- name: networking_requirements
+  title: Application Support Engineer
+  description: |
+    Responsibilities:
+    Support customers and troubleshoot applications.
+    Qualifications
+    Knowledge of networking architecture and firewall administration is a must.
+    Preferred experience with Linux-based systems and AWS cloud services.
+    Proficiency in SQL, Linux, Python, and virtualization technologies.
+- name: java_web_requirements
+  title: Junior Java Developer
+  description: |
+    Who You Are:
+    2 or more years of web application development experience.
+    Hands-on experience with technologies such as Java, CSS, XML/XSLT, HTML, JavaScript, JUnit, and Oracle SQL.
+    Experience with Spring framework and multithreading.
+    Preferred:
+    Experience with DevOps CI/CD and automated tests with tools such as Git, Azure DevOps, Ansible.
+- name: domain_requirements
+  title: Healthcare Consultant
+  description: |
+    Qualifications
+    Required:
+    Experience in healthcare supply chain, sourcing, procurement, or medical/surgical purchasing.
+    Preferred:
+    Experience supporting business requirements development.
+    2+ years of experience in federal health.
+- name: streaming_data_identity
+  title: Data Engineer II, Data Products
+  description: |
+    Essential Job Functions
+    Build streaming and replication pipelines with CDC and Kafka.
+    Manage schemas and data contracts.
+    Provision cloud infrastructure with Terraform, Kubernetes and Docker.
+    Expertise in Kafka, streaming systems, Python (or similar), SQL, and cloud infrastructure (AWS/GCP/Azure).
+    Education and Experience
+    5+ years prior experience in data engineering.
+- name: software_development_identity
+  title: Engineer I-Software Development
+  description: |
+    Work as a C++ software developer on an automation QA framework.
+    Develop automated tests to validate storage solutions.
+    Requirements/Qualifications
+    2+ years of proven programming experience using C++ and Bash Shell scripting.
+    Knowledge of Object-Oriented Design.
+    Experience working in multi-threaded environments.
+    Experience with Linux operating systems.
+    Preferred Qualifications
+    Memory management in low-memory environments.
+    Familiarity with server storage technologies (RAID, SCSI).
+    Java, Python, and/or Perl is a plus.
+- name: healthy_target
+  title: Data Engineer
+  description: |
+    Build SQL ETL data pipelines and data integration with Python.
+    Required qualifications:
+    SQL and Python. 4 years of experience.
+    PySpark experience a strong plus.

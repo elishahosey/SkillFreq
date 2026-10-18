@@ -867,6 +867,28 @@ lane_rules:
   active: true
   max_hits: 1
   group: identity.database_development
+- id: software_development_title
+  category: software_development_title
+  signal_type: title
+  title_pattern:
+    any: [software development]
+    with: [engineer, developer]
+  lane: secondary_lane
+  weight: 12
+  scope: title
+  hard_exclusion: false
+  active: true
+  max_hits: 1
+- id: programming_work_evidence
+  category: programming_work
+  signal_type: capability
+  pattern: '\b(?:programming experience|software developer|object-oriented design|develop automated tests|maintain.*automation.*framework)\b'
+  lane: secondary_lane
+  weight: 3
+  scope: description
+  hard_exclusion: false
+  active: true
+  max_hits: 3
 - id: software_work_evidence
   category: software_work
   signal_type: capability
@@ -1565,6 +1587,10 @@ term_groups:
   - role_term: programmer
   - role_term: technician
   lane.core_data_signals:
+  - streaming and replication pipelines
+  - streaming pipelines
+  - replication pipelines
+  - data contracts
   - concept_term:
     - etl
     - etl
@@ -1962,6 +1988,8 @@ term_groups:
   - role_term: agent
   - *id004
   ecosystem.products:
+  - atomic: Adobe Journey Optimizer
+  - atomic: Adobe Experience Platform
   - informatica
   - iics
   - idmc
@@ -2444,6 +2472,16 @@ eligibility_rules:
   - op: append
     field: eligible
     value: secondary_lane
+  stop: false
+- id: software_development_eligibility
+  priority: 885
+  when:
+    all:
+    - {field: hits.software_development_title, op: gte, value: 1}
+    - {field: hits.programming_work, op: gte, value: 2}
+    - {field: hits.platform_heavy_terms, op: lte, value: 3}
+  actions:
+  - {op: append, field: eligible, value: secondary_lane}
   stop: false
 - id: bridge_title_guard
   priority: 880
