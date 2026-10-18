@@ -1,5 +1,6 @@
 """Config editor tests only write temporary copies, never the live configs."""
 import copy
+import os
 from pathlib import Path
 import re
 import shutil
@@ -11,8 +12,11 @@ from streamlit.testing.v1 import AppTest
 import yaml
 
 from scripts.config_editor import (
-    FILES, edit_value, load_config, make_preview, parse_yaml, save_preview, validate_candidate,
+    FILES, Preview, edit_value, load_config, make_preview, make_changes_preview,
+    parse_yaml, save_preview, semantic_diff, validate_candidate,
 )
+from scripts.config_editor_views import search_settings, settings_catalog, VIEWS
+from skillfreq import configuration
 from skillfreq.configuration import CONFIG_DIR
 
 
@@ -92,9 +96,8 @@ class ConfigEditorTest(unittest.TestCase):
         loaded = self.load()
         preview = make_preview(loaded, ('experience_years',), [4, 5])
         self.assertIn('profile.yml (current)', preview.diff)
-        self.assertIn(' experience_years:', preview.diff)
-        self.assertIn('-- 3', preview.diff)
-        self.assertIn('+- 5', preview.diff)
+        self.assertIn('-experience_years: [3, 4]', preview.diff)
+        self.assertEqual(preview.changes, ['profile.experience_years: [3, 4] -> [4, 5]'])
         self.assertTrue(preview.content.startswith(b'# Candidate-confirmed'))
         self.assertEqual(preview.content.split(b'active_clearance:', 1)[1],
                          loaded.original.split(b'active_clearance:', 1)[1])
@@ -173,6 +176,124 @@ class ConfigEditorTest(unittest.TestCase):
         self.assertFalse(any(b.label == 'Save validated changes' for b in app.button))
         next(b for b in app.button if b.label == 'Reload / reset').click().run()
         self.assertEqual(app.number_input[0].value, 4)
+
+    def test_search_ownership_and_related_profile_fields(self):
+        entries = settings_catalog(self.load().bundle)
+        terraform = search_settings(entries, 'Terraform')[0]
+        self.assertEqual(terraform.file, 'profile.yml')
+        self.assertEqual(terraform.value['atomic_skills'], 0)
+        self.assertEqual(terraform.value['growth_paths']['priority'], 0.35)
+        self.assertIn('azure', terraform.value['growth_paths']['adjacent_concepts'])
+        for query, filename, kind in (
+            ('network architecture', 'skills.yml', 'concept'),
+            ('integration engineer', 'roles.yml', 'text'),
+            ('target_lane', 'roles.yml', 'lane'),
+            ('principal', 'requirements.yml', 'seniority'),
+            ('clearance', 'requirements.yml', 'advanced'),
+            ('experience_gap', 'weights.yml', 'advanced'),
+            ('resume evidence', 'resume_signal.yml', 'advanced'),
+        ):
+            with self.subTest(query=query):
+                self.assertTrue(any(e.file == filename and e.kind == kind for e in search_settings(entries, query)))
+
+    def test_multi_field_growth_edit_and_concise_diff(self):
+        loaded = self.load()
+        preview = make_changes_preview(loaded, [
+            (('growth_paths', 'Terraform', 'priority'), 0.5),
+            (('growth_paths', 'Terraform', 'adjacent_concepts'), ['azure', 'systems', 'aws']),
+            (('atomic_skills', 'Terraform'), 0),
+        ])
+        self.assertEqual(preview.changes, [
+            'profile.growth_paths.Terraform.priority: 0.35 -> 0.5',
+            'profile.growth_paths.Terraform.adjacent_concepts: + "aws"',
+        ])
+        self.assertEqual(parse_yaml(preview.content)['growth_paths']['Terraform']['priority'], 0.5)
+        self.assertEqual(loaded.path.read_bytes(), loaded.original)
+        preview = make_preview(self.load('skills.yml'), ('network_architecture', 'terms'),
+                               ['networking architecture', 'network architecture', 'network topology'])
+        self.assertEqual(preview.changes, ['skills.network_architecture.terms: + "network topology"'])
+        self.assertEqual(semantic_diff({'a': 1}, {'a': 1}, 'profile'), [])
+        self.assertTrue(semantic_diff(['a', 'b'], ['b', 'a'], 'terms'))
+
+    def test_reuses_repo_validators_and_rejects_broken_references(self):
+        with patch('skillfreq.score.grading.load_roles', wraps=configuration.load_roles) as roles, \
+             patch('skillfreq.configuration.validate_grading_settings', wraps=configuration.validate_grading_settings) as grading, \
+             patch('scripts.config_editor.resolve_terms', wraps=configuration.resolve_terms) as refs:
+            make_preview(self.load(), ('experience_years',), [3, 5])
+            roles.assert_called_once()
+            grading.assert_called_once()
+            self.assertTrue(refs.called)
+        for name, path, value in (
+            ('roles.yml', ('lane_rules', 0, 'lane'), 'imaginary_lane'),
+            ('roles.yml', ('lane_rules', 0, 'scope'), 'imaginary_scope'),
+            ('roles.yml', ('lane_rules', 0, 'max_hits'), 0),
+            ('roles.yml', ('term_groups', 'alignment.no_experience'), [{'seniority': 'imaginary'}]),
+            ('skills.yml', ('sql', 'term_refs'), [['python', 'imaginary']]),
+            ('resume_signal.yml', ('python', 'aliases'), [{'concept_term': ['python', 'imaginary']}]),
+            ('requirements.yml', ('seniority_levels', 'senior', 'rank'), -1),
+            ('requirements.yml', ('maximum_experience_years',), 0),
+        ):
+            with self.subTest(path=path), self.assertRaises((ValueError, KeyError)):
+                make_preview(self.load(name), path, value)
+        rules = copy.deepcopy(self.load('roles.yml').data['lane_rules'])
+        rules.append(copy.deepcopy(rules[0]))
+        with self.assertRaises(ValueError):
+            make_preview(self.load('roles.yml'), ('lane_rules',), rules)
+
+    def test_backup_exists_before_replace_and_invalid_preview_cannot_write(self):
+        loaded = self.load()
+        invalid = Preview(loaded, edit_value(loaded, ('experience_years',), [9, 2]), '')
+        with self.assertRaises(ValueError):
+            save_preview(invalid)
+        backup_dir = self.directory.parent / 'data/outputs/config-backups'
+        self.assertFalse(backup_dir.exists())
+        self.assertEqual(loaded.path.read_bytes(), loaded.original)
+        replace = os.replace
+
+        def checked_replace(source, target):
+            backups = list(backup_dir.glob('*.yml'))
+            self.assertEqual(len(backups), 1)
+            self.assertEqual(backups[0].read_bytes(), loaded.original)
+            self.assertEqual(loaded.path.read_bytes(), loaded.original)
+            replace(source, target)
+
+        with patch('scripts.config_editor.os.replace', side_effect=checked_replace):
+            save_preview(make_preview(loaded, ('experience_years',), [3, 5]))
+
+    def test_ui_terraform_search_edit_preview_and_save(self):
+        app = AppTest.from_string('from pathlib import Path\nfrom scripts.config_editor import main\n'
+                                 f'main(Path({str(self.directory)!r}))', default_timeout=25).run()
+        app.text_input[0].set_value('Terraform').run()
+        self.assertFalse(app.exception)
+        self.assertEqual(app.number_input[1].label, 'Growth priority')
+        self.assertEqual(app.number_input[1].value, 0.35)
+        app.number_input[1].set_value(0.5)
+        app.multiselect[0].select('aws')
+        next(b for b in app.button if b.label == 'Validate and preview').click().run()
+        self.assertFalse(app.exception)
+        self.assertFalse(app.error)
+        summary = next(c.value for c in app.code if c.language == 'text')
+        self.assertIn('profile.growth_paths.Terraform.priority: 0.35 -> 0.5', summary)
+        self.assertIn('adjacent_concepts: + "aws"', summary)
+        self.assertNotIn('atomic_skills', summary)
+        self.assertEqual(self.load().original, self.originals['profile.yml'])
+        next(b for b in app.button if b.label == 'Save validated changes').click().run()
+        self.assertFalse(app.error)
+        growth = self.load().data['growth_paths']['Terraform']
+        self.assertEqual(growth, {'priority': 0.5, 'adjacent_concepts': ['azure', 'systems', 'aws']})
+
+    def test_ui_views_render_and_advanced_policy_is_opt_in(self):
+        app = AppTest.from_string('from pathlib import Path\nfrom scripts.config_editor import main\n'
+                                 f'main(Path({str(self.directory)!r}))', default_timeout=25).run()
+        for view in VIEWS[1:]:
+            app.radio[0].set_value(view).run()
+            self.assertFalse(app.exception, view)
+            self.assertFalse(app.error, view)
+        app.radio[0].set_value('Quick Edit').run()
+        app.text_input[0].set_value('preferred_patterns').run()
+        self.assertFalse(any(b.label == 'Validate and preview' for b in app.button))
+        next(c for c in app.checkbox if c.label == 'Open in Advanced').check().run()
+        self.assertTrue(any(b.label == 'Validate and preview' for b in app.button))
 
 
 if __name__ == '__main__':

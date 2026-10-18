@@ -17,11 +17,11 @@ from yaml.nodes import MappingNode, ScalarNode, SequenceNode
 from yaml.tokens import AliasToken, AnchorToken
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from skillfreq.configuration import CONFIG_DIR
+from skillfreq.configuration import CONFIG_DIR, read_config, resolve_terms
 from skillfreq.score.grading import GradingContext
 
 FILES = ('profile.yml', 'roles.yml', 'requirements.yml', 'weights.yml',
-         'market_skills.yml', 'skills.yml')
+         'market_skills.yml', 'skills.yml', 'resume_signal.yml')
 
 
 class UniqueLoader(yaml.SafeLoader):
@@ -63,6 +63,10 @@ class Preview:
     content: bytes
     diff: str
 
+    @property
+    def changes(self):
+        return semantic_diff(self.loaded.data, parse_yaml(self.content), self.loaded.path.stem)
+
 
 def load_config(directory, filename):
     directory = Path(directory).resolve()
@@ -72,9 +76,8 @@ def load_config(directory, filename):
         if (directory / name).is_symlink():
             raise ValueError('Config symlinks are not supported')
     bundle = {name: (directory / name).read_bytes() for name in FILES}
-    data = parse_yaml(bundle[filename].decode('utf-8'))
-    if not isinstance(data, dict):
-        raise ValueError('Config must contain a top-level mapping')
+    parse_yaml(bundle[filename].decode('utf-8'))  # Also reject duplicate keys.
+    data = read_config(directory / filename)
     return ConfigFile(directory / filename, bundle, data)
 
 
@@ -137,6 +140,15 @@ def validate_candidate(loaded, content):
             skills_path=directory / 'skills.yml', profile_path=directory / 'profile.yml',
             weight_path=directory / 'weights.yml', roles_path=directory / 'roles.yml',
             taxonomy_path=directory / 'market_skills.yml', requirements_path=directory / 'requirements.yml')
+        # The resume loader uses resolve_terms with default production paths.
+        # Reuse that resolver with this proposed bundle, never the live defaults.
+        for meta in read_config(directory / 'resume_signal.yml').values():
+            if (not isinstance(meta, dict) or not isinstance(meta.get('aliases'), list)
+                    or not isinstance(meta.get('domains'), list)
+                    or any(not isinstance(v, str) for v in meta['domains'])):
+                raise ValueError('Resume signals need domains and aliases lists')
+            resolve_terms(meta['aliases'], roles=context.roles, concepts=context.snapshot['skills'],
+                          taxonomy=context.taxonomy, requirements=context.requirements)
         for field in ('skills', 'atomic_skills'):
             for name, strength in context.profile_config.get(field, {}).items():
                 if type(strength) not in (int, float) or not math.isfinite(strength) or strength < 0:
@@ -152,6 +164,14 @@ def validate_candidate(loaded, content):
                 re.compile(pattern)
         for pattern in context.requirements.get('clearance', {}).values():
             re.compile(pattern)
+        for name, level in context.requirements.get('seniority_levels', {}).items():
+            if (not isinstance(level, dict) or type(level.get('rank')) is not int or level['rank'] < 0
+                    or not isinstance(level.get('terms'), list) or not level['terms']
+                    or any(not isinstance(term, str) or not term.strip() for term in level['terms'])):
+                raise ValueError(f'Invalid seniority rank or terms: {name}')
+        maximum = context.requirements.get('maximum_experience_years')
+        if type(maximum) is not int or maximum < 1:
+            raise ValueError('Maximum experience years must be a positive integer')
     return candidate
 
 
@@ -213,14 +233,64 @@ def edit_value(loaded, path, value):
     return (text[:start] + rendered + text[end:]).encode('utf-8')
 
 
+def semantic_diff(before, after, prefix):
+    """Changed paths only; string-list additions/removals stay readable."""
+    show = lambda v: json.dumps(v, ensure_ascii=False)
+    if before == after:
+        return []
+    if isinstance(before, dict) and isinstance(after, dict):
+        changes = []
+        for key in dict.fromkeys([*before, *after]):
+            label = f'{prefix}.{key}'
+            if key not in before:
+                changes.append(f'{label}: added {show(after[key])}')
+            elif key not in after:
+                changes.append(f'{label}: removed {show(before[key])}')
+            else:
+                changes.extend(semantic_diff(before[key], after[key], label))
+        return changes
+    if isinstance(before, list) and isinstance(after, list):
+        if all(isinstance(v, str) for v in before + after):
+            added = [v for v in after if v not in before]
+            removed = [v for v in before if v not in after]
+            # Reordering and duplicate-count changes must not disappear.
+            if len(before) == len(set(before)) and len(after) == len(set(after)) and (
+                    [v for v in before if v in after] == [v for v in after if v in before]):
+                return [f'{prefix}: - {show(v)}' for v in removed] + [f'{prefix}: + {show(v)}' for v in added]
+        if before and after and all(isinstance(v, dict) and 'id' in v for v in before + after):
+            changes = semantic_diff({v['id']: v for v in before}, {v['id']: v for v in after}, prefix)
+            old_ids, new_ids = [v['id'] for v in before], [v['id'] for v in after]
+            if [v for v in old_ids if v in new_ids] != [v for v in new_ids if v in old_ids]:
+                changes.append(f'{prefix} order: {show(old_ids)} -> {show(new_ids)}')
+            return changes
+    return [f'{prefix}: {show(before)} -> {show(after)}']
+
+
 def make_preview(loaded, path, value):
-    content = edit_value(loaded, path, value)
+    return make_changes_preview(loaded, [(path, value)])
+
+
+def make_changes_preview(loaded, updates):
+    """One focused form may update several paths in the same file."""
+    working = loaded
+    for path, value in updates:
+        current = working.data
+        try:
+            for key in path:
+                current = current[key]
+            if current == value:
+                continue
+        except KeyError:
+            pass
+        content = edit_value(working, path, value)
+        working = ConfigFile(loaded.path, dict(loaded.bundle, **{loaded.path.name: content}), parse_yaml(content))
+    content = working.original
     candidate = validate_candidate(loaded, content)
     if candidate == loaded.data:
         raise ValueError('No values changed')
-    # Semantic YAML diff avoids noise from comments, quote styles and anchors.
-    before = yaml.safe_dump(loaded.data, sort_keys=False, allow_unicode=True)
-    after = yaml.safe_dump(candidate, sort_keys=False, allow_unicode=True)
+    # The concise semantic diff is primary; this exact text diff is Advanced-only.
+    before = loaded.original.decode('utf-8')
+    after = content.decode('utf-8')
     diff = ''.join(difflib.unified_diff(before.splitlines(True), after.splitlines(True),
                                       fromfile=loaded.path.name + ' (current)',
                                       tofile=loaded.path.name + ' (proposed)'))
@@ -289,82 +359,8 @@ def _select_setting(st, loaded, section):
 
 
 def main(config_dir=CONFIG_DIR):
-    import streamlit as st
-
-    st.set_page_config(page_title='SkillFreq config editor', layout='wide')
-    st.title('SkillFreq config editor')
-    filename = st.sidebar.selectbox('Config file', FILES)
-    identity = (str(Path(config_dir).resolve()), filename)
-    if st.session_state.get('config_identity') != identity:
-        st.session_state.config_identity = identity
-        st.session_state.pop('loaded_config', None)
-        st.session_state.pop('config_preview', None)
-    if st.sidebar.button('Reload / reset'):
-        st.session_state.pop('loaded_config', None)
-        st.session_state.pop('config_preview', None)
-        st.session_state['edit_generation'] = st.session_state.get('edit_generation', 0) + 1
-    try:
-        if 'loaded_config' not in st.session_state:
-            st.session_state.loaded_config = load_config(config_dir, filename)
-        loaded = st.session_state.loaded_config
-        st.caption(str(loaded.path))
-        st.caption('Last modified: ' + datetime.fromtimestamp(loaded.path.stat().st_mtime).astimezone().isoformat(timespec='seconds'))
-        if 'config_saved' in st.session_state:
-            st.success(st.session_state.pop('config_saved'))
-        section = st.sidebar.selectbox('Section', list(loaded.data))
-        path, value = _select_setting(st, loaded, section)
-        label = '.'.join(map(str, path))
-        st.subheader(label)
-        if filename == 'profile.yml':
-            st.caption('Skill strengths express your evidence. Atomic technologies use 0–1; domain concepts are under skills. Existing entries can be set to 0, and vocabulary entries can be added.')
-        with st.form('edit:' + repr((identity, path, st.session_state.get('edit_generation', 0)))):
-            if filename == 'profile.yml' and path == ('experience_years',):
-                draft = [st.number_input('Minimum experience (years)', value=value[0]),
-                         st.number_input('Maximum experience (years)', value=value[1])]
-            elif path == ('active_clearance',):
-                draft = st.selectbox(label, [False, True, None], index=[False, True, None].index(value),
-                                     format_func=lambda v: 'Unknown' if v is None else 'Yes' if v else 'No')
-            elif isinstance(value, bool):
-                draft = st.checkbox(label, value=value)
-            elif isinstance(value, (int, float)):
-                draft = st.number_input(label, value=value)
-            elif isinstance(value, str):
-                draft = st.text_input(label, value=value)
-            elif isinstance(value, list) and all(isinstance(v, str) for v in value):
-                draft = st.text_area('One item per line', '\n'.join(value), height=220)
-            else:
-                draft = st.text_area('Value (YAML)', yaml.safe_dump(value, sort_keys=False, allow_unicode=True), height=240)
-            submitted = st.form_submit_button('Validate and preview')
-        if submitted:
-            st.session_state.pop('config_preview', None)
-            try:
-                if isinstance(value, list) and all(isinstance(v, str) for v in value):
-                    draft = [line.strip() for line in draft.splitlines() if line.strip()]
-                elif (isinstance(value, (dict, list)) or value is None) and isinstance(draft, str):
-                    if path != ('active_clearance',):
-                        draft = parse_yaml(draft)
-                st.session_state.config_preview = make_preview(loaded, path, draft)
-            except (ValueError, TypeError, KeyError, OSError, yaml.YAMLError, re.error) as error:
-                st.error(str(error))
-        preview = st.session_state.get('config_preview')
-        if preview:
-            st.subheader('Validated changes')
-            st.code(preview.diff, language='diff')
-            st.caption('Save writes exactly this preview. Submit Validate and preview again to include further edits. No fields save automatically.')
-            if st.button('Save validated changes', type='primary'):
-                try:
-                    backup = save_preview(preview)
-                    st.session_state.config_saved = f'Saved {loaded.path}. Backup: {backup}'
-                    st.session_state.pop('loaded_config', None)
-                    st.session_state.pop('config_preview', None)
-                    st.session_state['edit_generation'] = st.session_state.get('edit_generation', 0) + 1
-                    st.rerun()
-                except (ValueError, TypeError, KeyError, OSError, yaml.YAMLError, re.error) as error:
-                    st.error(str(error))
-        with st.expander('Current YAML (read only)'):
-            st.code(loaded.original.decode('utf-8'), language='yaml')
-    except (ValueError, TypeError, KeyError, OSError, yaml.YAMLError) as error:
-        st.error(f'Cannot load config: {error}')
+    from scripts.config_editor_views import render_editor
+    render_editor(config_dir)
 
 
 if __name__ == '__main__':

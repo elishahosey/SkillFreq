@@ -1,92 +1,128 @@
-# Local config editor
+# Local calibration/config editor
 
-From the repository root, activate the existing SkillFreq Python environment and run:
+From the repository root, activate the existing SkillFreq Python environment:
 
 ```powershell
 python -m streamlit run scripts/config_editor.py --server.address 127.0.0.1
 ```
 
-Streamlit and PyYAML are already in `requirements.txt`. No extra dependencies,
-database connection, or AI calls are needed.
+Streamlit and PyYAML are already dependencies. No database, API, AI calls, or
+background jobs are needed.
 
-## Edit and save
+## Search, edit, preview, save
 
-1. Choose a **Config file**, **Section**, and setting in the sidebar. The page
-   shows the absolute file path and its last-modified time.
-2. Change the value. Numbers use numeric inputs, flags use checkboxes or a
-   selector, and text lists use one item per line. Nested rule lists support
-   selecting one record/item; **Whole list (YAML)** is available for advanced edits.
-3. Click **Validate and preview**. Validation uses temporary copies of all six
-   configs and the grader's existing `GradingContext.load` validation. Errors
-   prevent saving. The diff shows parsed values before and after, without noise
-   from quote styles and comments.
-4. Review the diff and click **Save validated changes**. This saves exactly the
-   previewed changes. Further form edits need another **Validate and preview**.
-5. A success message shows the saved path and backup path. **Reload / reset**
-   discards unsaved edits and loads current files again.
+**Quick Edit** opens by default. Search for a technology, capability, title,
+lane rule, seniority term, clearance setting, or policy concept. Results show
+the owning file; you do not need to choose a YAML file first.
 
-Nothing saves automatically. Make one setting/list change at a time, preview it,
-and save it before editing another setting. The raw YAML expander is read only.
-Normal grading commands pick up saved configuration on their next run.
+For example, search **Terraform** and select its `profile.yml` result. Familiarity,
+growth priority, adjacent concepts, and notes appear together. Change priority
+and select an adjacent concept, then click **Validate and preview**:
 
-## Editable configuration
+```text
+profile.growth_paths.Terraform.priority: 0.35 -> 0.5
+profile.growth_paths.Terraform.adjacent_concepts: + "aws"
+```
 
-| File | Settings available |
-|---|---|
-| `profile.yml` | Experience range, active clearance (yes/no/unknown), capability strengths including clouds and domain experience, explicit atomic strengths and notes, existing growth paths |
-| `roles.yml` | Existing TARGET/SECONDARY/BRIDGE/SURVIVAL/WRONG title and evidence term groups, exclusions, lane signal weights and flags, existing eligibility conditions, specialization vocabulary |
-| `requirements.yml` | Required/preferred headings and patterns, lead/seniority/ownership terms and ranks, equivalences, existing clearance and experience interpretation policy |
-| `weights.yml` | Existing weights, penalties, fit/decision rules and their thresholds, lane caps, learning and confidence settings |
-| `market_skills.yml` | Existing technology alias lists |
-| `skills.yml` | Existing capability terms, atomic links and term references |
+Only changed values appear. **Advanced: full YAML diff** shows the exact text
+changes, including formatting and any shared-anchor effects. Click **Save validated
+changes** to write exactly the preview. Further edits need another preview.
+Nothing saves automatically. Navigation to another setting clears the pending
+preview; **Reload / reset** discards drafts and reloads the files.
 
-In profile **skills** and **atomic_skills**, the setting selector also includes
-existing vocabulary entries not yet in the profile. Choose one to add a strength.
-Domain experience uses the existing capability vocabulary (for example,
-`healthcare_supply_chain`); the editor does not invent new profile fields. Broad
-capability and explicit atomic proficiency are separate settings.
+Saving shows the original path and backup path. Normal grading commands pick up
+the saved configuration on their next run. The editor does not run calibration,
+interpret job grades, recommend changes, or decide what the profile should be.
 
-Existing mapping keys and rule IDs cannot be deleted. Set a strength to `0` or
-a rule's existing `active` flag to `false` instead. Term-list items can be added
-and removed. New arbitrary top-level sections and a new taxonomy-entry workflow
-are intentionally omitted; this utility edits the current config schema.
+## Config issue or grader issue?
 
-## Validation and file safety
+The decision rule appears at the top of every view:
 
-Validation rejects malformed YAML, duplicate keys, deleted mapping/rule keys,
-numeric-to-text/boolean changes, list-to-scalar changes, invalid experience
-ranges, unknown atomic references, invalid policy rules and invalid regular
-expressions. Existing loader checks are reused for cross-file references and
-policy bounds. This validates configuration, not the quality of a calibration
-choice; a syntactically valid threshold can still produce undesirable grades.
+- If changing configuration fixes the behavior without changing the intended
+  algorithm, it is probably a config issue.
+- If the algorithm must parse, resolve, score, or apply that configuration
+  differently, it is probably a grader issue.
 
-Each save creates an exact copy of the previous bytes under:
+Each setting also has guidance specific to its owner. A missing networking
+synonym may be a vocabulary edit. A synonym already present but undetected needs
+extractor investigation. Incorrect candidate experience belongs in the profile;
+`years_required = 200` or correct preferred patterns being ignored belongs in
+parser/code work. Correct role rules ignored by eligibility need lane logic work.
+Do not compensate for these defects with weights or thresholds.
+
+**Requires grader/code change:** interpretation/application of correct config,
+new algorithmic behavior, or a setting that does not exist in the current schema.
+The editor does not move implementation constants into YAML.
+
+## Views and ownership
+
+| View / file | Focused edits | Advanced-only |
+|---|---|---|
+| Profile / `profile.yml` | Experience range, active clearance (yes/no/unknown), capability strengths, atomic familiarity, existing growth priority/adjacent concepts, notes | Other structural edits |
+| Skills / Vocabulary / `skills.yml` | Existing capability terms; atomic links and term refs are visible | Atomic links, term refs, structural changes |
+| Skills / Vocabulary / `market_skills.yml` | Existing technology alias lists | New taxonomy structures |
+| Role Lanes / `roles.yml` | Role vocabulary text, plain term lists, lane-rule lane/active/weight | Regexes, reference lists, eligibility conditions, title overrides and resume mappings with references, scope and exclusion mechanics |
+| Seniority / Requirements / Hard Filters / `requirements.yml` | Seniority ranks/terms, lead lists, blocker lists/count, maximum experience years, explicit equivalences | Required/preferred, ownership, years and clearance regexes |
+| Advanced Policy / `weights.yml` | No normal quick-edit weights | Capability weights, caps, penalties, experience-gap/fit/quality/decision rules and other scoring policy |
+| Advanced Policy / `resume_signal.yml` | Search and inspection of resume evidence domains/references | Edits to resume evidence mappings |
+
+Role rules show their ID, lane, scope, active state, weight and pattern/group.
+Complex search results require **Open in Advanced** before editing. Advanced
+Policy keeps weights and complex rules visibly separate from personal edits.
+**Advanced YAML** is a secondary file/section/setting navigator and raw-value
+escape hatch, not a whole-file editor. Roles are never presented as one giant
+editable document.
+
+Atomic familiarity and growth priority use 0–1. Broad capability strength may
+exceed 1 where the current profile supports it. Cloud/domain evidence uses the
+existing capability vocabulary, not new profile fields. Known vocabulary entries
+can be added to profile strengths. Existing growth paths have a focused form;
+creating new growth paths is intentionally left to manual YAML authoring. Equivalences use approved atomic
+and capability selections and are never inferred automatically.
+
+## Validation and safe saves
+
+Validation stages a temporary copy of all seven configs, then calls the existing
+`GradingContext.load`, which reuses `read_config`, `load_roles`,
+`validate_grading_settings`, skill dictionary, profile, weights and market taxonomy
+loaders. Resume aliases use the existing `resolve_terms` with the proposed bundle,
+so edits cannot silently leave broken resume references to a removed term.
+
+Small editor safeguards additionally reject duplicate YAML keys, deletion of
+existing mapping/rule identities, changed field types, nonfinite/negative profile
+strengths, invalid seniority rank/term shapes, invalid maximum experience years,
+and malformed regexes. Existing loader checks cover numeric policy bounds,
+experience ranges, valid lanes/rules, duplicate rule IDs and cross-file references.
+A validation failure prevents backup and write. These checks establish structural
+validity, not whether a policy choice will improve grading.
+
+Existing mapping keys/rule IDs cannot be deleted. Set a strength to 0 or an
+existing rule's active flag to false. List terms can be added/removed, but removing
+a referenced term will fail validation until the references are addressed. There
+is no multi-file transaction workflow; coordinated migrations remain code work.
+
+Every save revalidates and checks that **all seven files** still match the loaded
+snapshot. It then makes an exact backup of the selected file under:
 
 ```text
 data/outputs/config-backups/profile.20261018T200000.123456Z.a1b2c3d4.yml
 ```
 
-The name contains the config stem, UTC timestamp and unique suffix. Backups are
-never reused, and `data/outputs/` is already Git-ignored. Backup and staged write
-are flushed before an atomic replacement of the original. A failed backup
-prevents the overwrite. A failed replacement leaves the original and backup
-available and cleans up the temporary write.
+The UTC timestamp plus unique suffix prevents backup reuse. The backup and staged
+write are flushed before atomic replacement. Backup failure prevents overwrite;
+replacement failure preserves the original and cleans up the staged file. A stale
+preview requires reload and a fresh preview. This is a local optimistic check,
+not a locking service. Config symlinks are unsupported.
 
-Saving refuses a preview if any of the six source files has changed since load.
-Reload and preview again in that case. This is an optimistic check for a local
-single-user utility, not a filesystem locking service. Config symlinks are not
-supported.
+Only edited value spans are rewritten. Surrounding comments and unrelated text
+are preserved; edited collections use YAML flow syntax. Shared anchors may affect
+multiple paths, all of which appear in the semantic diff. Collections defining
+nested anchors used elsewhere must be edited through individual items.
 
-Only the selected value's text is rewritten; surrounding comments, line endings,
-and unrelated settings are preserved. Edited collections use valid YAML flow
-syntax and may change local formatting. Editing an anchor owner also updates
-its shared aliases, which appear in the diff. A collection that defines nested
-anchors used elsewhere must be edited through its individual items instead.
+To restore, stop editing, copy the chosen backup over its original config, and
+reload. No restore UI or automatic backup pruning is included.
 
-To restore, stop editing and copy the desired backup over its corresponding
-file in `configs/`, then reload. There is no automatic backup pruning or restore UI.
-
-Focused tests (temporary copies only):
+Focused tests use temporary copies only:
 
 ```powershell
 python -m unittest tests.test_config_editor -v
